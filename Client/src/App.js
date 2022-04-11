@@ -1,6 +1,6 @@
-import logo from "./logo.svg";
-import "./App.css";
-import { useEffect } from "react";
+import logo from './logo.svg';
+import './App.css';
+import { useEffect } from 'react';
 
 function App() {
   useEffect(() => {
@@ -10,7 +10,7 @@ function App() {
   });
 
   async function callBackendAPI() {
-    const response = await fetch("/mongodbtest");
+    const response = await fetch('/mongodbtest');
     const body = await response.json();
 
     if (response.status !== 200) {

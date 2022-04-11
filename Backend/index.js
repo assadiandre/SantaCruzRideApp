@@ -1,20 +1,21 @@
-const express = require("express");
+const express = require('express');
+
 const app = express();
 const port = process.env.PORT || 3001;
 
 // All of the MongoDB code below was taken from the tutorial provided in the Readme document
-const { MongoClient } = require("mongodb");
+const { MongoClient } = require('mongodb');
 // Make sure to put your database connection string below
-const uri = "<YOUR_DATABASE_CONNECTION_STRING>";
+const uri = '<YOUR_DATABASE_CONNECTION_STRING>';
 const client = new MongoClient(uri);
 
 async function run() {
   try {
     await client.connect();
-    const database = client.db("sample_mflix");
-    const movies = database.collection("movies");
+    const database = client.db('sample_mflix');
+    const movies = database.collection('movies');
     // Query for a movie that has the title 'Back to the Future'
-    const query = { title: "Back to the Future" };
+    const query = { title: 'Back to the Future' };
     const movie = await movies.findOne(query);
     return movie;
   } finally {
@@ -27,12 +28,12 @@ async function run() {
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 // Example GET route
-app.get("/express_backend", (req, res) => {
-  res.send({ express: "YOUR EXPRESS BACKEND IS CONNECTED TO REACT" });
+app.get('/express_backend', (req, res) => {
+  res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
 });
 
 // Example GET route with MongoDB
-app.get("/mongodbtest", (req, res) => {
+app.get('/mongodbtest', (req, res) => {
   run()
     .then((response) => res.send({ data: response }))
     .catch(console.dir);
