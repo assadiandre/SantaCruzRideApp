@@ -56,7 +56,7 @@ Everything should be installed now, but we still need to populate our .env file.
 
 Once you're added you should be able to see the project dashboard. Go to `Database Access` in the left tab pane. You should now be viewing the Database Access page. Click on `+ Add New Database User` you will be prompted to provide a user name, password and an IP address. 
 
-Once you've setup your user, we can get the connection string the project dashboard in the `Database` section of the left tab pane. Click Connect --> Connect your application
+Once you've setup your user, we can get the connection string the project dashboard in the `Database` section of the left tab pane. Click Connect --> Connect your application. Fill in the connection string with your user details.
 
 You should be able to view a connection string, copy it. My string looks something like this: `mongodb+srv://andreassadi:mypassword@santacruzrideapp-cluste.z8ywr.mongodb.net/SantaCruzRideApp-Cluster?retryWrites=true&w=majority`
 
@@ -69,8 +69,24 @@ Now everything is setup, run the backend by running the following command:
 
     node index.js
 
+#### Step 2 - Setting up the Client 
 
+Now lets setup the Client. This should install the necessary modules:
+ - `cd Client`  
+ - `npm install`
 
+You can now run the client by typing:
+ - `npm start`
 
+The Client will be running on a proxy web pack server. A lot of this stuff is handled by Create-React-App. One important thing to note is that if you changed the `PORT` value in your `.env` when setting up the Backend you also need to change it in Client --> `package.json` and there should be a field like this: 
+`"proxy": "http://localhost:3001"`
+Change the port from 3001 to whatever port you changed it to and re-run the Client.
 
+#### Going From Here  
+
+Now we can develop in the React app and the Node server. The database is populated right now (as of April 11) with dummy data provided by MongoDB, so later on that should be changed.
+
+The React App has just the default view setup, nothing special so wee need to add some UI there. 
+
+The Node backend is pretty messy but it works for what we want, this needs to be pruned. 
 
