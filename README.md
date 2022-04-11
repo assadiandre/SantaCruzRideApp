@@ -43,13 +43,32 @@ I built this repository by following these tutorials. If you are in doubt about 
 #### Step 1 - Setting up the Backend
 
 Go into the project directory with terminal:
- `cd SantaCruzRideApp` 
+ - `cd SantaCruzRideApp`
 
 Lets first setup the Backend. This should install the necessary modules:
-`cd Backend` 
-`npm install` 
+ - `cd Backend`  
+ - `npm install`
 
-Everything should be installed now. We need to just provide our Database connection string you will need to be added to the `SantaCruzRideApp-Cluster` 
+Now run the following command. This is where we will stash our environment variables:
+ - `touch .env`
+
+Everything should be installed now, but we still need to populate our .env file. The Database connection string will be needed for this. Make sure you have a MongoDB account setup, and have been added to the `SantaCruzRideApp-Cluster` 
+
+Once you're added you should be able to see the project dashboard. Go to `Database Access` in the left tab pane. You should now be viewing the Database Access page. Click on `+ Add New Database User` you will be prompted to provide a user name, password and an IP address. 
+
+Once you've setup your user, we can get the connection string the project dashboard in the `Database` section of the left tab pane. Click Connect --> Connect your application
+
+You should be able to view a connection string, copy it. My string looks something like this: `mongodb+srv://andreassadi:mypassword@santacruzrideapp-cluste.z8ywr.mongodb.net/SantaCruzRideApp-Cluster?retryWrites=true&w=majority`
+
+Now populate our .env file with two fields: 
+
+    PORT=3001
+    DB_CONNECTION_STRING=mongodb+srv://andreassadi:mypassword@santacruzrideapp-cluste.z8ywr.mongodb.net/SantaCruzRideApp-Cluster?retryWrites=true&w=majority
+
+Now everything is setup, run the backend by running the following command:
+
+    node index.js
+
 
 
 
