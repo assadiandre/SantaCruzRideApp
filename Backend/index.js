@@ -1,12 +1,14 @@
 const express = require('express');
+// Require dotenv so that we can load values from our .env file
+require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 5000;
 
 // All of the MongoDB code below was taken from the tutorial provided in the Readme document
 const { MongoClient } = require('mongodb');
 // Make sure to put your database connection string below
-const uri = '<YOUR_DATABASE_CONNECTION_STRING>';
+const uri = process.env.DB_CONNECTION_STRING;
 const client = new MongoClient(uri);
 
 async function run() {
