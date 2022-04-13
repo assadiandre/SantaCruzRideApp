@@ -1,41 +1,18 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Homepage from './Components/Homepage/Homepage';
+import LoginPage from './Components/LoginPage/LoginPage';
 
 function App() {
-  useEffect(() => {
-    callBackendAPI()
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  });
-
-  async function callBackendAPI() {
-    const response = await fetch('/mongodbtest');
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw Error(body.message);
-    }
-    return body;
-  }
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" exact element={<Homepage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
