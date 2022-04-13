@@ -18,10 +18,7 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": ["react-app", "prettier"],
-    "rules": {
-      "additional-rule": "warn"
-    }
+    "extends": ["react-app", "prettier"]
   },
   "browserslist": {
     "production": [
