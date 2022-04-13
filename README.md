@@ -20,6 +20,9 @@ I built this repository by following these tutorials. If you are in doubt about 
       "launch": {
       "configurations": []
       },
+      "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true,
+      },
       "editor.formatOnSave": true,
       "javascript.format.enable": false,
       "workbench.colorTheme": "Default Dark+",
