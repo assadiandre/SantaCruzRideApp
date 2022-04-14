@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
+import User from './User.js';
 
 // Define "require"
 import { createRequire } from 'module';
@@ -42,23 +43,33 @@ passport.serializeUser((user, done) => done(null, user));
 
 passport.deserializeUser((user, done) => done(null, user));
 
-// Username (change to First Name and Last Name later)
-// ID
-
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: '/auth/google/callback',
-      // scope: [ 'profile' ],
-      // state: true
     },
     (accessToken, refreshToken, profile, cb) => {
       // Called on successful authentication
-      // Inset into Database (TODO)
       // console.log(profile);
 
+      // Insert into Database
+      User.findOne({ googleId: profile.id }, async (err, doc) => {
+        // return an error if there is one
+        if (err) {
+          return cb(err, null);
+        }
+
+        if (!doc) {
+          // If no user created yet, create one
+          const newUser = new User({
+            googleId: profile.id,
+            username: profile.name.givenName,
+          });
+          await newUser.save();
+        }
+      });
       cb(null, profile);
     }
   )
@@ -73,7 +84,7 @@ app.get(
   '/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
-    // Successful authentication, redirect home
+    // Successful authentication, redirect to home
     res.redirect('http://localhost:3000');
   }
 );

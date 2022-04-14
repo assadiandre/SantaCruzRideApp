@@ -72,7 +72,7 @@ Now populate our .env file with two fields:
 
 Now everything is setup, run the backend by running the following command:
 
-    node index.js
+    npm run dev
 
 #### Step 2 - Setting up the Client
 
@@ -88,6 +88,37 @@ You can now run the client by typing:
 The Client will be running on a proxy web pack server. A lot of this stuff is handled by Create-React-App. One important thing to note is that if you changed the `PORT` value in your `.env` when setting up the Backend you also need to change it in Client --> `package.json` and there should be a field like this:
 `"proxy": "http://localhost:3001"`
 Change the port from 3001 to whatever port you changed it to and re-run the Client.
+
+#### Step 3 - Setting up Authentication
+
+Almost everything was implemented by following this tutorial, so check it out if you have any questions: https://www.youtube.com/watch?v=cD17CYA1dck
+
+Everything described below goes from 42:24 to 44:10 in the video right above, although some steps are slightly different.
+
+Run `npm install`
+
+Go to https://console.developers.google.com/apis/dashboard and login.
+
+Create a new project, call it `Santa Cruz Ride App` (or whatever you want). If you're logged into your UCSC account, pick ucsc.edu for Organization and Location.
+
+Click `APIs and Services` on the sidebar on the left. Then click `OAuth consent screen` on the left sidebar.
+
+Select the User Type (either is okay for now, but we'll probably want Internal later), then fill in the required info. No need to fill out the App logo and App domain fields.
+
+Click `Credentials` on the left sidebar. Click `Create Credentials`, which is towards the top left of the page, and then click `OAuth client ID`.
+
+Select `Web application` for the Application type. Fill out the name, then fill out the Authorized JavaScript origins URI field with the backend address. Fill it out with `http://localhost:3001` (doesn't support ports other than 3001 for now, but I will change that later).
+
+Then fill out the Authorized redirect URI field with `http://localhost:3001/auth/google/callback`.
+
+This should create a Client ID and Client Secret.
+
+Add these two fields to our .env file (without the <>s):
+
+    GOOGLE_CLIENT_ID=<client_id_here>
+    GOOGLE_CLIENT_SECRET=<client_secret_here>
+
+We should be able to create new users using Google OAuth now. Try making one, and it should be added to whichever database you set in your DB_CONNECTION_STRING in the .env file.
 
 #### Going From Here
 
