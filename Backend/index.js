@@ -32,53 +32,83 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new GoogleStrategy({
-  clientID: GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: 'https://www.example.com/oauth2/redirect/google',
-  scope: [ 'profile' ],
-  state: true
-},
-function(accessToken, refreshToken, profile, cb) {
-  db.get('SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?', [
-    'https://accounts.google.com',
-    profile.id
-  ], function(err, cred) {
-    if (err) { return cb(err); }
-    if (!cred) {
-      // The account at Google has not logged in to this app before.  Create a
-      // new user record and associate it with the Google account.
-      db.run('INSERT INTO users (name) VALUES (?)', [
-        profile.displayName
-      ], function(err) {
-        if (err) { return cb(err); }
+passport.serializeUser((user, done) => done(null, user));
 
-        var id = this.lastID;
-        db.run('INSERT INTO federated_credentials (user_id, provider, subject) VALUES (?, ?, ?)', [
-          id,
-          'https://accounts.google.com',
-          profile.id
-        ], function(err) {
-          if (err) { return cb(err); }
-          var user = {
-            id: id,
-            name: profile.displayName
-          };
-          return cb(null, user);
-        });
-      });
-    } else {
-      // The account at Google has previously logged in to the app.  Get the
-      // user record associated with the Google account and log the user in.
-      db.get('SELECT * FROM users WHERE id = ?', [ cred.user_id ], function(err, user) {
-        if (err) { return cb(err); }
-        if (!user) { return cb(null, false); }
-        return cb(null, user);
-      });
+passport.deserializeUser((user, done) => done(null, user));
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: '/auth/google/callback',
+      // scope: [ 'profile' ],
+      // state: true
+    },
+    (accessToken, refreshToken, profile, cb) => {
+      // Called on successful authentication
+      // Inset into Database
+      console.log(profile);
+      cb(null, profile);
     }
-  };
-}
-));
+  )
+);
+
+app.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile'] })
+);
+
+app.get(
+  '/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  (req, res) => {
+    // Successful authentication, redirect home
+    res.redirect('/');
+  }
+);
+
+// function(accessToken, refreshToken, profile, cb) {
+//   // Called on successful authentication
+//   db.get('SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?', [
+//     'https://accounts.google.com',
+//     profile.id
+//   ], function(err, cred) {
+//     if (err) { return cb(err); }
+//     if (!cred) {
+//       // The account at Google has not logged in to this app before.  Create a
+//       // new user record and associate it with the Google account.
+//       db.run('INSERT INTO users (name) VALUES (?)', [
+//         profile.displayName
+//       ], function(err) {
+//         if (err) { return cb(err); }
+
+//         var id = this.lastID;
+//         db.run('INSERT INTO federated_credentials (user_id, provider, subject) VALUES (?, ?, ?)', [
+//           id,
+//           'https://accounts.google.com',
+//           profile.id
+//         ], function(err) {
+//           if (err) { return cb(err); }
+//           var user = {
+//             id: id,
+//             name: profile.displayName
+//           };
+//           return cb(null, user);
+//         });
+//       });
+//     } else {
+//       // The account at Google has previously logged in to the app.  Get the
+//       // user record associated with the Google account and log the user in.
+//       db.get('SELECT * FROM users WHERE id = ?', [ cred.user_id ], function(err, user) {
+//         if (err) { return cb(err); }
+//         if (!user) { return cb(null, false); }
+//         return cb(null, user);
+//       });
+//     }
+//   };
+// }
+// ));
 
 // async function run() {
 //   try {
