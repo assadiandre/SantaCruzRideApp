@@ -10,6 +10,7 @@ export default function Context(props) {
       .get('http://localhost:3001/getuser', { withCredentials: true })
       .then((res) => {
         if (res.data) {
+          // console.log(res);
           setUserObject(res.data);
         }
       });

@@ -1,17 +1,23 @@
-const express = require('express');
-// Require dotenv so that we can load values from our .env file
-require('dotenv').config();
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import session from 'express-session';
+import passport from 'passport';
 
-const cors = require('cors');
-const session = require('express-session');
-const passport = require('passport');
+// Define "require"
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+// load values from our .env file
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 // All of the MongoDB code below was taken from the tutorial provided in the Readme document
-const mongoose = require('mongoose');
+
 // Make sure to put your database connection string below
 const uri = process.env.DB_CONNECTION_STRING;
 mongoose.connect(uri, {}, () => {
@@ -36,6 +42,9 @@ passport.serializeUser((user, done) => done(null, user));
 
 passport.deserializeUser((user, done) => done(null, user));
 
+// Username (change to First Name and Last Name later)
+// ID
+
 passport.use(
   new GoogleStrategy(
     {
@@ -48,7 +57,7 @@ passport.use(
     (accessToken, refreshToken, profile, cb) => {
       // Called on successful authentication
       // Inset into Database (TODO)
-      console.log(profile);
+      // console.log(profile);
       cb(null, profile);
     }
   )
@@ -78,15 +87,3 @@ app.get('/getuser', (req, res) => {
 
 // This displays message that the server running and listening to specified port
 app.listen(port, () => console.log(`Listening on port ${port}`));
-
-// // Example GET route
-// app.get('/express_backend', (req, res) => {
-//   res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
-// });
-
-// // Example GET route with MongoDB
-// app.get('/mongodbtest', (req, res) => {
-//   run()
-//     .then((response) => res.send({ data: response }))
-//     .catch(console.dir);
-// });

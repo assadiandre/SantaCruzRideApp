@@ -1,0 +1,4 @@
+export User {
+  googleId: "",
+  username: "",
+};
