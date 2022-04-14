@@ -20,7 +20,7 @@ mongoose.connect(uri, {}, () => {
 
 // Middleware
 app.use(express.json());
-app.use(cors({ origin: `https://localhost:3000`, credentials: true })); // Frontend Port?
+app.use(cors({ origin: `https://localhost:3000`, credentials: true })); // Frontend Port.
 app.use(
   session({
     secret: 'secretcode',
@@ -47,7 +47,7 @@ passport.use(
     },
     (accessToken, refreshToken, profile, cb) => {
       // Called on successful authentication
-      // Inset into Database
+      // Inset into Database (TODO)
       console.log(profile);
       cb(null, profile);
     }
@@ -64,73 +64,20 @@ app.get(
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
     // Successful authentication, redirect home
-    res.redirect('/');
+    res.redirect('http://localhost:3000');
   }
 );
-
-// function(accessToken, refreshToken, profile, cb) {
-//   // Called on successful authentication
-//   db.get('SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?', [
-//     'https://accounts.google.com',
-//     profile.id
-//   ], function(err, cred) {
-//     if (err) { return cb(err); }
-//     if (!cred) {
-//       // The account at Google has not logged in to this app before.  Create a
-//       // new user record and associate it with the Google account.
-//       db.run('INSERT INTO users (name) VALUES (?)', [
-//         profile.displayName
-//       ], function(err) {
-//         if (err) { return cb(err); }
-
-//         var id = this.lastID;
-//         db.run('INSERT INTO federated_credentials (user_id, provider, subject) VALUES (?, ?, ?)', [
-//           id,
-//           'https://accounts.google.com',
-//           profile.id
-//         ], function(err) {
-//           if (err) { return cb(err); }
-//           var user = {
-//             id: id,
-//             name: profile.displayName
-//           };
-//           return cb(null, user);
-//         });
-//       });
-//     } else {
-//       // The account at Google has previously logged in to the app.  Get the
-//       // user record associated with the Google account and log the user in.
-//       db.get('SELECT * FROM users WHERE id = ?', [ cred.user_id ], function(err, user) {
-//         if (err) { return cb(err); }
-//         if (!user) { return cb(null, false); }
-//         return cb(null, user);
-//       });
-//     }
-//   };
-// }
-// ));
-
-// async function run() {
-//   try {
-//     await client.connect();
-//     const database = client.db('sample_mflix');
-//     const movies = database.collection('movies');
-//     // Query for a movie that has the title 'Back to the Future'
-//     const query = { title: 'Back to the Future' };
-//     const movie = await movies.findOne(query);
-//     return movie;
-//   } finally {
-//     // Ensures that the client will close when you finish/error
-//     await client.close();
-//   }
-// }
-
-// This displays message that the server running and listening to specified port
-app.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.get('/', (req, res) => {
   res.send('Hello world');
 });
+
+app.get('/getuser', (req, res) => {
+  res.send(req.user);
+});
+
+// This displays message that the server running and listening to specified port
+app.listen(port, () => console.log(`Listening on port ${port}`));
 
 // // Example GET route
 // app.get('/express_backend', (req, res) => {

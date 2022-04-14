@@ -6,8 +6,12 @@ import Homepage from './Components/Homepage/Homepage';
 import LoginPage from './Components/LoginPage/LoginPage';
 import NavBar from './Components/NavBar/NavBar';
 import './GlobalStyles.css';
+import { useContext } from 'react';
+import { myContext } from './Context';
 
 function App() {
+  const userObject = useContext(myContext);
+  console.log(userObject);
   return (
     <BrowserRouter>
       <NavBar />
