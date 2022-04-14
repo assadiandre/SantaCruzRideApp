@@ -58,6 +58,7 @@ passport.use(
       // Called on successful authentication
       // Inset into Database (TODO)
       // console.log(profile);
+
       cb(null, profile);
     }
   )
