@@ -20,7 +20,7 @@ mongoose.connect(uri, {}, () => {
 
 // Middleware
 app.use(express.json());
-app.use(cors({ origin: `https://localhost:3000`, credentials: true })); // Frontend Port.
+app.use(cors({ origin: 'http://localhost:3000', credentials: true })); // Frontend Port.
 app.use(
   session({
     secret: 'secretcode',
