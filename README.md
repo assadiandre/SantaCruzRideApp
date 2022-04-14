@@ -70,9 +70,10 @@ Now populate our .env file with two fields:
     PORT=3001
     DB_CONNECTION_STRING=mongodb+srv://andreassadi:mypassword@santacruzrideapp-cluste.z8ywr.mongodb.net/SantaCruzRideApp-Cluster?retryWrites=true&w=majority
 
-Now everything is setup, run the backend by running the following command:
+Now everything is setup, run the backend by running either of the following commands:
 
     npm run dev
+    nodemon index.js
 
 #### Step 2 - Setting up the Client
 
@@ -95,7 +96,7 @@ Almost everything was implemented by following this tutorial, so check it out if
 
 Everything described below goes from 42:24 to 44:10 in the video right above, although some steps are slightly different.
 
-Run `npm install`
+Run `npm install` on both client and backend if you set them up before authentication was implemented.
 
 Go to https://console.developers.google.com/apis/dashboard and login.
 
