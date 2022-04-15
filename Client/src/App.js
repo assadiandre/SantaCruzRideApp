@@ -17,7 +17,8 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" exact element={<Homepage />} />
-        <Route path="/login" element={<LoginPage />} />
+        {/* Hide login page from users that are already logged in. */}
+        {userObject ? null : <Route path="/login" element={<LoginPage />} />}
       </Routes>
     </BrowserRouter>
   );

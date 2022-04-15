@@ -39,9 +39,14 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.serializeUser((user, done) => done(null, user));
+// only serialize ID
+passport.serializeUser((user, done) => done(null, user._id));
 
-passport.deserializeUser((user, done) => done(null, user));
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, doc) => {
+    return done(null, doc);
+  });
+});
 
 passport.use(
   new GoogleStrategy(
@@ -50,7 +55,7 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: '/auth/google/callback',
     },
-    (accessToken, refreshToken, profile, cb) => {
+    (_, __, profile, cb) => {
       // Called on successful authentication
       // console.log(profile);
 
@@ -67,10 +72,12 @@ passport.use(
             googleId: profile.id,
             username: profile.name.givenName,
           });
+
           await newUser.save();
+          cb(null, newUser);
         }
+        cb(null, doc);
       });
-      cb(null, profile);
     }
   )
 );
@@ -95,6 +102,13 @@ app.get('/', (req, res) => {
 
 app.get('/getuser', (req, res) => {
   res.send(req.user);
+});
+
+app.get('/auth/logout', (req, res) => {
+  if (req.user) {
+    req.logout();
+    res.send('Logout successful');
+  }
 });
 
 // This displays message that the server running and listening to specified port
