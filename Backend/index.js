@@ -75,8 +75,9 @@ passport.use(
 
           await newUser.save();
           cb(null, newUser);
+        } else {
+          cb(null, doc);
         }
-        cb(null, doc);
       });
     }
   )

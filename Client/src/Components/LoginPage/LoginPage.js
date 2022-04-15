@@ -10,10 +10,10 @@ export default function LoginPage() {
   return (
     <div className={styles.loginPage}>
       <div className={styles.loginForm}>
-        <h1>Login</h1>
+        <h1>Login/Signup</h1>
         <div className={styles.googleContainer} onClick={googleLogin}>
           <img src={googleImage} alt="Google Icon" />
-          <p>Login with Google</p>
+          <p>Login/Signup with Google</p>
         </div>
       </div>
     </div>

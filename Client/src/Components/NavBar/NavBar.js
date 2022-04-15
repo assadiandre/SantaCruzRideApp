@@ -30,7 +30,7 @@ export default function NavBar() {
           <li onClick={logout}>Logout</li>
         ) : (
           <li>
-            <Link to="/login">Login</Link>
+            <Link to="/login">Login/Signup</Link>
           </li>
         )}
       </ul>
