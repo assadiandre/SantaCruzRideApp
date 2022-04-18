@@ -79,6 +79,7 @@ passport.use(
           const newUser = new User({
             googleId: profile.id,
             username: profile.name.givenName,
+            setupFlag: false,
           });
 
           await newUser.save();
@@ -91,6 +92,7 @@ passport.use(
   )
 );
 
+// Auth endpoints
 app.get(
   '/auth/google',
   passport.authenticate('google', { scope: ['profile'] })
@@ -105,6 +107,14 @@ app.get(
   }
 );
 
+app.get('/auth/logout', (req, res) => {
+  if (req.user) {
+    req.logout();
+    res.send('Logout successful');
+  }
+});
+
+// Dummy endpoint
 app.get('/', (req, res) => {
   res.send('Hello world');
 });
@@ -113,10 +123,14 @@ app.get('/getuser', (req, res) => {
   res.send(req.user);
 });
 
-app.get('/auth/logout', (req, res) => {
+// Account setup endpoint
+app.put('/account/setup', (req, res) => {
+  console.log(req.body);
+  console.log(req.user);
   if (req.user) {
-    req.logout();
-    res.send('Logout successful');
+    User.findByIdAndUpdate(req.user.id, req.body).then(() => {
+      // res.send(user);
+    });
   }
 });
 
