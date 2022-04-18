@@ -9,6 +9,9 @@ import './GlobalStyles.css';
 import { useContext } from 'react';
 import { myContext } from './Context';
 
+import { Button } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css'; // bootstrap stylesheet
+
 function App() {
   const userObject = useContext(myContext);
   console.log(userObject);
