@@ -79,6 +79,7 @@ passport.use(
           const newUser = new User({
             googleId: profile.id,
             username: profile.name.givenName,
+            lastname: profile.name.familyName,
             setupFlag: false,
           });
 
