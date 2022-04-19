@@ -2,12 +2,15 @@ import React, { useContext } from 'react';
 import { myContext } from '../../Context';
 import { Card, Button, Stack } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Homepage() {
   const context = useContext(myContext);
+
   const googleLogin = () => {
     window.open('http://localhost:3001/auth/google', '_self');
   };
+
   return (
     <div>
       <Card border="danger" className="text-center mt-5 mx-auto w-75">

@@ -3,8 +3,9 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { myContext } from '../../Context';
+import logo from '../../assets/scraLogo.png';
 
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown, Image } from 'react-bootstrap';
 
 export default function NavBar() {
   const userObject = useContext(myContext);
@@ -39,12 +40,12 @@ export default function NavBar() {
 
       <Navbar bg="danger" variant="dark">
         <Container>
-          <Navbar.Brand as={Link} to="/">
-            SCRA
-          </Navbar.Brand>
+          <Link to={'/'}>
+            <img src={logo} width="65" height="45" alt="" />
+          </Link>
           <Navbar.Toggle />
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/login">
+            <Nav.Link as={Link} to="/about">
               About
             </Nav.Link>
           </Nav>
