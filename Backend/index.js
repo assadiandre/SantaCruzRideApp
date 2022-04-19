@@ -125,11 +125,9 @@ app.get('/getuser', (req, res) => {
 
 // Account setup endpoint
 app.put('/account/setup', (req, res) => {
-  console.log(req.body);
-  console.log(req.user);
   if (req.user) {
     User.findByIdAndUpdate(req.user.id, req.body).then(() => {
-      // res.send(user);
+      res.send(req.user);
     });
   }
 });

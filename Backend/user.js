@@ -15,6 +15,12 @@ const user = new mongoose.Schema({
     required: true,
     type: Boolean,
   },
+  phoneNumber: {
+    type: String,
+  },
+  bio: {
+    type: String,
+  },
 });
 
 export default mongoose.model('User', user);

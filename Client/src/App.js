@@ -8,6 +8,7 @@ import NavBar from './Components/NavBar/NavBar';
 import './GlobalStyles.css';
 import { useContext } from 'react';
 import { myContext } from './Context';
+import EndpointTest from './Components/EndpointTest/EndpointTest';
 
 function App() {
   const userObject = useContext(myContext);
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" exact element={<Homepage />} />
         {/* Hide login page from users that are already logged in. */}
         {userObject ? null : <Route path="/login" element={<LoginPage />} />}
+        <Route path="/test" element={<EndpointTest />} />
       </Routes>
     </BrowserRouter>
   );
