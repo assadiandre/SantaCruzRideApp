@@ -10,6 +10,17 @@ const user = new mongoose.Schema({
     required: true,
     type: String,
   },
+  // Flag to check if the account has been set up for routing purposes. Initialized to false.
+  setupFlag: {
+    required: true,
+    type: Boolean,
+  },
+  phoneNumber: {
+    type: String,
+  },
+  bio: {
+    type: String,
+  },
 });
 
 export default mongoose.model('User', user);

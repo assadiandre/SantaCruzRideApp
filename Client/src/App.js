@@ -8,6 +8,7 @@ import NavBar from './Components/NavBar/NavBar';
 import './GlobalStyles.css';
 import { useContext } from 'react';
 import { myContext } from './Context';
+import EndpointTest from './Components/EndpointTest/EndpointTest';
 
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'; // bootstrap stylesheet
@@ -23,6 +24,7 @@ function App() {
         exists -> when on path="/setup" show __*/}
         <Route path="/" element={<Homepage />} />
         <Route path="/setup" element={<LoginPage />} />
+
       </Routes>
     </BrowserRouter>
   );

@@ -21,9 +21,14 @@ const port = process.env.PORT || 5000;
 
 // Make sure to put your database connection string below
 const uri = process.env.DB_CONNECTION_STRING;
-mongoose.connect(uri, {}, () => {
-  console.log('Connected to mongoose successfully');
-});
+mongoose
+  .connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log('Connected to mongoose successfully');
+  });
 
 // Middleware
 app.use(express.json());
@@ -33,6 +38,9 @@ app.use(
     secret: 'secretcode',
     resave: true,
     saveUninitialized: true,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // One week
+    },
   })
 );
 
@@ -71,6 +79,7 @@ passport.use(
           const newUser = new User({
             googleId: profile.id,
             username: profile.name.givenName,
+            setupFlag: false,
           });
 
           await newUser.save();
@@ -83,6 +92,7 @@ passport.use(
   )
 );
 
+// Auth endpoints
 app.get(
   '/auth/google',
   passport.authenticate('google', { scope: ['profile'] })
@@ -99,6 +109,14 @@ app.get(
   }
 );
 
+app.get('/auth/logout', (req, res) => {
+  if (req.user) {
+    req.logout();
+    res.send('Logout successful');
+  }
+});
+
+// Dummy endpoint
 app.get('/', (req, res) => {
   res.send('Hello world');
 });
@@ -107,10 +125,12 @@ app.get('/getuser', (req, res) => {
   res.send(req.user);
 });
 
-app.get('/auth/logout', (req, res) => {
+// Account setup endpoint
+app.put('/account/setup', (req, res) => {
   if (req.user) {
-    req.logout();
-    res.send('Logout successful');
+    User.findByIdAndUpdate(req.user.id, req.body).then(() => {
+      res.send(req.user);
+    });
   }
 });
 
