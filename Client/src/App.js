@@ -4,6 +4,7 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Homepage from './Components/Homepage/Homepage';
 import LoginPage from './Components/LoginPage/LoginPage';
+import AccountSetup from './Components/AccountSetup/AccountSetup';
 import NavBar from './Components/NavBar/NavBar';
 import './GlobalStyles.css';
 import { useContext } from 'react';
@@ -23,7 +24,7 @@ function App() {
         {/* if userobj does not exist -> when on path="/" show homepage  else if userobj 
         exists -> when on path="/setup" show __*/}
         <Route path="/" element={<Homepage />} />
-        <Route path="/setup" element={<LoginPage />} />
+        <Route path="/setup" element={<AccountSetup />} />
 
       </Routes>
     </BrowserRouter>
