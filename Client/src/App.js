@@ -10,6 +10,9 @@ import { useContext } from 'react';
 import { myContext } from './Context';
 import EndpointTest from './Components/EndpointTest/EndpointTest';
 
+import { Button } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css'; // bootstrap stylesheet
+
 function App() {
   const userObject = useContext(myContext);
   console.log(userObject);
@@ -17,10 +20,11 @@ function App() {
     <BrowserRouter>
       <NavBar />
       <Routes>
-        <Route path="/" exact element={<Homepage />} />
-        {/* Hide login page from users that are already logged in. */}
-        {userObject ? null : <Route path="/login" element={<LoginPage />} />}
-        <Route path="/test" element={<EndpointTest />} />
+        {/* if userobj does not exist -> when on path="/" show homepage  else if userobj 
+        exists -> when on path="/setup" show __*/}
+        <Route path="/" element={<Homepage />} />
+        <Route path="/setup" element={<LoginPage />} />
+
       </Routes>
     </BrowserRouter>
   );

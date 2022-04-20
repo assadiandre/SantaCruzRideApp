@@ -100,9 +100,11 @@ app.get(
 
 app.get(
   '/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     // Successful authentication, redirect to home
+
+    // redirect after authentication
     res.redirect('http://localhost:3000');
   }
 );
