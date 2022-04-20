@@ -19,11 +19,11 @@ function App() {
     <BrowserRouter>
       <NavBar />
       <Routes>
-        {!userObject ? (
-          <Route path="/" element={<Homepage />} />
-        ) : (
-          <Route path="/setup" element={<LoginPage />} />
-        )}
+        {/* if userobj does not exist -> when on path="/" show homepage  else if userobj 
+        exists -> when on path="/setup" show __*/}
+        <Route path="/" element={<Homepage />} />
+        <Route path="/setup" element={<LoginPage />} />
+        <Route path="/loading" element={<></>} />
       </Routes>
     </BrowserRouter>
   );

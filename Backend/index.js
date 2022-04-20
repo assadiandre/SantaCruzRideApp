@@ -93,7 +93,9 @@ app.get(
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     // Successful authentication, redirect to home
-    res.redirect('http://localhost:3000/setup');
+
+    // redirect after authentication
+    res.redirect('http://localhost:3000');
   }
 );
 

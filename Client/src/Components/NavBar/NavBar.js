@@ -18,6 +18,7 @@ export default function NavBar() {
       .then((res) => {
         if (res.data === 'Logout successful') {
           window.location.href = '/';
+          localStorage.setItem('auth', 'false');
         }
       });
   };
