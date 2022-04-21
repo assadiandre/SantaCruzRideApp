@@ -25,6 +25,9 @@ const user = new mongoose.Schema({
   bio: {
     type: String,
   },
+  userType: {
+    type: String,
+  },
 });
 
 export default mongoose.model('User', user);

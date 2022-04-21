@@ -17,6 +17,24 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
+//user schema for users
+const UserSchema = new mongoose.Schema({
+  driver: {
+      type: String,
+      required: true,
+  },
+  email: {
+      type: String,
+      required: true,
+      unique: true,
+  },
+  date: {
+      type: Date,
+      default: Date.now,
+  },
+});
+
+
 // All of the MongoDB code below was taken from the tutorial provided in the Readme document
 
 // Make sure to put your database connection string below

@@ -11,7 +11,8 @@ export default function EndpointTest() {
         'http://localhost:3001/account/setup',
         {
           setupFlag: true,
-          phoneNumber: '(123) 456-9999',
+          userType: 'rider',
+          phoneNumber: '(123) 456-1234',
           bio: 'hello asbdasjhbdsahjkbdk',
         },
         {

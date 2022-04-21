@@ -3,15 +3,12 @@ import './App.css';
 // import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Homepage from './Components/Homepage/Homepage';
-import LoginPage from './Components/LoginPage/LoginPage';
 import AccountSetup from './Components/AccountSetup/AccountSetup';
 import NavBar from './Components/NavBar/NavBar';
 import './GlobalStyles.css';
 import { useContext } from 'react';
 import { myContext } from './Context';
 import EndpointTest from './Components/EndpointTest/EndpointTest';
-
-import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'; // bootstrap stylesheet
 
 function App() {

@@ -27,7 +27,7 @@ export default function Homepage() {
         // then redirect to list page
 
         // Otherwise redirect to setup page
-        navigate('/setup');
+        //navigate('/setup');
       }
     }
   }, [context]);
