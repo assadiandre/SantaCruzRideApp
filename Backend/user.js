@@ -11,6 +11,10 @@ const user = new mongoose.Schema({
     type: String,
   },
   lastname: {
+    // required: true,
+    type: String,
+  },
+  email: {
     required: true,
     type: String,
   },
@@ -19,6 +23,10 @@ const user = new mongoose.Schema({
     required: true,
     type: Boolean,
   },
+  // testFlag: {
+  //   required: true,
+  //   type: Boolean,
+  // },
   phoneNumber: {
     type: String,
   },

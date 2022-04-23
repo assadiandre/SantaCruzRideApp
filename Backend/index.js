@@ -80,9 +80,12 @@ passport.use(
             googleId: profile.id,
             username: profile.name.givenName,
             lastname: profile.name.familyName,
+            email: profile.emails[0].value,
             setupFlag: false,
+            // testFlag: false, Will be used later.
           });
 
+          console.log(profile);
           await newUser.save();
           cb(null, newUser);
         } else {
@@ -96,7 +99,7 @@ passport.use(
 // Auth endpoints
 app.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['profile'] })
+  passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
 app.get(
