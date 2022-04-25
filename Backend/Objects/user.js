@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Route from './route.js';
 
 // change username to First Name and Last Name later
 const user = new mongoose.Schema({
@@ -11,7 +12,7 @@ const user = new mongoose.Schema({
     type: String,
   },
   lastname: {
-    required: true,
+    // required: true,
     type: String,
   },
   // Flag to check if the account has been set up for routing purposes. Initialized to false.
@@ -24,6 +25,10 @@ const user = new mongoose.Schema({
   },
   bio: {
     type: String,
+  },
+  routes: {
+    required: true,
+    type: [Route],
   },
 });
 

@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
-import User from './User.js';
+import User from './Objects/user.js';
 
 // Define "require"
 import { createRequire } from 'module';
@@ -81,6 +81,7 @@ passport.use(
             username: profile.name.givenName,
             lastname: profile.name.familyName,
             setupFlag: false,
+            routes: [],
           });
 
           await newUser.save();
