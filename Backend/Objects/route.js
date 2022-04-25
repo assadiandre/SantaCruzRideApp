@@ -7,6 +7,10 @@ const Route = {
     required: true,
     type: [String],
   },
+  time: {
+    required: true,
+    type: Date,
+  },
   offCampusLocation: {
     required: true,
     type: String,
