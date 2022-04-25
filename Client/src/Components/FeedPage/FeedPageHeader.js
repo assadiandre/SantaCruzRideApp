@@ -33,8 +33,8 @@ const FeedPageHeader = () => {
         <Row>
           <ButtonToolbar className="p-1">
             <ButtonGroup>
-              <Button variant="dark">Mon</Button>{' '}
-              <Button variant="light">Tues</Button>{' '}
+              <Button variant="dark">Mon</Button>
+              <Button variant="light">Tue</Button>
               <Button variant="dark">Wed</Button>
               <Button variant="light">Thu</Button>
               <Button variant="dark">Fri</Button>

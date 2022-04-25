@@ -24,7 +24,7 @@ export default function NavBar() {
   };
 
   return (
-    <div className={''}>
+    <div>
       <Navbar bg="danger" variant="dark">
         <Container>
           <Link to={'/'}>
@@ -32,7 +32,7 @@ export default function NavBar() {
           </Link>
           <Navbar.Toggle />
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/about">
+            <Nav.Link className="text-light" as={Link} to="/about">
               <b>SCcarpool</b>
             </Nav.Link>
           </Nav>
