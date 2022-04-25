@@ -30,7 +30,15 @@ export default function EndpointTest() {
     axios
       .put(
         'http://localhost:3001/account/addroute',
-        {},
+        {
+          routes: {
+            toCampus: true,
+            days: ['M', 'W'],
+            time: new Date(),
+            offCampusLocation: '123 Sesame Street',
+            campusLocation: 'College Nine/Ten',
+          },
+        },
         {
           withCredentials: true,
         }
