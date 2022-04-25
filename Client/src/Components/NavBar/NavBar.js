@@ -25,20 +25,6 @@ export default function NavBar() {
 
   return (
     <div className={''}>
-      {/* <ul className={styles.navBar}>
-        <li>
-          <Link to="/">Home</Link>
-        </li> */}
-      {/* Display Login button if user not logged in, display Logout button if user logged in already. */}
-      {/* {userObject ? (
-          <li onClick={logout}>Logout</li>
-        ) : (
-          <li>
-            <Link to="/login">Login/Signup</Link>
-          </li>
-        )}
-      </ul> */}
-
       <Navbar bg="danger" variant="dark">
         <Container>
           <Link to={'/'}>
@@ -47,14 +33,14 @@ export default function NavBar() {
           <Navbar.Toggle />
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/about">
-              About
+              <b>SCcarpool</b>
             </Nav.Link>
           </Nav>
           <Navbar.Collapse className="justify-content-end">
             {userObject ? (
               <Nav>
                 <NavDropdown
-                  title={`Hi, ${userObject.username}`}
+                  title={<b>{`Hi, ${userObject.username}`}</b>}
                   id="navbarScrollingDropdown"
                 >
                   <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>

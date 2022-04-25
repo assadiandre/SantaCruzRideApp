@@ -22,12 +22,13 @@ export default function Homepage() {
   // use effect called when component is rendered or when args are true
   useEffect(() => {
     if (auth) {
-      if (context !== null) {
-        // If the user object is not null and setup is already true,
-        // then redirect to list page
-
-        // Otherwise redirect to setup page
+      // currently backwards just so i can code
+      if (context && !context.setupFlag) {
+        navigate('/feed');
+      } else if (context && context.setupFlag) {
         navigate('/setup');
+      } else {
+        navigate('/');
       }
     }
   }, [context]);
@@ -41,16 +42,17 @@ export default function Homepage() {
   return (
     <div>
       <Card border="danger" className="text-center mt-5 mx-auto w-75">
-        <Card.Header>Santa Cruz Ride App</Card.Header>
         <Card.Body>
-          <Card.Title>Welcome</Card.Title>
-          <Card.Text>Click below to Log in or Sign up!</Card.Text>
           <Stack gap={2} className="col-md-5 mx-auto">
-            <Button variant="outline-danger" onClick={googleLogin}>
-              Log in
+            <Button
+              className="mt-2"
+              variant="outline-danger"
+              onClick={googleLogin}
+            >
+              SIGNUP
             </Button>
-            <Button className="mb-3" variant="danger" onClick={googleLogin}>
-              Sign up
+            <Button className="mb-2" variant="danger" onClick={googleLogin}>
+              LOGIN
             </Button>
           </Stack>
         </Card.Body>
