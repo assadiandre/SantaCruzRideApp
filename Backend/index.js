@@ -82,7 +82,6 @@ passport.use(
             lastname: profile.name.familyName,
             email: profile.emails[0].value,
             setupFlag: false,
-            // testFlag: false, Will be used later.
           });
 
           console.log(profile);
@@ -140,3 +139,5 @@ app.put('/account/setup', (req, res) => {
 
 // This displays message that the server running and listening to specified port
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
+export default app;
