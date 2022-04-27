@@ -5,10 +5,10 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Homepage from './Components/Homepage/Homepage';
 import AccountSetup from './Components/AccountSetup/AccountSetup';
 import NavBar from './Components/NavBar/NavBar';
+import Schedule from './Components/Schedule/Schedule';
 import './GlobalStyles.css';
 import { useContext } from 'react';
 import { myContext } from './Context';
-import EndpointTest from './Components/EndpointTest/EndpointTest';
 import 'bootstrap/dist/css/bootstrap.min.css'; // bootstrap stylesheet
 
 function App() {
@@ -22,8 +22,10 @@ function App() {
         exists -> when on path="/setup" show __*/}
         <Route path="/" element={<Homepage />} />
         <Route path="/setup" element={<AccountSetup />} />
-
+        <Route path="/schedule" element={<Schedule />} />
       </Routes>
+      <div>
+	</div>
     </BrowserRouter>
   );
 }

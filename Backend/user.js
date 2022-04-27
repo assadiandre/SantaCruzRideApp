@@ -28,6 +28,9 @@ const user = new mongoose.Schema({
   userType: {
     type: String,
   },
+  address: {
+    type: String,
+  },
 });
 
 export default mongoose.model('User', user);

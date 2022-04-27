@@ -22,10 +22,7 @@
     border-radius: 3px;
     position: absolute;
 }
-.errorList {
-    color: rgb(221, 1, 1);
-    background: rgb(255, 255, 255);
-}
+
 .githubContainer {
     background: rgb(56, 56, 56);
 }
@@ -42,7 +39,7 @@
 .loginPage {
     width: 100vw;
     display: flex;
-    background: #4385f4;
+    background: #377ef8;
     align-items: center;
     flex-direction: column;
     justify-content: center;
@@ -50,18 +47,26 @@
 
 .loginForm {
     display: flex;
-    color: #000000;
+    align-items: left;
     background: #ffffff;
-    align-items: center;
     justify-content: center;
     max-width: 600px;
     flex-direction: column;
-    min-width: 40vw;
-    box-shadow: #000000;
-    box-shadow: 2px 2px 2px #3d3d3d;
+    min-width: 50vw;
+    box-shadow: 2px 2px 2px #5d5d5d;
     border-radius: 15px;
 }
 .buttons {
-    box-shadow: 2px 2px 2px #3d3d3d;
-    background-color: #ffffff
+    box-shadow: 2px 2px 2px #5d5d5d;
+}
+.inputs{
+    max-width: 400px;
+    min-width: 40vw;
+    justify-content: left;
+    display: flex;
+    align-items: left;
+    padding-bottom: 2vw;
+}
+h1{
+    color: #ffffff;
 }
