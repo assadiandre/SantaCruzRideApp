@@ -1,9 +1,15 @@
 import React, { useContext } from 'react';
 import { myContext } from '../../Context';
-import { Card, Button, Stack } from 'react-bootstrap';
+import { Card, Button, Stack, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useCallback } from 'react';
+
+import {
+  BsPencilSquare,
+  BsFillPinMapFill,
+  BsFillCalendarDayFill,
+} from 'react-icons/bs';
 
 function getLocalAuth() {
   const potentialAuth = localStorage.getItem('auth');
@@ -41,7 +47,27 @@ export default function Homepage() {
 
   return (
     <div>
-      <Card border="danger" className="text-center mt-5 mx-auto w-75">
+      <Container className="mt-4 px-4 pb-3">
+        <Row>
+          <h1>
+            <b>CARPOOL TO</b>
+          </h1>
+        </Row>
+        <Row>
+          <h1>
+            <b>AND FROM</b>
+          </h1>
+        </Row>
+        <Row>
+          <h1>
+            <b>UCSC CAMPUS</b>
+          </h1>
+        </Row>
+      </Container>
+      <Card
+        border="danger"
+        className="text-center mt-5 mb-5 mx-auto w-75 pt-2 pb-2"
+      >
         <Card.Body>
           <Stack gap={2} className="col-md-5 mx-auto">
             <Button
@@ -57,6 +83,34 @@ export default function Homepage() {
           </Stack>
         </Card.Body>
       </Card>
+      <Container className="text-left mt-5 mx-auto px-5 pt-5 ">
+        <Row className="pb-2">
+          <Col xs={2}>
+            <BsPencilSquare size={45}></BsPencilSquare>
+          </Col>
+          <Col>
+            <h5>1. Sign up as a rider or driver</h5>
+          </Col>
+        </Row>
+        <Row className="pb-2">
+          <Col xs={2}>
+            <BsFillCalendarDayFill size={45}></BsFillCalendarDayFill>
+          </Col>
+          <Col>
+            <h5>2. Input your Weekly schedule</h5>
+          </Col>
+        </Row>
+        <Row className="pb-2">
+          <Col xs={2}>
+            <BsFillPinMapFill size={45}></BsFillPinMapFill>
+          </Col>
+          <Col>
+            <h5>
+              3. Match with students going the same route at the same time
+            </h5>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }
