@@ -12,9 +12,10 @@ import {
   ToggleButton,
 } from 'react-bootstrap';
 
-const FeedPageHeader = () => {
-  const [value, setValue] = useState([1, 7]);
-  const handleChange = (val) => setValue(val);
+const FeedPageHeader = ({ value, handleChange }) => {
+  // const [value, setValue] = useState([1, 7]);
+  // const handleChange = (val) => setValue(val);
+
   return (
     <div>
       <Container className="bg-danger pt-2 p-3 text-light">
