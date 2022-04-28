@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
-import User from './User.js';
+import User from './Objects/user.js';
 
 // Define "require"
 import { createRequire } from 'module';
@@ -81,6 +81,7 @@ passport.use(
             username: profile.name.givenName,
             lastname: profile.name.familyName,
             setupFlag: false,
+            routes: [],
           });
 
           await newUser.save();
@@ -127,11 +128,49 @@ app.get('/getuser', (req, res) => {
 });
 
 // Account setup endpoint
+// finds account by ID, then updates the use with that ID with whatever fields
+// were specified in req.body
 app.put('/account/setup', (req, res) => {
   if (req.user) {
-    User.findByIdAndUpdate(req.user.id, req.body).then(() => {
-      res.send(req.user);
-    });
+    User.findByIdAndUpdate(
+      req.user.id,
+      req.body,
+      { safe: true, upsert: true, new: true },
+      function (err, doc) {
+        if (err) {
+          // console.log(err);
+          res.send(err);
+        } else {
+          // console.log('Updated User : ', docs);
+          res.send(doc);
+        }
+      }
+    );
+  }
+});
+
+// Add to an account's list of routes
+// See below link for how to push to an array in mongoose
+// https://stackoverflow.com/questions/15621970/pushing-object-into-array-schema-in-mongoose
+app.put('/account/addroute', (req, res) => {
+  if (req.user) {
+    // console.log('testing route adding');
+    User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $push: req.body,
+      },
+      { safe: true, upsert: true, new: true },
+      function (err, doc) {
+        if (err) {
+          // console.log(err);
+          res.send(err);
+        } else {
+          // console.log('Updated User : ', docs);
+          res.send(doc);
+        }
+      }
+    );
   }
 });
 

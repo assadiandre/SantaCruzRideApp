@@ -25,7 +25,7 @@ function App() {
         exists -> when on path="/setup" show __*/}
         <Route path="/" element={<Homepage />} />
         <Route path="/setup" element={<AccountSetup />} />
-
+        <Route path="/test" element={<EndpointTest />} />
       </Routes>
     </BrowserRouter>
   );

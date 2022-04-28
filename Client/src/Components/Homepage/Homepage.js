@@ -25,7 +25,6 @@ export default function Homepage() {
       if (context !== null) {
         // If the user object is not null and setup is already true,
         // then redirect to list page
-
         // Otherwise redirect to setup page
         navigate('/setup');
       }

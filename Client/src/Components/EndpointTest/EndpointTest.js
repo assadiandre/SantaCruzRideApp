@@ -20,7 +20,32 @@ export default function EndpointTest() {
       )
       .then((res) => {
         if (res.data) {
-          //   console.log(res);
+          console.log(res.data);
+          //   setUserObject(res.data);
+        }
+      });
+  };
+
+  const addRoute = () => {
+    axios
+      .put(
+        'http://localhost:3001/account/addroute',
+        {
+          routes: {
+            toCampus: true,
+            days: ['M', 'W'],
+            time: new Date(),
+            offCampusLocation: '123 Sesame Street',
+            campusLocation: 'College Nine/Ten',
+          },
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.data) {
+          console.log(res.data);
           //   setUserObject(res.data);
         }
       });
@@ -29,7 +54,7 @@ export default function EndpointTest() {
   return (
     <div>
       Test Setup Endpoint
-      <div onClick={accountSetup}>
+      <div onClick={addRoute}>
         <p>Click me</p>
       </div>
     </div>
