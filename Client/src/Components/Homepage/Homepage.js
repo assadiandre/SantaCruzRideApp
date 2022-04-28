@@ -3,7 +3,7 @@ import { myContext } from '../../Context';
 import { Card, Button, Stack, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 
 import {
   BsPencilSquare,

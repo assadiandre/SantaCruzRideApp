@@ -32,7 +32,7 @@ export default function NavBar() {
           </Link>
           <Navbar.Toggle />
           <Nav className="me-auto">
-            <Nav.Link className="text-light" as={Link} to="/about">
+            <Nav.Link className="text-light" as={Link} to="/">
               <b>SCcarpool</b>
             </Nav.Link>
           </Nav>
