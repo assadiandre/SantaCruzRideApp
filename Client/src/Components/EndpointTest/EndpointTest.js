@@ -20,7 +20,7 @@ export default function EndpointTest() {
       )
       .then((res) => {
         if (res.data) {
-          console.log('t', res.data);
+          console.log(res.data);
           //   setUserObject(res.data);
         }
       });
@@ -45,7 +45,7 @@ export default function EndpointTest() {
       )
       .then((res) => {
         if (res.data) {
-          console.log('e', res.data);
+          console.log(res.data);
           //   setUserObject(res.data);
         }
       });
