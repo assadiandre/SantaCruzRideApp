@@ -22,12 +22,12 @@ export default function Homepage() {
   // use effect called when component is rendered or when args are true
   useEffect(() => {
     if (auth) {
-      // if (context !== null) {
-      //   // If the user object is not null and setup is already true,
-      //   // then redirect to list page
-      //   // Otherwise redirect to setup page
-      //   navigate('/setup');
-      // }
+      if (context !== null) {
+        // If the user object is not null and setup is already true,
+        // then redirect to list page
+        // Otherwise redirect to setup page
+        navigate('/setup');
+      }
     }
   }, [context]);
 
