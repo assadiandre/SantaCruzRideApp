@@ -5,7 +5,7 @@ const Route = {
   },
   days: {
     required: true,
-    type: [String],
+    type: [Number],
   },
   time: {
     required: true,

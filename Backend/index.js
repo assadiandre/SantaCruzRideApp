@@ -163,7 +163,7 @@ app.put('/account/addroute', (req, res) => {
       { safe: true, upsert: true, new: true },
       function (err, doc) {
         if (err) {
-          // console.log(err);
+          console.log(err);
           res.send(err);
         } else {
           // console.log('Updated User : ', docs);
