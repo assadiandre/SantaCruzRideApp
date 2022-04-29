@@ -8,8 +8,10 @@ import {
   DropdownButton,
   Dropdown,
   Button,
+  ButtonGroup,
   InputGroup,
   FormControl,
+  ToggleButton,
 } from 'react-bootstrap';
 function validate(userType, phone, bio) {
   const errors = [];
@@ -23,19 +25,29 @@ export default function Schedule() {
   const userObject = useContext(myContext);
   console.log(userObject);
 
-  const [direction, setDirection] = useState('To UCSC');
+  const [toCampus, setToCampus] = useState(true);
 
   const [onCampusLocation, setOnCampusLocation] = useState('');
   const [offCampusLocation, setOffCampusLocation] = useState('');
-  const [arrivalTime, setArrivalTime] = useState('');
-  const [days, setDays] = useState([]);
+  const [time, setTime] = useState('');
+  const myDays = ['Mon', 'Tues', 'Wed', 'Thurs', 'Fri'];
+  const [days, setDays] = useState([false, false, false, false, false]); //indices of true days
 
   const [err, setErr] = useState([]);
-  const [inputList, setInputList] = useState([]);
+  const [routes, setRoutes] = useState([
+    {
+      toCampus: false,
+      days: [''],
+      onCampusLocation: '',
+      offCampusLocation: '',
+      time: '',
+    },
+  ]);
 
   const schedule = (e) => {
     e.preventDefault();
     setErr([]);
+    updateItem(e);
     const errors = validate();
     if (errors.length > 0) {
       setErr(errors);
@@ -45,11 +57,13 @@ export default function Schedule() {
           'http://localhost:3001/schedule',
           {
             setupFlag: true,
-            arrivalTime: arrivalTime,
-            direction: direction,
+            time: time,
+            toCampus: toCampus,
             onCampusLocation: onCampusLocation,
             offCampusLocation: offCampusLocation,
-            days: days,
+            days: myDays
+              .from({ length: 5 }, (_, i) => (days[i] === true ? i : _))
+              .filter((x) => x),
           },
           {
             withCredentials: true,
@@ -57,41 +71,55 @@ export default function Schedule() {
         )
         .then((res) => {
           if (res.data) {
+            myDays
+              .from({ length: 5 }, (_, i) => (days[i] === true ? i : _))
+              .filter((x) => x)
+              .forEach((x) => console.log(x));
             //    console.log(userType);
             //   setUserObject(res.data);
           }
         });
     }
   };
-  const handleInputChange = (e, index) => {
-    const { name, value } = e.target;
-    const list = [inputList];
-    list[index][name] = value;
-    setInputList(list);
+  // update specific routes
+  const updateItem = (e, index) => {
+    const list = routes;
+    list[index] = {
+      setupFlag: true,
+      time: time,
+      toCampus: toCampus,
+      onCampusLocation: onCampusLocation,
+      offCampusLocation: offCampusLocation,
+      days: myDays
+        .from({ length: 5 }, (_, i) => (days[i] === true ? i : _))
+        .filter((x) => x),
+    };
+    setRoutes(list);
+    handleAddDay(e);
   };
-
+  // add route button
   const handleAddClick = (e) => {
-    setInputList([
-      ...inputList,
+    setRoutes([
+      ...routes,
       {
         destination: 'To UCSC',
         offCampusLocation: '',
         onCampusLocation: '',
-        arrivalTime: '',
-        days: [],
+        time: '',
+        days: [[false, false, false, false, false]],
       },
     ]);
   };
-  const handleAddDay = () => {
-    const items = days;
-    setDays([...items, `item-${items.length}`]);
-  };
-  const handleRemoveDay = () => {
-    const items = days;
-    if (items.length > 0) {
-      const lastIndex = items.length - 1;
-      setDays(items.filter((item, index) => index !== lastIndex));
+  const handleAddDay = (e) => {
+    // set current day to days
+    let idx = e.target.value;
+    if (days[idx] === false) {
+      days[idx] = true;
+    } else {
+      days[idx] = false;
     }
+    console.log(idx, days[idx]);
+    setDays([...days.slice(0, idx), days[idx], ...days.slice(idx + 1)]);
   };
 
   return (
@@ -119,21 +147,22 @@ export default function Schedule() {
         <br></br>
         <br></br>
 
-        {inputList.map((x, i) => {
+        {routes.map((x, i) => {
           return (
             <div className={styles.loginForm}>
               <ol>
+                <h2>Route #{i + 1}</h2>
                 <br></br>
                 <DropdownButton
                   size="med"
                   id="dropdownr-basic-button"
-                  title={direction}
+                  title={toCampus === true ? 'To UCSC' : 'From UCSC'}
                 >
                   <Dropdown.Item
                     as="button"
                     type="button"
                     value="To UCSC"
-                    onClick={(e) => setDirection(e.target.value)}
+                    onClick={(e) => setToCampus(true)}
                   >
                     To UCSC
                   </Dropdown.Item>
@@ -141,7 +170,7 @@ export default function Schedule() {
                     as="button"
                     type="button"
                     value="From UCSC"
-                    onClick={(e) => setDirection(e.target.value)}
+                    onClick={(e) => setToCampus(false)}
                   >
                     From UCSC
                   </Dropdown.Item>
@@ -178,88 +207,69 @@ export default function Schedule() {
                     <FormControl
                       aria-label="Default"
                       aria-describedby="inputGroup-sizing-default"
-                      value={arrivalTime}
-                      onChange={(e) => setArrivalTime(e.target.value)}
+                      value={time}
+                      onChange={(e) => setTime(e.target.value)}
                     />
                   </InputGroup>
                 </li>
                 <li>
-                  <div class="btn-group">
-                    <input
+                  <ButtonGroup className="mb-2">
+                    <ToggleButton
+                      className="mb-2"
+                      id="toggle-check"
                       type="checkbox"
-                      class="btn-check"
-                      name="options"
-                      id="Mon"
-                      autoComplete="off"
-                    ></input>
-                    <label
-                      class="btn btn-outline-dark"
-                      for="check1"
-                      onChange={(e) => setDays(e.target.value)}
+                      variant="outline-primary"
+                      checked={days[0]}
+                      value="0"
+                      onChange={handleAddDay}
                     >
                       Mon
-                    </label>
-
-                    <input
+                    </ToggleButton>
+                    <ToggleButton
+                      className="mb-2"
+                      id="toggle-check1"
                       type="checkbox"
-                      class="btn-check"
-                      name="options"
-                      id="Tues"
-                      autoComplete="off"
-                    ></input>
-                    <label
-                      class="btn btn-outline-dark"
-                      for="check2"
-                      onChange={(e) => setDays(e.target.value)}
+                      variant="outline-primary"
+                      checked={days[1]}
+                      value="1"
+                      onChange={handleAddDay}
                     >
                       Tues
-                    </label>
-
-                    <input
+                    </ToggleButton>
+                    <ToggleButton
+                      className="mb-2"
+                      id="toggle-check2"
                       type="checkbox"
-                      class="btn-check"
-                      name="options"
-                      id="Wed"
-                      autoComplete="off"
-                    ></input>
-                    <label
-                      class="btn btn-outline-dark"
-                      for="check3"
-                      onChange={(e) => setDays(e.target.value)}
+                      variant="outline-primary"
+                      checked={days[2]}
+                      value="2"
+                      onChange={handleAddDay}
                     >
                       Wed
-                    </label>
-
-                    <input
+                    </ToggleButton>
+                    <ToggleButton
+                      className="mb-2"
+                      id="toggle-check3"
                       type="checkbox"
-                      class="btn-check"
-                      name="options"
-                      id="Thurs"
-                      autoComplete="off"
-                    ></input>
-                    <label
-                      class="btn btn-outline-dark"
-                      for="check4"
-                      onChange={(e) => setDays(e.target.value)}
+                      variant="outline-primary"
+                      checked={days[3]}
+                      value="3"
+                      onChange={handleAddDay}
                     >
                       Thurs
-                    </label>
-
-                    <input
+                    </ToggleButton>
+                    <ToggleButton
+                      className="mb-2"
+                      id="toggle-check4"
                       type="checkbox"
-                      class="btn-check"
-                      name="options"
-                      id="Fri"
-                      autoComplete="off"
-                    ></input>
-                    <label
-                      class="btn btn-outline-dark"
-                      for="check5"
-                      onChange={(e) => setDays(e.target.value)}
+                      variant="outline-primary"
+                      checked={days[4]}
+                      value="4"
+                      onChange={handleAddDay}
                     >
                       Fri
-                    </label>
-                  </div>
+                    </ToggleButton>
+                  </ButtonGroup>
                 </li>
               </ol>
             </div>
