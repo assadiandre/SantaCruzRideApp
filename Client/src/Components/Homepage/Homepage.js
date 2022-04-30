@@ -46,8 +46,8 @@ export default function Homepage() {
   };
 
   return (
-    <div>
-      <Container className="mt-4 px-4 pb-3">
+    <div className="bg-danger pb-5">
+      <Container className="pt-4 px-4 pb-3 text-light">
         <Row>
           <h1>
             <b>CARPOOL TO</b>
@@ -66,30 +66,36 @@ export default function Homepage() {
       </Container>
       <Card
         border="danger"
-        className="text-center mt-5 mb-5 mx-auto w-75 pt-2 pb-2"
+        className="text-center mt-5 mb-5 mx-auto w-75 pt-2 pb-2 bg-danger"
       >
         <Card.Body>
           <Stack gap={2} className="col-md-5 mx-auto">
             <Button
               className="mt-2"
-              variant="outline-danger"
+              variant="dark"
+              size="lg"
               onClick={googleLogin}
             >
               SIGNUP
             </Button>
-            <Button className="mb-2" variant="danger" onClick={googleLogin}>
+            <Button
+              className="mb-2"
+              variant="light"
+              size="lg"
+              onClick={googleLogin}
+            >
               LOGIN
             </Button>
           </Stack>
         </Card.Body>
       </Card>
-      <Container className="text-left mt-5 mx-auto px-5 pt-5 ">
+      <Container className="text-left mt-5 mx-auto px-5 pt-5 pb-5">
         <Row className="pb-2">
           <Col xs={2}>
             <BsPencilSquare size={45}></BsPencilSquare>
           </Col>
           <Col>
-            <h5>1. Sign up as a rider or driver</h5>
+            <h5 className="text-light">1. Sign up as a rider or driver</h5>
           </Col>
         </Row>
         <Row className="pb-2">
@@ -97,15 +103,15 @@ export default function Homepage() {
             <BsFillCalendarDayFill size={45}></BsFillCalendarDayFill>
           </Col>
           <Col>
-            <h5>2. Input your Weekly schedule</h5>
+            <h5 className="text-light">2. Input your Weekly schedule</h5>
           </Col>
         </Row>
-        <Row className="pb-2">
+        <Row className="pb-5">
           <Col xs={2}>
             <BsFillPinMapFill size={45}></BsFillPinMapFill>
           </Col>
           <Col>
-            <h5>
+            <h5 className="text-light">
               3. Match with students going the same route at the same time
             </h5>
           </Col>
