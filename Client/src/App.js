@@ -24,8 +24,6 @@ function App() {
         <Route path="/setup" element={<AccountSetup />} />
         <Route path="/schedule" element={<Schedule />} />
       </Routes>
-      <div>
-	</div>
     </BrowserRouter>
   );
 }
