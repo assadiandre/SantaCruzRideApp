@@ -25,19 +25,22 @@ export default function Schedule() {
   const userObject = useContext(myContext);
   console.log(userObject);
 
-  const [toCampus, setToCampus] = useState(true);
-
-  const [onCampusLocation, setOnCampusLocation] = useState('');
-  const [offCampusLocation, setOffCampusLocation] = useState('');
-  const [time, setTime] = useState('');
-  const myDays = ['Mon', 'Tues', 'Wed', 'Thurs', 'Fri'];
-  const [days, setDays] = useState([false, false, false, false, false]); //indices of true days
+  const myDays = [0, 1, 2, 3, 4, 5, 6];
+  const [days, setDays] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]); //indices of marked days
 
   const [err, setErr] = useState([]);
   const [routes, setRoutes] = useState([
     {
       toCampus: false,
-      days: [''],
+      days: [false, false, false, false, false, false, false],
       onCampusLocation: '',
       offCampusLocation: '',
       time: '',
@@ -47,7 +50,11 @@ export default function Schedule() {
   const schedule = (e) => {
     e.preventDefault();
     setErr([]);
-    updateItem(e);
+
+    // update every route number
+    for (let i = 0; i < routes.length; i++) {
+      updateDays(e, i);
+    }
     const errors = validate();
     if (errors.length > 0) {
       setErr(errors);
@@ -57,13 +64,7 @@ export default function Schedule() {
           'http://localhost:3001/schedule',
           {
             setupFlag: true,
-            time: time,
-            toCampus: toCampus,
-            onCampusLocation: onCampusLocation,
-            offCampusLocation: offCampusLocation,
-            days: myDays
-              .from({ length: 5 }, (_, i) => (days[i] === true ? i : _))
-              .filter((x) => x),
+            routes: routes,
           },
           {
             withCredentials: true,
@@ -81,22 +82,16 @@ export default function Schedule() {
         });
     }
   };
-  // update specific routes
-  const updateItem = (e, index) => {
-    const list = routes;
-    list[index] = {
-      setupFlag: true,
-      time: time,
-      toCampus: toCampus,
-      onCampusLocation: onCampusLocation,
-      offCampusLocation: offCampusLocation,
-      days: myDays
-        .from({ length: 5 }, (_, i) => (days[i] === true ? i : _))
-        .filter((x) => x),
-    };
+  // update specific routes' days from true/false to numbers
+  const updateDays = (e, index) => {
+    const list = [...routes];
+    list[index].days = myDays
+      .from({ length: 5 }, (_, i) => (days[i] === true ? i : _))
+      .filter((x) => x);
     setRoutes(list);
     handleAddDay(e);
   };
+
   // add route button
   const handleAddClick = (e) => {
     setRoutes([
@@ -106,20 +101,40 @@ export default function Schedule() {
         offCampusLocation: '',
         onCampusLocation: '',
         time: '',
-        days: [[false, false, false, false, false]],
+        days: [false, false, false, false, false, false, false],
       },
     ]);
   };
-  const handleAddDay = (e) => {
-    // set current day to days
-    let idx = e.target.value;
-    if (days[idx] === false) {
-      days[idx] = true;
-    } else {
-      days[idx] = false;
-    }
-    console.log(idx, days[idx]);
-    setDays([...days.slice(0, idx), days[idx], ...days.slice(idx + 1)]);
+
+  const handleOnCampusLocation = (e, index) => {
+    const list = [...routes];
+    list[index].onCampusLocation = e.target.value;
+    setRoutes(list);
+  };
+
+  const handleOffCampusLocation = (e, index) => {
+    const list = [...routes];
+    list[index].offCampusLocation = e.target.value;
+    setRoutes(list);
+  };
+
+  const handleTime = (e, index) => {
+    const list = [...routes];
+    list[index].time = e.target.value;
+    setRoutes(list);
+  };
+
+  const handleToCampus = (e, index, value) => {
+    const list = [...routes];
+    list[index].toCampus = value;
+    setRoutes(list);
+  };
+
+  const handleAddDay = (e, index, idx) => {
+    const list = [...routes];
+    list[index].days[idx] = !list[index].days[idx];
+    setRoutes(list);
+    //setDays([...days.slice(0, idx), days[idx], ...days.slice(idx + 1)]);
   };
 
   return (
@@ -147,22 +162,24 @@ export default function Schedule() {
         <br></br>
         <br></br>
 
-        {routes.map((x, i) => {
+        {routes.map((x, routeNum) => {
           return (
-            <div className={styles.loginForm}>
+            <div className={styles.loginForm} key={routeNum}>
               <ol>
-                <h2>Route #{i + 1}</h2>
+                <h2>Route #{routeNum + 1}</h2>
                 <br></br>
                 <DropdownButton
                   size="med"
                   id="dropdownr-basic-button"
-                  title={toCampus === true ? 'To UCSC' : 'From UCSC'}
+                  title={
+                    routes[routeNum].toCampus === true ? 'To UCSC' : 'From UCSC'
+                  }
                 >
                   <Dropdown.Item
                     as="button"
                     type="button"
                     value="To UCSC"
-                    onClick={(e) => setToCampus(true)}
+                    onClick={(e) => handleToCampus(e, routeNum, true)}
                   >
                     To UCSC
                   </Dropdown.Item>
@@ -170,7 +187,7 @@ export default function Schedule() {
                     as="button"
                     type="button"
                     value="From UCSC"
-                    onClick={(e) => setToCampus(false)}
+                    onClick={(e) => handleToCampus(e, routeNum, false)}
                   >
                     From UCSC
                   </Dropdown.Item>
@@ -183,9 +200,10 @@ export default function Schedule() {
                     <FormControl
                       aria-label="Default"
                       aria-describedby="inputGroup-sizing-default"
-                      value={onCampusLocation}
-                      onChange={(e) => setOnCampusLocation(e.target.value)}
+                      value={routes[routeNum].onCampusLocation}
+                      onChange={(e) => handleOnCampusLocation(e, routeNum)}
                     />
+                    {console.log(routes[routeNum].onCampusLocation)}
                   </InputGroup>
                 </li>
 
@@ -195,8 +213,8 @@ export default function Schedule() {
                     <FormControl
                       aria-label="Default"
                       aria-describedby="inputGroup-sizing-default"
-                      value={offCampusLocation}
-                      onChange={(e) => setOffCampusLocation(e.target.value)}
+                      value={routes[routeNum].offCampusLocation}
+                      onChange={(e) => handleOffCampusLocation(e, routeNum)}
                     />
                   </InputGroup>
                 </li>
@@ -207,67 +225,88 @@ export default function Schedule() {
                     <FormControl
                       aria-label="Default"
                       aria-describedby="inputGroup-sizing-default"
-                      value={time}
-                      onChange={(e) => setTime(e.target.value)}
+                      value={routes[routeNum].time}
+                      onChange={(e) => handleTime(e, routeNum)}
                     />
                   </InputGroup>
                 </li>
-                <li>
+                <li key={routeNum}>
                   <ButtonGroup className="mb-2">
                     <ToggleButton
                       className="mb-2"
-                      id="toggle-check"
+                      id={`toggle-check-${routeNum}0`}
                       type="checkbox"
                       variant="outline-primary"
-                      checked={days[0]}
-                      value="0"
-                      onChange={handleAddDay}
+                      checked={routes[routeNum].days[0]}
+                      onChange={(e) => handleAddDay(e, routeNum, 0)}
                     >
                       Mon
                     </ToggleButton>
                     <ToggleButton
                       className="mb-2"
-                      id="toggle-check1"
+                      id={`toggle-check-${routeNum}1`}
                       type="checkbox"
                       variant="outline-primary"
-                      checked={days[1]}
+                      checked={routes[routeNum].days[1]}
                       value="1"
-                      onChange={handleAddDay}
+                      onChange={(e) => handleAddDay(e, routeNum, 1)}
                     >
                       Tues
                     </ToggleButton>
                     <ToggleButton
                       className="mb-2"
-                      id="toggle-check2"
+                      id={`toggle-check-${routeNum}2`}
                       type="checkbox"
                       variant="outline-primary"
-                      checked={days[2]}
+                      checked={routes[routeNum].days[2]}
                       value="2"
-                      onChange={handleAddDay}
+                      onChange={(e) => handleAddDay(e, routeNum, 2)}
                     >
                       Wed
                     </ToggleButton>
                     <ToggleButton
                       className="mb-2"
-                      id="toggle-check3"
+                      id={`toggle-check-${routeNum}3`}
                       type="checkbox"
                       variant="outline-primary"
-                      checked={days[3]}
+                      checked={routes[routeNum].days[3]}
                       value="3"
-                      onChange={handleAddDay}
+                      onChange={(e) => handleAddDay(e, routeNum, 3)}
                     >
                       Thurs
                     </ToggleButton>
                     <ToggleButton
                       className="mb-2"
-                      id="toggle-check4"
+                      id={`toggle-check-${routeNum}4`}
                       type="checkbox"
                       variant="outline-primary"
-                      checked={days[4]}
+                      checked={routes[routeNum].days[4]}
                       value="4"
-                      onChange={handleAddDay}
+                      onChange={(e) => handleAddDay(e, routeNum, 4)}
                     >
                       Fri
+                    </ToggleButton>
+                    <ToggleButton
+                      className="mb-2"
+                      id={`toggle-check-${routeNum}5`}
+                      type="checkbox"
+                      variant="outline-primary"
+                      checked={routes[routeNum].days[5]}
+                      value="5"
+                      onChange={(e) => handleAddDay(e, routeNum, 5)}
+                    >
+                      Sat
+                    </ToggleButton>
+                    <ToggleButton
+                      className="mb-2"
+                      id={`toggle-check-${routeNum}6`}
+                      type="checkbox"
+                      variant="outline-primary"
+                      checked={routes[routeNum].days[6]}
+                      value="6"
+                      onChange={(e) => handleAddDay(e, routeNum, 6)}
+                    >
+                      Sun
                     </ToggleButton>
                   </ButtonGroup>
                 </li>
