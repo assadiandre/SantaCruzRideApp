@@ -25,14 +25,18 @@ export default function NavBar() {
 
   return (
     <div>
-      <Navbar bg="danger" variant="dark">
+      <Navbar bg={userObject ? 'danger' : 'light'} variant="dark">
         <Container>
           <Link to={'/'}>
             <img src={logo} width="65" height="45" alt="" />
           </Link>
           <Navbar.Toggle />
           <Nav className="me-auto">
-            <Nav.Link className="text-light" as={Link} to="/">
+            <Nav.Link
+              className={userObject ? 'text-light' : 'text-dark'}
+              as={Link}
+              to="/"
+            >
               <b>SCcarpool</b>
             </Nav.Link>
           </Nav>
@@ -48,7 +52,11 @@ export default function NavBar() {
               </Nav>
             ) : (
               <Nav>
-                <Navbar.Text>Not signed in...</Navbar.Text>
+                <Navbar.Text
+                  className={userObject ? 'text-light' : 'text-dark'}
+                >
+                  Not signed in...
+                </Navbar.Text>
               </Nav>
             )}
           </Navbar.Collapse>
