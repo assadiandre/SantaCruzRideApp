@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Route from './route.js';
 
 // change username to First Name and Last Name later
 const user = new mongoose.Schema({
@@ -11,6 +12,10 @@ const user = new mongoose.Schema({
     type: String,
   },
   lastname: {
+    // required: true,
+    type: String,
+  },
+  email: {
     required: true,
     type: String,
   },
@@ -24,6 +29,10 @@ const user = new mongoose.Schema({
   },
   bio: {
     type: String,
+  },
+  routes: {
+    required: true,
+    type: [Route],
   },
   userType: {
     type: String,

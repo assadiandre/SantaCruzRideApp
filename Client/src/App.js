@@ -9,11 +9,13 @@ import Schedule from './Components/Schedule/Schedule';
 import './GlobalStyles.css';
 import { useContext } from 'react';
 import { myContext } from './Context';
+import EndpointTest from './Components/EndpointTest/EndpointTest';
+import FeedPage from './Components/FeedPage/FeedPage';
 import 'bootstrap/dist/css/bootstrap.min.css'; // bootstrap stylesheet
 
 function App() {
   const userObject = useContext(myContext);
-  console.log(userObject);
+  console.log('rendering from app', userObject);
   return (
     <BrowserRouter>
       <NavBar />
@@ -23,6 +25,8 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/setup" element={<AccountSetup />} />
         <Route path="/schedule" element={<Schedule />} />
+        <Route path="/feed" element={<FeedPage />} />
+        <Route path="/test" element={<EndpointTest />} />
       </Routes>
     </BrowserRouter>
   );
