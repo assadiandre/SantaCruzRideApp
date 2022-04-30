@@ -80,6 +80,7 @@ passport.use(
             googleId: profile.id,
             username: profile.name.givenName,
             lastname: profile.name.familyName,
+            email: profile.emails[0].value,
             setupFlag: false,
             routes: [],
           });
@@ -97,7 +98,7 @@ passport.use(
 // Auth endpoints
 app.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['profile'] })
+  passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
 app.get(
@@ -163,7 +164,7 @@ app.put('/account/addroute', (req, res) => {
       { safe: true, upsert: true, new: true },
       function (err, doc) {
         if (err) {
-          // console.log(err);
+          console.log(err);
           res.send(err);
         } else {
           // console.log('Updated User : ', docs);

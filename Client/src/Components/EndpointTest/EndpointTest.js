@@ -33,7 +33,7 @@ export default function EndpointTest() {
         {
           routes: {
             toCampus: true,
-            days: ['M', 'W'],
+            days: [1, 3, 7],
             time: new Date(),
             offCampusLocation: '123 Sesame Street',
             campusLocation: 'College Nine/Ten',
