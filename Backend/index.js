@@ -80,6 +80,7 @@ passport.use(
             googleId: profile.id,
             username: profile.name.givenName,
             lastname: profile.name.familyName,
+            email: profile.emails[0].value,
             setupFlag: false,
             routes: [],
           });
@@ -97,7 +98,7 @@ passport.use(
 // Auth endpoints
 app.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['profile'] })
+  passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
 app.get(
