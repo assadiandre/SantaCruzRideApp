@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
-import User from './User.js';
+import User from './Objects/user.js';
 
 // Define "require"
 import { createRequire } from 'module';
@@ -81,6 +81,7 @@ passport.use(
             username: profile.name.givenName,
             lastname: profile.name.familyName,
             setupFlag: false,
+            routes: [],
           });
 
           await newUser.save();
@@ -127,13 +128,73 @@ app.get('/getuser', (req, res) => {
 });
 
 // Account setup endpoint
+// finds account by ID, then updates the use with that ID with whatever fields
+// were specified in req.body
 app.put('/account/setup', (req, res) => {
   if (req.user) {
-    User.findByIdAndUpdate(req.user.id, req.body).then(() => {
-      res.send(req.user);
-    });
+    User.findByIdAndUpdate(
+      req.user.id,
+      req.body,
+      { safe: true, upsert: true, new: true },
+      function (err, doc) {
+        if (err) {
+          // console.log(err);
+          res.send(err);
+        } else {
+          // console.log('Updated User : ', docs);
+          res.send(doc);
+        }
+      }
+    );
+  }
+});
+
+// Add to an account's list of routes
+// See below link for how to push to an array in mongoose
+// https://stackoverflow.com/questions/15621970/pushing-object-into-array-schema-in-mongoose
+app.put('/account/addroute', (req, res) => {
+  if (req.user) {
+    // console.log('testing route adding');
+    User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $push: req.body,
+      },
+      { safe: true, upsert: true, new: true },
+      function (err, doc) {
+        if (err) {
+          // console.log(err);
+          res.send(err);
+        } else {
+          // console.log('Updated User : ', docs);
+          res.send(doc);
+        }
+      }
+    );
   }
 });
 
 // This displays message that the server running and listening to specified port
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
+// Endpoint to get all users filtered data
+app.get('/feed/fill', (req, res) => {
+  // first arg query: filters the collection were searching in
+  // for now we filter by whether they're setup and that they are
+  // not the current user
+
+  // second arg projection: filters the fields that are returned
+  // Here, we want to filter for the person's first name, phone number, bio
+  // later we will also get their home location and routes
+
+  // {$and: [{ setupFlag: true }, { _id: { $ne: req.user.id }]}
+  // username: 1, phoneNumber: 1, bio: 1
+  console.log(req.user);
+  if (req.user) {
+    User.find({ _id: { $ne: req.user.id } }, {}).then((doc, err) => {
+      if (err) throw err;
+      // console.log(doc);
+      res.send(doc);
+    });
+  }
+});

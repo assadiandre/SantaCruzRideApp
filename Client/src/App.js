@@ -27,6 +27,7 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/setup" element={<AccountSetup />} />
         <Route path="/feed" element={<FeedPage />} />
+        <Route path="/test" element={<EndpointTest />} />
       </Routes>
     </BrowserRouter>
   );
