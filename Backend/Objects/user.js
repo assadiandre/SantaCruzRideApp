@@ -34,6 +34,12 @@ const user = new mongoose.Schema({
     required: true,
     type: [Route],
   },
+  userType: {
+    type: String,
+  },
+  address: {
+    type: String,
+  },
 });
 
 export default mongoose.model('User', user);
