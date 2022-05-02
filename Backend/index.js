@@ -155,11 +155,14 @@ app.put('/account/setup', (req, res) => {
 // https://stackoverflow.com/questions/15621970/pushing-object-into-array-schema-in-mongoose
 app.put('/account/addroute', (req, res) => {
   if (req.user) {
+    console.log('BODY', req.body.routes);
     // console.log('testing route adding');
     User.findByIdAndUpdate(
       req.user.id,
       {
-        $push: req.body,
+        $push: {
+          routes: { $each: req.body.routes },
+        },
       },
       { safe: true, upsert: true, new: true },
       function (err, doc) {

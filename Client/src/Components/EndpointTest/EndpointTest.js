@@ -32,13 +32,22 @@ export default function EndpointTest() {
       .put(
         'http://localhost:3001/account/addroute',
         {
-          routes: {
-            toCampus: true,
-            days: [1, 3, 7],
-            time: new Date(),
-            offCampusLocation: '123 Sesame Street',
-            campusLocation: 'College Nine/Ten',
-          },
+          routes: [
+            {
+              toCampus: true,
+              days: [1, 3, 7],
+              time: new Date(),
+              offCampusLocation: '123 Sesame Street',
+              campusLocation: 'College Nine/Ten',
+            },
+            {
+              toCampus: false,
+              days: [2, 4, 6],
+              time: new Date(),
+              offCampusLocation: '321 Bob Street',
+              campusLocation: 'Science Hill',
+            },
+          ],
         },
         {
           withCredentials: true,
