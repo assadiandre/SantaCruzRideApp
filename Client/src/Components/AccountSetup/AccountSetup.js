@@ -25,8 +25,6 @@ function validate(userType, phone, bio) {
 }
 export default function AccountSetup() {
   const userObject = useContext(myContext);
-  console.log(userObject);
-
   const [userType, setUserType] = useState('');
   const [phone, setPhone] = useState('');
   const [bio, setBio] = useState('');
@@ -44,7 +42,7 @@ export default function AccountSetup() {
     } else {
       axios
         .put(
-          'http://localhost:3001/account/setup',
+          '/account/setup',
           {
             setupFlag: true,
             userType: userType,
@@ -71,7 +69,7 @@ export default function AccountSetup() {
       <div></div>
       <div>
         <form onSubmit={accountSetup}>
-          <div class={styles.loginForm}>
+          <div className={styles.loginForm}>
             <ul className={styles.errorList}>
               {err.map((error) => (
                 <li key={error}>{error}</li>
