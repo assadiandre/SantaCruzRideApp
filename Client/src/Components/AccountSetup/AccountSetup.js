@@ -13,7 +13,6 @@ import {
   Button,
   InputGroup,
   FormControl,
-  Container,
 } from 'react-bootstrap';
 
 function validate(userType, phone, bio) {
@@ -44,7 +43,7 @@ export default function AccountSetup() {
     } else {
       axios
         .put(
-          'http://localhost:3001/account/setup',
+          '/account/setup',
           {
             setupFlag: true,
             userType: userType,
@@ -60,7 +59,7 @@ export default function AccountSetup() {
           if (res.data) {
             //    console.log(userType);
             //   setUserObject(res.data);
-            //    navigate('/schedule');
+            navigate('/addroute');
           }
         });
     }
@@ -71,7 +70,7 @@ export default function AccountSetup() {
       <div></div>
       <div>
         <form onSubmit={accountSetup}>
-          <div class={styles.loginForm}>
+          <div className={styles.loginForm}>
             <ul className={styles.errorList}>
               {err.map((error) => (
                 <li key={error}>{error}</li>

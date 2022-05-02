@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+//import React, { useContext } from 'react';
 import { useState } from 'react';
-import { myContext } from '../../Context';
+//import { myContext } from '../../Context';
+import { useNavigate } from 'react-router-dom';
 import styles from './Schedule.module.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
@@ -13,37 +14,39 @@ import {
   FormControl,
   ToggleButton,
 } from 'react-bootstrap';
-function validate(userType, phone, bio) {
+function validate(routes) {
   const errors = [];
-  if (userType.length === 0) {
-    errors.push('Must pick rider or driver');
+  for (let i = 0; i < routes.length; i++) {
+    if (routes[i].onCampusLocation.length === 0) {
+      errors.push('Must pick Campus Location for route #' + (i + 1));
+    }
+    if (routes[i].offCampusLocation.length === 0) {
+      errors.push('Must pick Off Campus Location for route #' + (i + 1));
+    }
+    if (routes[i].time.length === 0) {
+      errors.push('Must pick Arrival Time for route #' + (i + 1));
+    }
+    if (routes[i].days.length === 0) {
+      errors.push('Must pick Days for route #' + (i + 1));
+    }
   }
+
   return errors;
 }
 
 export default function Schedule() {
-  const userObject = useContext(myContext);
-  console.log(userObject);
+  //const userObject = useContext(myContext);
+  //console.log(userObject);
 
-  const myDays = [0, 1, 2, 3, 4, 5, 6];
-  const [days, setDays] = useState([
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]); //indices of marked days
-
+  const navigate = useNavigate();
   const [err, setErr] = useState([]);
   const [routes, setRoutes] = useState([
     {
       toCampus: false,
-      days: [false, false, false, false, false, false, false],
-      onCampusLocation: '',
-      offCampusLocation: '',
+      days: [false, false, false, false, false, false, false], // marked indices of days chosen
       time: '',
+      offCampusLocation: '',
+      onCampusLocation: '',
     },
   ]);
 
@@ -55,16 +58,24 @@ export default function Schedule() {
     for (let i = 0; i < routes.length; i++) {
       updateDays(e, i);
     }
-    const errors = validate();
+    const errors = validate(routes);
     if (errors.length > 0) {
       setErr(errors);
     } else {
       axios
         .put(
-          'http://localhost:3001/schedule',
+          '/account/addroute',
           {
             setupFlag: true,
-            routes: routes,
+            routes: [
+              {
+                toCampus: false,
+                days: [1], // marked indices of days chosen
+                time: '1234',
+                offCampusLocation: '1234',
+                onCampusLocation: '1234',
+              },
+            ],
           },
           {
             withCredentials: true,
@@ -72,12 +83,10 @@ export default function Schedule() {
         )
         .then((res) => {
           if (res.data) {
-            myDays
-              .from({ length: 5 }, (_, i) => (days[i] === true ? i : _))
-              .filter((x) => x)
-              .forEach((x) => console.log(x));
+            console.log(routes);
             //    console.log(userType);
             //   setUserObject(res.data);
+            navigate('/feed');
           }
         });
     }
@@ -85,11 +94,14 @@ export default function Schedule() {
   // update specific routes' days from true/false to numbers
   const updateDays = (e, index) => {
     const list = [...routes];
-    list[index].days = myDays
-      .from({ length: 5 }, (_, i) => (days[i] === true ? i : _))
-      .filter((x) => x);
+    const newList = [];
+    for (let i = 0; i < 7; i++) {
+      if (list[index].days[i] === true) {
+        newList.push(i);
+      }
+    }
+    list[index].days = newList;
     setRoutes(list);
-    handleAddDay(e);
   };
 
   // add route button
@@ -97,11 +109,11 @@ export default function Schedule() {
     setRoutes([
       ...routes,
       {
-        destination: 'To UCSC',
+        toCampus: false,
+        days: [false, false, false, false, false, false, false], // marked indices of days chosen
+        time: '',
         offCampusLocation: '',
         onCampusLocation: '',
-        time: '',
-        days: [false, false, false, false, false, false, false],
       },
     ]);
   };
@@ -138,7 +150,7 @@ export default function Schedule() {
   };
 
   return (
-    <div className={styles.loginPage}>
+    <div className="bg-danger pb-5">
       <h1>YOUR SCHEDULE</h1>
       <form onSubmit={schedule}>
         <ul className="errorList">
@@ -172,7 +184,9 @@ export default function Schedule() {
                   size="med"
                   id="dropdownr-basic-button"
                   title={
-                    routes[routeNum].toCampus === true ? 'To UCSC' : 'From UCSC'
+                    routes[routeNum].toCampus === false
+                      ? 'To UCSC'
+                      : 'From UCSC'
                   }
                 >
                   <Dropdown.Item
@@ -203,7 +217,6 @@ export default function Schedule() {
                       value={routes[routeNum].onCampusLocation}
                       onChange={(e) => handleOnCampusLocation(e, routeNum)}
                     />
-                    {console.log(routes[routeNum].onCampusLocation)}
                   </InputGroup>
                 </li>
 
@@ -231,6 +244,7 @@ export default function Schedule() {
                   </InputGroup>
                 </li>
                 <li key={routeNum}>
+                  Days<br></br>
                   <ButtonGroup className="mb-2">
                     <ToggleButton
                       className="mb-2"
@@ -325,7 +339,6 @@ export default function Schedule() {
           SUBMIT
         </Button>
       </form>
-
       <br></br>
     </div>
   );
