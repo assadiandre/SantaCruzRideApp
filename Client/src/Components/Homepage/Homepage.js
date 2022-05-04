@@ -103,7 +103,7 @@ export default function Homepage() {
             <BsFillCalendarDayFill size={45}></BsFillCalendarDayFill>
           </Col>
           <Col>
-            <h5 className="text-light">2. Input your Weekly schedule</h5>
+            <h5 className="text-light">2. Input your weekly schedule</h5>
           </Col>
         </Row>
         <Row className="pb-5">

@@ -36,17 +36,6 @@ const FeedPageHeader = ({ value, handleChange }) => {
           </Col>
         </Row>
         <Row>
-          {/* <ButtonToolbar className="p-1">
-            <ButtonGroup>
-              <Button variant="dark">Mon</Button>
-              <Button variant="light">Tue</Button>
-              <Button variant="dark">Wed</Button>
-              <Button variant="light">Thu</Button>
-              <Button variant="dark">Fri</Button>
-              <Button variant="light">Sat</Button>
-              <Button variant="light">Sun</Button>
-            </ButtonGroup>
-          </ButtonToolbar> */}
           <ToggleButtonGroup
             className="p-1"
             type="checkbox"
