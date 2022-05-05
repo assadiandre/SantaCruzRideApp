@@ -9,7 +9,7 @@ const Route = {
   },
   time: {
     required: true,
-    type: String,
+    type: Date,
   },
   offCampusLocation: {
     required: true,

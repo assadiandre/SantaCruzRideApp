@@ -14,6 +14,8 @@ import {
   FormControl,
   ToggleButton,
 } from 'react-bootstrap';
+import TimePicker from 'react-bootstrap-time-picker';
+import { DateTime } from 'react-datetime-bootstrap';
 function validate(routes) {
   const errors = [];
   for (let i = 0; i < routes.length; i++) {
@@ -71,7 +73,7 @@ export default function Schedule() {
               {
                 toCampus: false,
                 days: [1], // marked indices of days chosen
-                time: '1234',
+                time: new Date(), // change to int
                 offCampusLocation: '1234',
                 onCampusLocation: '1234',
               },
@@ -130,9 +132,10 @@ export default function Schedule() {
     setRoutes(list);
   };
 
-  const handleTime = (e, index) => {
+  const handleTime = (index, time) => {
     const list = [...routes];
-    list[index].time = e.target.value;
+    list[index].time = time;
+    console.log(time);
     setRoutes(list);
   };
 
@@ -148,7 +151,7 @@ export default function Schedule() {
     setRoutes(list);
     //setDays([...days.slice(0, idx), days[idx], ...days.slice(idx + 1)]);
   };
-
+  const [startDate, setStartDate] = useState(new Date());
   return (
     <div className="bg-danger pb-5">
       <h1>YOUR SCHEDULE</h1>
@@ -234,14 +237,14 @@ export default function Schedule() {
 
                 <li>
                   Arrival Time
-                  <InputGroup className={styles.inputs}>
-                    <FormControl
-                      aria-label="Default"
-                      aria-describedby="inputGroup-sizing-default"
-                      value={routes[routeNum].time}
-                      onChange={(e) => handleTime(e, routeNum)}
-                    />
-                  </InputGroup>
+                  <TimePicker
+                    start="1:00"
+                    end="23:00"
+                    step={15}
+                    selected={startDate}
+                    onChange={(time) => handleTime(routeNum, time)}
+                    value={routes[routeNum].time}
+                  />
                 </li>
                 <li key={routeNum}>
                   Days<br></br>

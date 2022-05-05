@@ -59,7 +59,7 @@ export default function AccountSetup() {
           if (res.data) {
             //    console.log(userType);
             //   setUserObject(res.data);
-            navigate('/addroute');
+            navigate('/schedule');
           }
         });
     }
