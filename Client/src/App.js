@@ -11,10 +11,11 @@ import { useContext } from 'react';
 import { myContext } from './Context';
 import EndpointTest from './Components/EndpointTest/EndpointTest';
 import FeedPage from './Components/FeedPage/FeedPage';
+import ProfilePage from './Components/ProfilePage/ProfilePage';
 import 'bootstrap/dist/css/bootstrap.min.css'; // bootstrap stylesheet
 
 function App() {
-  const userObject = useContext(myContext);
+  const [userObject, setUserObject] = useContext(myContext);
   console.log('rendering from app', userObject);
   return (
     <BrowserRouter>
@@ -27,6 +28,7 @@ function App() {
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/test" element={<EndpointTest />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { myContext } from '../../Context';
 import styles from './AccountSetup.module.css';
@@ -24,14 +24,27 @@ function validate(userType, phone, bio) {
   return errors;
 }
 export default function AccountSetup() {
-  const userObject = useContext(myContext);
-  const [userType, setUserType] = useState('');
+  const [userObject, setUserObject] = useContext(myContext);
+
+  const [userType, setUserType] = useState('Rider');
   const [phone, setPhone] = useState('');
   const [bio, setBio] = useState('');
   const [address, setAddress] = useState('');
   const [err, setErr] = useState([]);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // if user has already setup, load their default values.
+    const loadDefaults = userObject && userObject.setupFlag;
+    if (loadDefaults) {
+      setUserType(userObject.userType);
+      setPhone(userObject.phoneNumber);
+      setBio(userObject.bio);
+      setAddress(userObject.address);
+      console.log('dsahjsdha');
+    }
+  }, [userObject]);
 
   const accountSetup = (e) => {
     e.preventDefault();
@@ -57,16 +70,15 @@ export default function AccountSetup() {
         .then((res) => {
           if (res.data) {
             //    console.log(userType);
-            //   setUserObject(res.data);
-            //    navigate('/schedule');
+            setUserObject(res.data);
+            navigate('/feed');
           }
         });
     }
   };
   return (
     <div className={styles.loginPage}>
-      <h1>ACCOUNT SETUP</h1>
-      <div></div>
+      <h1>ACCOUNT INFO</h1>
       <div>
         <form onSubmit={accountSetup}>
           <div className={styles.loginForm}>
@@ -84,7 +96,7 @@ export default function AccountSetup() {
                   value={phone}
                   onChange={setPhone}
                 />
-                <p class="text-muted">
+                <p className="text-muted">
                   Students will be able to view this to contact you.
                 </p>
               </li>
@@ -117,10 +129,10 @@ export default function AccountSetup() {
 
               <li>
                 About You
-                <div class="input-group">
-                  <div class="input-group-prepend"></div>
+                <div className="input-group">
+                  <div className="input-group-prepend"></div>
                   <textarea
-                    class="form-control"
+                    className="form-control"
                     aria-label="With textarea"
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}

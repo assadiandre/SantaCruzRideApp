@@ -29,9 +29,9 @@ export default function Homepage() {
   useEffect(() => {
     if (auth) {
       // currently backwards just so i can code
-      if (context && !context.setupFlag) {
+      if (context && context.setupFlag) {
         navigate('/feed');
-      } else if (context && context.setupFlag) {
+      } else if (context && !context.setupFlag) {
         navigate('/setup');
       } else {
         navigate('/');
