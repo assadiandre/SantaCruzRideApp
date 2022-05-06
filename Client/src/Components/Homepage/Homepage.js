@@ -27,7 +27,6 @@ export default function Homepage() {
 
   // use effect called when component is rendered or when args are true
   useEffect(() => {
-    console.log('homeload', userObject);
     if (auth) {
       // currently backwards just so i can code
       if (userObject && userObject.setupFlag) {
