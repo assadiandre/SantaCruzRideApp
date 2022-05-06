@@ -198,7 +198,7 @@ app.get('/feed/fill', (req, res) => {
 
   // {$and: [{ setupFlag: true }, { _id: { $ne: req.user.id }]}
   // username: 1, phoneNumber: 1, bio: 1
-  console.log(req.user);
+  // console.log(req.user);
   if (req.user) {
     User.find({ _id: { $ne: req.user.id } }, {}).then((doc, err) => {
       if (err) throw err;

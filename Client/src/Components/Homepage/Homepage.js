@@ -21,23 +21,24 @@ function getLocalAuth() {
 }
 
 export default function Homepage() {
-  const context = useContext(myContext);
+  const [userObject, setUserObject] = useContext(myContext);
   const auth = getLocalAuth();
   const navigate = useNavigate();
 
   // use effect called when component is rendered or when args are true
   useEffect(() => {
+    console.log('homeload', userObject);
     if (auth) {
       // currently backwards just so i can code
-      if (context && context.setupFlag) {
+      if (userObject && userObject.setupFlag) {
         navigate('/feed');
-      } else if (context && !context.setupFlag) {
+      } else if (userObject && !userObject.setupFlag) {
         navigate('/setup');
       } else {
         navigate('/');
       }
     }
-  }, [context]);
+  }, [userObject]);
 
   const googleLogin = () => {
     // open google window with your accounts

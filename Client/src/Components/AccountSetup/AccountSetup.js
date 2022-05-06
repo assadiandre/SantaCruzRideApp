@@ -42,7 +42,6 @@ export default function AccountSetup() {
       setPhone(userObject.phoneNumber);
       setBio(userObject.bio);
       setAddress(userObject.address);
-      console.log('dsahjsdha');
     }
   }, [userObject]);
 
