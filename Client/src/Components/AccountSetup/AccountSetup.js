@@ -13,7 +13,6 @@ import {
   Button,
   InputGroup,
   FormControl,
-  Container,
 } from 'react-bootstrap';
 
 function validate(userType, phone, bio) {
@@ -76,7 +75,8 @@ export default function AccountSetup() {
     }
   };
   return (
-    <div className={styles.loginPage}>
+    // #DC3545 is the hex code for bootstrap danger
+    <div className={styles.loginPage} style={{ background: '#DC3545' }}>
       <h1>ACCOUNT INFO</h1>
       <div>
         <form onSubmit={accountSetup}>
@@ -103,7 +103,11 @@ export default function AccountSetup() {
 
               <li>
                 Do you want to Drive or Ride?
-                <DropdownButton id="dropdownr-basic-button" title={userType}>
+                <DropdownButton
+                  id="dropdownr-basic-button"
+                  title={userType}
+                  variant="danger"
+                >
                   <Dropdown.Item
                     required
                     as="button"
