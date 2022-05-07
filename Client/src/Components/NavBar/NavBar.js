@@ -28,6 +28,10 @@ export default function NavBar() {
     navigate('/profile');
   };
 
+  const moveToSchedule = () => {
+    navigate('/schedule');
+  };
+
   return (
     <div>
       <Navbar bg={userObject ? 'danger' : 'light'} variant="dark">
@@ -55,6 +59,9 @@ export default function NavBar() {
                   <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                   <NavDropdown.Item onClick={moveToProfile}>
                     Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={moveToSchedule}>
+                    Schedule
                   </NavDropdown.Item>
                 </NavDropdown>
               </Nav>

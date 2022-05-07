@@ -160,7 +160,7 @@ export default function AccountSetup() {
             size="lg"
             active
           >
-            CONTINUE
+            {window.location.pathname.match('/profile') ? 'SAVE' : 'CONTINUE'}
           </Button>
         </form>
       </div>
