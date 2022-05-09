@@ -28,15 +28,62 @@ const FeedPageHeader = ({ value, handleChange }) => {
           <Col>
             <DropdownButton
               variant="danger"
-              id="dropdown-basic-button"
-              title="To Campus"
+              align="end"
+              id="dropdown-menu"
+              title="Match Route"
             >
-              <Dropdown.Item>To Home</Dropdown.Item>
+              <Dropdown.Item>
+                <Container>
+                  <Row>
+                    <Col>
+                      <b> Route #1</b>
+                    </Col>
+                    <Col>M W F</Col>
+                  </Row>
+                  <Row>
+                    <Col>To Campus</Col>
+                  </Row>
+                  <Row>
+                    <Col>11:30 AM</Col>
+                  </Row>
+                </Container>
+                <hr style={{ color: '#DC3545' }} />
+                <Container>
+                  <Row>
+                    <Col>
+                      <b> Route #2</b>
+                    </Col>
+                    <Col>M W F</Col>
+                  </Row>
+                  <Row>
+                    <Col>To Campus</Col>
+                  </Row>
+                  <Row>
+                    <Col>11:30 AM</Col>
+                  </Row>
+                </Container>
+                <hr style={{ color: '#DC3545' }} />
+                <Container>
+                  <Row>
+                    <Col>
+                      <b> Route #3</b>
+                    </Col>
+                    <Col>M W F</Col>
+                  </Row>
+                  <Row>
+                    <Col>To Campus</Col>
+                  </Row>
+                  <Row>
+                    <Col>11:30 AM</Col>
+                  </Row>
+                </Container>
+                <hr style={{ color: '#DC3545' }} />
+              </Dropdown.Item>
             </DropdownButton>
           </Col>
         </Row>
         <Row>
-          <ToggleButtonGroup
+          {/* <ToggleButtonGroup
             className="p-1"
             type="checkbox"
             value={value}
@@ -63,7 +110,7 @@ const FeedPageHeader = ({ value, handleChange }) => {
             <ToggleButton variant="secondary" id="tbg-btn-7" value={7}>
               Sun
             </ToggleButton>
-          </ToggleButtonGroup>
+          </ToggleButtonGroup> */}
         </Row>
       </Container>
     </div>
