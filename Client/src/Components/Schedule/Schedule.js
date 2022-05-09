@@ -22,7 +22,7 @@ function validate(userType, phone, bio) {
 }
 
 export default function Schedule() {
-  const userObject = useContext(myContext);
+  const [userObject, setUserObject] = useContext(myContext);
   console.log(userObject);
 
   const myDays = [0, 1, 2, 3, 4, 5, 6];

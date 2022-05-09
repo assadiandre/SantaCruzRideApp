@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 // import styles from './NavBar.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { myContext } from '../../Context';
 import logo from '../../assets/scraLogo.png';
@@ -8,7 +8,8 @@ import logo from '../../assets/scraLogo.png';
 import { Navbar, Nav, Container, NavDropdown, Image } from 'react-bootstrap';
 
 export default function NavBar() {
-  const userObject = useContext(myContext);
+  const [userObject, setUserObject] = useContext(myContext);
+  const navigate = useNavigate();
 
   const logout = () => {
     axios
@@ -21,6 +22,14 @@ export default function NavBar() {
           localStorage.setItem('auth', 'false');
         }
       });
+  };
+
+  const moveToProfile = () => {
+    navigate('/profile');
+  };
+
+  const moveToSchedule = () => {
+    navigate('/schedule');
   };
 
   return (
@@ -48,6 +57,12 @@ export default function NavBar() {
                   id="navbarScrollingDropdown"
                 >
                   <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+                  <NavDropdown.Item onClick={moveToProfile}>
+                    Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={moveToSchedule}>
+                    Schedule
+                  </NavDropdown.Item>
                 </NavDropdown>
               </Nav>
             ) : (
