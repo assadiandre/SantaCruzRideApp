@@ -7,6 +7,7 @@ import {
   InputGroup,
   FormControl,
   ToggleButton,
+  CloseButton,
 } from 'react-bootstrap';
 
 export default function ScheduleRoute(props) {
@@ -19,14 +20,21 @@ export default function ScheduleRoute(props) {
     handleOffCampusLocation,
     handleTime,
     handleAddDay,
+    handleRemoveRoute,
   } = props;
   const startDate = new Date();
 
   return (
     <div className={styles.loginForm} key={routeNum}>
       <ol>
-        <h2>Route #{routeNum + 1}</h2>
-        <br></br>
+        <div className={styles.routeHeader}>
+          <h2 className={styles.routeHeaderText}>Route #{routeNum + 1}</h2>
+          <CloseButton
+            className="me-4"
+            onClick={() => handleRemoveRoute(routeNum)}
+          />
+        </div>
+
         <DropdownButton
           size="med"
           id="dropdownr-basic-button"

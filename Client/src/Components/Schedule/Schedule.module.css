@@ -22,6 +22,17 @@
   height: calc(100% - 60px); /* This is 100% minus the 60px navbar */
 }
 
+.routeHeaderText {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.routeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .googleContainer img {
   width: 12.5%;
   height: 100%;
