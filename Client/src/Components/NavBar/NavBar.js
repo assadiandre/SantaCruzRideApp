@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { myContext } from '../../Context';
 import logo from '../../assets/scraLogo.png';
+import styles from './NavBar.module.css';
 
 import { Navbar, Nav, Container, NavDropdown, Image } from 'react-bootstrap';
 
@@ -34,7 +35,11 @@ export default function NavBar() {
 
   return (
     <div>
-      <Navbar bg={userObject ? 'danger' : 'light'} variant="dark">
+      <Navbar
+        className={styles.navbarHeight}
+        bg={userObject ? 'danger' : 'light'}
+        variant="dark"
+      >
         <Container>
           <Link to={'/'}>
             <img src={logo} width="65" height="45" alt="" />
