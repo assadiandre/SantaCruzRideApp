@@ -42,7 +42,6 @@
 .loginPage {
     width: 100vw;
     display: flex;
-    background: #4385f4;
     align-items: center;
     flex-direction: column;
     justify-content: center;

@@ -21,7 +21,7 @@ function getLocalAuth() {
 }
 
 export default function Homepage() {
-  const context = useContext(myContext);
+  const [userObject, setUserObject] = useContext(myContext);
   const auth = getLocalAuth();
   const navigate = useNavigate();
 
@@ -29,15 +29,15 @@ export default function Homepage() {
   useEffect(() => {
     if (auth) {
       // currently backwards just so i can code
-      if (context && !context.setupFlag) {
-        navigate('/setup');
-      } else if (context && context.setupFlag) {
+      if (userObject && userObject.setupFlag) {
         navigate('/feed');
+      } else if (userObject && !userObject.setupFlag) {
+        navigate('/setup');
       } else {
         navigate('/');
       }
     }
-  }, [context]);
+  }, [userObject]);
 
   const googleLogin = () => {
     // open google window with your accounts
@@ -103,7 +103,7 @@ export default function Homepage() {
             <BsFillCalendarDayFill size={45}></BsFillCalendarDayFill>
           </Col>
           <Col>
-            <h5 className="text-light">2. Input your Weekly schedule</h5>
+            <h5 className="text-light">2. Input your weekly schedule</h5>
           </Col>
         </Row>
         <Row className="pb-5">

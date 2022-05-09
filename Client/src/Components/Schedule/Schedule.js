@@ -16,6 +16,9 @@ import {
 } from 'react-bootstrap';
 import TimePicker from 'react-bootstrap-time-picker';
 import { DateTime } from 'react-datetime-bootstrap';
+import { useContext } from 'react';
+import { myContext } from '../../Context';
+
 function validate(routes) {
   const errors = [];
   for (let i = 0; i < routes.length; i++) {
@@ -37,8 +40,19 @@ function validate(routes) {
 }
 
 export default function Schedule() {
-  //const userObject = useContext(myContext);
-  //console.log(userObject);
+  const [userObject, setUserObject] = useContext(myContext);
+  console.log(userObject);
+
+  const myDays = [0, 1, 2, 3, 4, 5, 6];
+  const [days, setDays] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]); //indices of marked days
 
   const navigate = useNavigate();
   const [err, setErr] = useState([]);
