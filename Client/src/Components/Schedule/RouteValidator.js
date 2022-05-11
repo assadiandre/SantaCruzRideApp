@@ -10,7 +10,11 @@ export function validate(routes) {
     if (routes[i].time.length === 0) {
       errors.push('Must pick Arrival Time for route #' + (i + 1));
     }
-    if (routes[i].days.length === 0) {
+    const daysValid = routes[i].days.reduce(
+      (prev, curr) => prev || curr,
+      false
+    );
+    if (!daysValid) {
       errors.push('Must pick Days for route #' + (i + 1));
     }
   }

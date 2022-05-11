@@ -53,7 +53,7 @@ export default function Schedule() {
 
   // Given a list of routes, in converts the days property for each one
   const convertDaysForRoutesToNumbers = (routes) => {
-    const list = [...routes];
+    const list = JSON.parse(JSON.stringify(routes));
     for (let i = 0; i < list.length; i++) {
       const days = list[i].days;
       const newDays = [];
@@ -73,11 +73,11 @@ export default function Schedule() {
     setErr([]);
 
     const errors = validate(routes);
-    const updatedRoutes = convertDaysForRoutesToNumbers(routes);
     if (errors.length > 0) {
-      setIsShown((current) => true);
+      setIsShown(true);
       setErr(errors);
     } else {
+      const updatedRoutes = convertDaysForRoutesToNumbers(routes);
       axios
         .put(
           '/account/addroute',
