@@ -90,3 +90,9 @@
 h1 {
   color: #ffffff;
 }
+.errorHeader {
+  background-color: #cecdcc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

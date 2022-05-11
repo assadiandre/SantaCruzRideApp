@@ -5,6 +5,7 @@ import { useContext } from 'react';
 import { myContext } from '../../Context';
 import { validate } from './RouteValidator';
 import { Button } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import ScheduleRoute from './ScheduleRoute';
 import styles from './Schedule.module.css';
 import { useEffect } from 'react';
@@ -13,6 +14,7 @@ export default function Schedule() {
   const [userObject, setUserObject] = useContext(myContext);
   const navigate = useNavigate();
   const [err, setErr] = useState([]);
+  const [isShown, setIsShown] = useState(false);
   const [routes, setRoutes] = useState([
     {
       toCampus: false,
@@ -69,9 +71,11 @@ export default function Schedule() {
   const schedule = (e) => {
     e.preventDefault();
     setErr([]);
+
     const errors = validate(routes);
     const updatedRoutes = convertDaysForRoutesToNumbers(routes);
     if (errors.length > 0) {
+      setIsShown((current) => true);
       setErr(errors);
     } else {
       axios
@@ -150,9 +154,18 @@ export default function Schedule() {
       <h1>YOUR SCHEDULE</h1>
       <form onSubmit={schedule}>
         <ul className="errorList">
-          {err.map((error) => (
-            <li key={error}>{error}</li>
-          ))}
+          <Card style={{ display: isShown ? 'block' : 'none' }}>
+            <Card.Header as="h5" className={styles.errorHeader}>
+              {err.length} Error{err.length > 1 ? 's' : ''}!
+            </Card.Header>
+            <Card.Body>
+              <ul>
+                {err.map((error) => (
+                  <li key={error}>{error}</li>
+                ))}
+              </ul>
+            </Card.Body>
+          </Card>
         </ul>
 
         <Button

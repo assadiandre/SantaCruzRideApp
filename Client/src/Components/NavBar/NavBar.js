@@ -46,11 +46,7 @@ export default function NavBar() {
           </Link>
           <Navbar.Toggle />
           <Nav className="me-auto">
-            <Nav.Link
-              className={userObject ? 'text-light' : 'text-dark'}
-              as={Link}
-              to="/"
-            >
+            <Nav.Link className={'text-light'} as={Link} to="/">
               <b>SCcarpool</b>
             </Nav.Link>
           </Nav>
@@ -58,7 +54,11 @@ export default function NavBar() {
             {userObject ? (
               <Nav>
                 <NavDropdown
-                  title={<b>{`Hi, ${userObject.username}`}</b>}
+                  title={
+                    <b
+                      className={'text-light'}
+                    >{`Hi, ${userObject.username}`}</b>
+                  }
                   id="navbarScrollingDropdown"
                 >
                   <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
@@ -72,9 +72,7 @@ export default function NavBar() {
               </Nav>
             ) : (
               <Nav>
-                <Navbar.Text
-                  className={userObject ? 'text-light' : 'text-dark'}
-                >
+                <Navbar.Text className={'text-light'}>
                   Not signed in...
                 </Navbar.Text>
               </Nav>
