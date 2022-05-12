@@ -1,3 +1,5 @@
+import Place from './place.js';
+
 const Route = {
   toCampus: {
     required: true,
@@ -13,11 +15,11 @@ const Route = {
   },
   offCampusLocation: {
     required: true,
-    type: String,
+    type: Place, // change to Place
   },
   campusLocation: {
     required: true,
-    type: String,
+    type: Place, // change to Place
   },
 };
 

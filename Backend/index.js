@@ -5,6 +5,7 @@ import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
 import User from './Objects/user.js';
+import getCoordsForAddress from './util/location.js';
 
 // Define "require"
 import { createRequire } from 'module';
@@ -131,8 +132,21 @@ app.get('/getuser', (req, res) => {
 // Account setup endpoint
 // finds account by ID, then updates the use with that ID with whatever fields
 // were specified in req.body
-app.put('/account/setup', (req, res) => {
+app.put('/account/setup', async function (req, res) {
   if (req.user) {
+    let coordinates;
+
+    try {
+      coordinates = await getCoordsForAddress(req.body.address);
+    } catch (err) {
+      console.log(err);
+      res.send(err);
+      return;
+    }
+
+    // console.log('Address: ', req.body.address);
+    // console.log('Coords: ', coordinates);
+
     User.findByIdAndUpdate(
       req.user.id,
       {
@@ -140,7 +154,10 @@ app.put('/account/setup', (req, res) => {
         userType: req.body.userType,
         phoneNumber: req.body.phoneNumber,
         bio: req.body.bio,
-        address: req.body.address,
+        address: {
+          address: req.body.address,
+          location: coordinates,
+        },
       },
       { safe: true, upsert: true, new: true },
       function (err, doc) {
@@ -157,13 +174,59 @@ app.put('/account/setup', (req, res) => {
 });
 
 // Replace user's array of routes with the input array
-app.put('/account/addroute', (req, res) => {
+app.put('/account/addroute', async function (req, res) {
   if (req.user) {
     // console.log('testing route adding');
+
+    // Turn each route's location string into a Place object
+
+    let routesToStore = [];
+
+    for (var i = 0; i < req.body.routes.length; i++) {
+      let offCampusCoordinates;
+      let campusCoordinates;
+
+      try {
+        offCampusCoordinates = await getCoordsForAddress(
+          req.body.routes[i].offCampusLocation
+        );
+      } catch (err) {
+        console.log(err);
+        res.send(err);
+        return;
+      }
+
+      try {
+        campusCoordinates = await getCoordsForAddress(
+          req.body.routes[i].campusLocation
+        );
+      } catch (err) {
+        console.log(err);
+        res.send(err);
+        return;
+      }
+
+      routesToStore.push({
+        toCampus: req.body.routes[i].toCampus,
+        days: req.body.routes[i].days,
+        time: req.body.routes[i].time,
+        campusLocation: {
+          address: req.body.routes[i].campusLocation,
+          location: campusCoordinates,
+        },
+        offCampusLocation: {
+          address: req.body.routes[i].offCampusLocation,
+          location: offCampusCoordinates,
+        },
+      });
+    }
+
+    // console.log(routesToStore);
+
     User.findByIdAndUpdate(
       req.user.id,
       {
-        routes: req.body.routes,
+        routes: routesToStore,
       },
       { safe: true, upsert: true, new: true },
       function (err, doc) {

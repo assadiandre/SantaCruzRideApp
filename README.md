@@ -121,6 +121,27 @@ Add these two fields to our .env file (without the <>s):
 
 We should be able to create new users using Google OAuth now. Try making one, and it should be added to whichever database you set in your DB_CONNECTION_STRING in the .env file.
 
+#### Step 4 - Setting up Google APIs
+
+Once again, go to https://console.developers.google.com/apis/dashboard.
+
+On the menu on the left side of the screen, navigate to: APIs and Services -> Library.
+
+On the search bar, look for Maps Javascript API and Geocoding API and enable them both.
+
+Again, look at the menu on the left side of the screen and navigate to Billing -> Payment Overview.
+
+Set up your payment information. (Unfortunately, this is necessary to use these APIs within our app.
+I think we have a free trial for 90 days, which is enough to last until the end of the quarter.)
+
+Next, navigate to: APIs and Services -> Credentials. Copy the API key.
+
+Add this field to our .env file (without the <>s):
+
+    API_KEY=<api_key_here>
+
+We should be able to make requests to google's API now. We may need to add additional APIs in the future.
+
 #### Going From Here
 
 Now we can develop in the React app and the Node server. The database is populated right now (as of April 11) with dummy data provided by MongoDB, so later on that should be changed.
