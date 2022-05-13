@@ -48,6 +48,8 @@ const FeedPageHeader = ({ value, handleChange }) => {
                   </Row>
                 </Container>
                 <hr style={{ color: '#DC3545' }} />
+              </Dropdown.Item>
+              <Dropdown.Item>
                 <Container>
                   <Row>
                     <Col>
@@ -63,6 +65,8 @@ const FeedPageHeader = ({ value, handleChange }) => {
                   </Row>
                 </Container>
                 <hr style={{ color: '#DC3545' }} />
+              </Dropdown.Item>
+              <Dropdown.Item>
                 <Container>
                   <Row>
                     <Col>
