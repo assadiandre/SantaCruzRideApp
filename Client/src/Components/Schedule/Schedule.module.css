@@ -72,12 +72,12 @@
   max-width: 600px;
   flex-direction: column;
   min-width: 50vw;
-  box-shadow: 2px 2px 2px #5d5d5d;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 15px;
   margin-bottom: 15px;
 }
 .buttons {
-  box-shadow: 2px 2px 2px #5d5d5d;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .inputs {
   max-width: 400px;
