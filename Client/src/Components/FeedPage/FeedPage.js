@@ -11,8 +11,8 @@ const FeedPage = () => {
   const handleChange = (val) => setValue(val); // flip flop buttons in that array
 
   const [feeds, setFeeds] = useState([]);
-
-  const userObject = useContext(myContext);
+  
+  const [userObject, setUserObject] = useContext(myContext);
 
   // upon every render or change of button values, pull from backend list of feeds
   useEffect(() => {
