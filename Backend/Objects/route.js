@@ -9,13 +9,13 @@ const Route = {
   },
   time: {
     required: true,
-    type: Date,
+    type: Number,
   },
   offCampusLocation: {
     required: true,
     type: String,
   },
-  campusLocation: {
+  onCampusLocation: {
     required: true,
     type: String,
   },

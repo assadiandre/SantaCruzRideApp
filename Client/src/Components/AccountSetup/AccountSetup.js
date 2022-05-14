@@ -8,6 +8,7 @@ import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import axios from 'axios';
 import {
+  Card,
   DropdownButton,
   Dropdown,
   Button,
@@ -30,7 +31,7 @@ export default function AccountSetup() {
   const [bio, setBio] = useState('');
   const [address, setAddress] = useState('');
   const [err, setErr] = useState([]);
-
+  const [isShown, setIsShown] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,8 +48,10 @@ export default function AccountSetup() {
   const accountSetup = (e) => {
     e.preventDefault();
     setErr([]);
+
     const errors = validate(userType, phone, bio);
     if (errors.length > 0) {
+      setIsShown((current) => true);
       setErr(errors);
     } else {
       axios
@@ -81,11 +84,19 @@ export default function AccountSetup() {
       <div>
         <form onSubmit={accountSetup}>
           <div className={styles.loginForm}>
-            <ul className={styles.errorList}>
-              {err.map((error) => (
-                <li key={error}>{error}</li>
-              ))}
-            </ul>
+            <Card style={{ display: isShown ? 'block' : 'none' }}>
+              <Card.Header as="h5" className={styles.errorHeader}>
+                {err.length} Error{err.length > 1 ? 's' : ''}!
+              </Card.Header>
+              <Card.Body>
+                <ul>
+                  {err.map((error) => (
+                    <li key={error}>{error}</li>
+                  ))}
+                </ul>
+              </Card.Body>
+            </Card>
+
             <ol>
               <li>
                 Phone number

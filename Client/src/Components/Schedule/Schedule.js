@@ -1,70 +1,89 @@
-import React, { useContext } from 'react';
 import { useState } from 'react';
-import { myContext } from '../../Context';
-import styles from './Schedule.module.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {
-  DropdownButton,
-  Dropdown,
-  Button,
-  ButtonGroup,
-  InputGroup,
-  FormControl,
-  ToggleButton,
-} from 'react-bootstrap';
-function validate(userType, phone, bio) {
-  const errors = [];
-  if (userType.length === 0) {
-    errors.push('Must pick rider or driver');
-  }
-  return errors;
-}
+import { useContext } from 'react';
+import { myContext } from '../../Context';
+import { validate } from './RouteValidator';
+import { Button } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
+import ScheduleRoute from './ScheduleRoute';
+import styles from './Schedule.module.css';
+import { useEffect } from 'react';
 
 export default function Schedule() {
   const [userObject, setUserObject] = useContext(myContext);
-  console.log(userObject);
-
-  const myDays = [0, 1, 2, 3, 4, 5, 6];
-  const [days, setDays] = useState([
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]); //indices of marked days
-
+  const navigate = useNavigate();
   const [err, setErr] = useState([]);
+  const [isShown, setIsShown] = useState(false);
   const [routes, setRoutes] = useState([
     {
       toCampus: false,
-      days: [false, false, false, false, false, false, false],
-      onCampusLocation: '',
-      offCampusLocation: '',
+      days: Array(7).fill(false), // marked indices of days chosen
       time: '',
+      offCampusLocation: '',
+      onCampusLocation: '',
     },
   ]);
 
+  // Will pull user data if it already exists and the user is already setup
+  useEffect(() => {
+    if (userObject && userObject.setupFlag) {
+      console.log(userObject);
+      const storedRoutes = userObject.routes.map((route) => {
+        return {
+          toCampus: route.toCampus,
+          time: route.time,
+          offCampusLocation: route.offCampusLocation,
+          onCampusLocation: route.onCampusLocation,
+          days: covertDaysToBooleans(route.days),
+        };
+      });
+      setRoutes(storedRoutes);
+    }
+  }, [userObject]);
+
+  // Given a list of days, it converts the days to booleans
+  const covertDaysToBooleans = (days) => {
+    const arr = Array(7).fill(false);
+    for (const day of days) {
+      arr[day] = true;
+    }
+    return arr;
+  };
+
+  // Given a list of routes, in converts the days property for each one
+  const convertDaysForRoutesToNumbers = (routes) => {
+    const list = JSON.parse(JSON.stringify(routes));
+    for (let i = 0; i < list.length; i++) {
+      const days = list[i].days;
+      const newDays = [];
+      for (let j = 0; j < days.length; j++) {
+        if (days[j]) {
+          newDays.push(j);
+        }
+      }
+      list[i].days = newDays;
+    }
+    return list;
+  };
+
+  // Get called on submit
   const schedule = (e) => {
     e.preventDefault();
     setErr([]);
 
-    // update every route number
-    for (let i = 0; i < routes.length; i++) {
-      updateDays(e, i);
-    }
-    const errors = validate();
+    const errors = validate(routes);
     if (errors.length > 0) {
+      setIsShown(true);
       setErr(errors);
     } else {
+      const updatedRoutes = convertDaysForRoutesToNumbers(routes);
       axios
         .put(
-          'http://localhost:3001/schedule',
+          '/account/addroute',
           {
             setupFlag: true,
-            routes: routes,
+            routes: updatedRoutes,
           },
           {
             withCredentials: true,
@@ -72,24 +91,11 @@ export default function Schedule() {
         )
         .then((res) => {
           if (res.data) {
-            myDays
-              .from({ length: 5 }, (_, i) => (days[i] === true ? i : _))
-              .filter((x) => x)
-              .forEach((x) => console.log(x));
-            //    console.log(userType);
-            //   setUserObject(res.data);
+            console.log(routes);
+            navigate('/feed');
           }
         });
     }
-  };
-  // update specific routes' days from true/false to numbers
-  const updateDays = (e, index) => {
-    const list = [...routes];
-    list[index].days = myDays
-      .from({ length: 5 }, (_, i) => (days[i] === true ? i : _))
-      .filter((x) => x);
-    setRoutes(list);
-    handleAddDay(e);
   };
 
   // add route button
@@ -97,11 +103,11 @@ export default function Schedule() {
     setRoutes([
       ...routes,
       {
-        destination: 'To UCSC',
+        toCampus: false,
+        days: [false, false, false, false, false, false, false], // marked indices of days chosen
+        time: '',
         offCampusLocation: '',
         onCampusLocation: '',
-        time: '',
-        days: [false, false, false, false, false, false, false],
       },
     ]);
   };
@@ -118,9 +124,10 @@ export default function Schedule() {
     setRoutes(list);
   };
 
-  const handleTime = (e, index) => {
+  const handleTime = (index, time) => {
     const list = [...routes];
-    list[index].time = e.target.value;
+    list[index].time = time;
+    console.log(time);
     setRoutes(list);
   };
 
@@ -134,199 +141,69 @@ export default function Schedule() {
     const list = [...routes];
     list[index].days[idx] = !list[index].days[idx];
     setRoutes(list);
-    //setDays([...days.slice(0, idx), days[idx], ...days.slice(idx + 1)]);
+  };
+
+  const handleRemoveRoute = (index) => {
+    const list = [...routes];
+    list.splice(index, 1);
+    setRoutes(list);
   };
 
   return (
-    <div className={styles.loginPage}>
+    <div className={`${styles.scheduleContent} bg-danger`}>
       <h1>YOUR SCHEDULE</h1>
       <form onSubmit={schedule}>
         <ul className="errorList">
-          {err.map((error) => (
-            <li key={error}>{error}</li>
-          ))}
+          <Card style={{ display: isShown ? 'block' : 'none' }}>
+            <Card.Header as="h5" className={styles.errorHeader}>
+              {err.length} Error{err.length > 1 ? 's' : ''}!
+            </Card.Header>
+            <Card.Body>
+              <ul>
+                {err.map((error) => (
+                  <li key={error}>{error}</li>
+                ))}
+              </ul>
+            </Card.Body>
+          </Card>
         </ul>
 
-        {
-          <Button
-            type="button"
-            variant="light"
-            size="med"
-            className={styles.buttons}
-            onClick={handleAddClick}
-            active
-          >
-            + ADD ROUTE
-          </Button>
-        }
-        <br></br>
-        <br></br>
-
-        {routes.map((x, routeNum) => {
-          return (
-            <div className={styles.loginForm} key={routeNum}>
-              <ol>
-                <h2>Route #{routeNum + 1}</h2>
-                <br></br>
-                <DropdownButton
-                  size="med"
-                  id="dropdownr-basic-button"
-                  title={
-                    routes[routeNum].toCampus === true ? 'To UCSC' : 'From UCSC'
-                  }
-                >
-                  <Dropdown.Item
-                    as="button"
-                    type="button"
-                    value="To UCSC"
-                    onClick={(e) => handleToCampus(e, routeNum, true)}
-                  >
-                    To UCSC
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    as="button"
-                    type="button"
-                    value="From UCSC"
-                    onClick={(e) => handleToCampus(e, routeNum, false)}
-                  >
-                    From UCSC
-                  </Dropdown.Item>
-                </DropdownButton>
-                <br></br>
-
-                <li>
-                  Campus Location
-                  <InputGroup className={styles.inputs}>
-                    <FormControl
-                      aria-label="Default"
-                      aria-describedby="inputGroup-sizing-default"
-                      value={routes[routeNum].onCampusLocation}
-                      onChange={(e) => handleOnCampusLocation(e, routeNum)}
-                    />
-                    {console.log(routes[routeNum].onCampusLocation)}
-                  </InputGroup>
-                </li>
-
-                <li>
-                  Off Campus Location
-                  <InputGroup className={styles.inputs}>
-                    <FormControl
-                      aria-label="Default"
-                      aria-describedby="inputGroup-sizing-default"
-                      value={routes[routeNum].offCampusLocation}
-                      onChange={(e) => handleOffCampusLocation(e, routeNum)}
-                    />
-                  </InputGroup>
-                </li>
-
-                <li>
-                  Arrival Time
-                  <InputGroup className={styles.inputs}>
-                    <FormControl
-                      aria-label="Default"
-                      aria-describedby="inputGroup-sizing-default"
-                      value={routes[routeNum].time}
-                      onChange={(e) => handleTime(e, routeNum)}
-                    />
-                  </InputGroup>
-                </li>
-                <li key={routeNum}>
-                  <ButtonGroup className="mb-2">
-                    <ToggleButton
-                      className="mb-2"
-                      id={`toggle-check-${routeNum}0`}
-                      type="checkbox"
-                      variant="outline-primary"
-                      checked={routes[routeNum].days[0]}
-                      onChange={(e) => handleAddDay(e, routeNum, 0)}
-                    >
-                      Mon
-                    </ToggleButton>
-                    <ToggleButton
-                      className="mb-2"
-                      id={`toggle-check-${routeNum}1`}
-                      type="checkbox"
-                      variant="outline-primary"
-                      checked={routes[routeNum].days[1]}
-                      value="1"
-                      onChange={(e) => handleAddDay(e, routeNum, 1)}
-                    >
-                      Tues
-                    </ToggleButton>
-                    <ToggleButton
-                      className="mb-2"
-                      id={`toggle-check-${routeNum}2`}
-                      type="checkbox"
-                      variant="outline-primary"
-                      checked={routes[routeNum].days[2]}
-                      value="2"
-                      onChange={(e) => handleAddDay(e, routeNum, 2)}
-                    >
-                      Wed
-                    </ToggleButton>
-                    <ToggleButton
-                      className="mb-2"
-                      id={`toggle-check-${routeNum}3`}
-                      type="checkbox"
-                      variant="outline-primary"
-                      checked={routes[routeNum].days[3]}
-                      value="3"
-                      onChange={(e) => handleAddDay(e, routeNum, 3)}
-                    >
-                      Thurs
-                    </ToggleButton>
-                    <ToggleButton
-                      className="mb-2"
-                      id={`toggle-check-${routeNum}4`}
-                      type="checkbox"
-                      variant="outline-primary"
-                      checked={routes[routeNum].days[4]}
-                      value="4"
-                      onChange={(e) => handleAddDay(e, routeNum, 4)}
-                    >
-                      Fri
-                    </ToggleButton>
-                    <ToggleButton
-                      className="mb-2"
-                      id={`toggle-check-${routeNum}5`}
-                      type="checkbox"
-                      variant="outline-primary"
-                      checked={routes[routeNum].days[5]}
-                      value="5"
-                      onChange={(e) => handleAddDay(e, routeNum, 5)}
-                    >
-                      Sat
-                    </ToggleButton>
-                    <ToggleButton
-                      className="mb-2"
-                      id={`toggle-check-${routeNum}6`}
-                      type="checkbox"
-                      variant="outline-primary"
-                      checked={routes[routeNum].days[6]}
-                      value="6"
-                      onChange={(e) => handleAddDay(e, routeNum, 6)}
-                    >
-                      Sun
-                    </ToggleButton>
-                  </ButtonGroup>
-                </li>
-              </ol>
-            </div>
-          );
-        })}
-        <br></br>
         <Button
-          className={styles.buttons}
-          type="submit"
+          className={`${styles.buttons} mb-3`}
+          type="button"
+          variant="light"
+          size="med"
+          onClick={handleAddClick}
+          active
+        >
+          + ADD ROUTE
+        </Button>
+
+        <div className="mb-3">
+          {routes.map((routeData, routeNum) => (
+            <ScheduleRoute
+              key={`${routeNum},${routeData.time}`}
+              routeData={routeData}
+              routeNum={routeNum}
+              handleToCampus={handleToCampus}
+              handleOnCampusLocation={handleOnCampusLocation}
+              handleOffCampusLocation={handleOffCampusLocation}
+              handleTime={handleTime}
+              handleAddDay={handleAddDay}
+              handleRemoveRoute={handleRemoveRoute}
+            />
+          ))}
+        </div>
+
+        <Button
+          className={`${styles.buttons} mb-3`}
           variant="light"
           size="lg"
-          active
+          type="submit"
         >
           SUBMIT
         </Button>
       </form>
-
-      <br></br>
     </div>
   );
 }

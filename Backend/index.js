@@ -156,10 +156,12 @@ app.put('/account/setup', (req, res) => {
   }
 });
 
+
 // Replace user's array of routes with the input array
 app.put('/account/addroute', (req, res) => {
   if (req.user) {
-    // console.log('testing route adding');
+    //console.log('BODY', req.body.routes);
+    //console.log('testing route adding');
     User.findByIdAndUpdate(
       req.user.id,
       {
@@ -171,7 +173,7 @@ app.put('/account/addroute', (req, res) => {
           console.log(err);
           res.send(err);
         } else {
-          // console.log('Updated User : ', docs);
+          //console.log('Updated User : ', docs);
           res.send(doc);
         }
       }
