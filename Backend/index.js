@@ -156,10 +156,8 @@ app.put('/account/setup', (req, res) => {
   }
 });
 
-// Add to an account's list of routes
-// See below link for how to push to an array in mongoose
-// https://stackoverflow.com/questions/15621970/pushing-object-into-array-schema-in-mongoose
 
+// Replace user's array of routes with the input array
 app.put('/account/addroute', (req, res) => {
   if (req.user) {
     //console.log('BODY', req.body.routes);
@@ -167,9 +165,7 @@ app.put('/account/addroute', (req, res) => {
     User.findByIdAndUpdate(
       req.user.id,
       {
-        $push: {
-          routes: { $each: req.body.routes },
-        },
+        routes: req.body.routes,
       },
       { safe: true, upsert: true, new: true },
       function (err, doc) {
