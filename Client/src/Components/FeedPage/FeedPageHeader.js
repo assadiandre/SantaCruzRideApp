@@ -1,20 +1,33 @@
-import { useState } from 'react';
-import {
-  Button,
-  Container,
-  Row,
-  Col,
-  DropdownButton,
-  Dropdown,
-  ButtonToolbar,
-  ButtonGroup,
-  ToggleButtonGroup,
-  ToggleButton,
-} from 'react-bootstrap';
+import { Container, Row, Col, DropdownButton, Dropdown } from 'react-bootstrap';
 
-const FeedPageHeader = ({ value, handleChange }) => {
-  // const [value, setValue] = useState([1, 7]);
-  // const handleChange = (val) => setValue(val);
+const FeedPageHeader = ({ value, handleChange, user }) => {
+  function convertDays(day) {
+    var dayString;
+    switch (day) {
+      case 1:
+        dayString = 'M';
+        break;
+      case 2:
+        dayString = 'Tu';
+        break;
+      case 3:
+        dayString = 'W';
+        break;
+      case 4:
+        dayString = 'Th';
+        break;
+      case 5:
+        dayString = 'F';
+        break;
+      case 6:
+        dayString = 'Sa';
+        break;
+      default:
+        dayString = 'Su';
+        break;
+    }
+    return dayString + ' ';
+  }
 
   return (
     <div>
@@ -22,21 +35,50 @@ const FeedPageHeader = ({ value, handleChange }) => {
         <Row>
           <Col xs={5}>
             <h1>
-              <b>All Drivers</b>
+              <b>
+                {user && user.userType === 'Rider'
+                  ? 'All Drivers'
+                  : 'All Riders'}
+              </b>
             </h1>
           </Col>
           <Col>
             <DropdownButton
               variant="danger"
-              id="dropdown-basic-button"
-              title="To Campus"
+              align="end"
+              id="dropdown-menu"
+              title="Match Route"
             >
-              <Dropdown.Item>To Home</Dropdown.Item>
+              {user &&
+                user.routes.map((route, index) => (
+                  <Dropdown.Item key={index}>
+                    <Container>
+                      <Row>
+                        <Col>
+                          <b> Route #{index + 1}</b>
+                        </Col>
+                        <Col>
+                          {' '}
+                          <b>{route.days.map((day) => convertDays(day))}</b>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          {route.toCampus ? 'To Campus' : 'From Campus'}
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>{route.time}</Col>
+                      </Row>
+                    </Container>
+                    <hr style={{ color: '#DC3545' }} />
+                  </Dropdown.Item>
+                ))}
             </DropdownButton>
           </Col>
         </Row>
         <Row>
-          <ToggleButtonGroup
+          {/* <ToggleButtonGroup
             className="p-1"
             type="checkbox"
             value={value}
@@ -63,7 +105,7 @@ const FeedPageHeader = ({ value, handleChange }) => {
             <ToggleButton variant="secondary" id="tbg-btn-7" value={7}>
               Sun
             </ToggleButton>
-          </ToggleButtonGroup>
+          </ToggleButtonGroup> */}
         </Row>
       </Container>
     </div>

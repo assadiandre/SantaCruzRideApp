@@ -1,7 +1,9 @@
 import FeedSingle from '../FeedSingle/FeedSingle';
 import FeedPageHeader from './FeedPageHeader';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+
+import { myContext } from '../../Context';
 
 const FeedPage = () => {
   // putting state of buttons in parent so we can use it for sorting
@@ -9,6 +11,8 @@ const FeedPage = () => {
   const handleChange = (val) => setValue(val); // flip flop buttons in that array
 
   const [feeds, setFeeds] = useState([]);
+  
+  const [userObject, setUserObject] = useContext(myContext);
 
   // upon every render or change of button values, pull from backend list of feeds
   useEffect(() => {
@@ -29,10 +33,7 @@ const FeedPage = () => {
 
   return (
     <div>
-      <FeedPageHeader
-        value={value}
-        handleChange={handleChange}
-      ></FeedPageHeader>
+      <FeedPageHeader user={userObject}></FeedPageHeader>
       {/* loop through list of feeds from backend*/}
       {feeds.map((feed) => (
         <FeedSingle

@@ -4,6 +4,40 @@ import { useState } from 'react';
 const FeedSingle = ({ feed, dest, time }) => {
   const [open, setOpen] = useState(false);
 
+  function convertDays(day) {
+    // convert numberical days to letters
+    var dayString;
+    switch (day) {
+      case 1:
+        dayString = 'M';
+        break;
+      case 2:
+        dayString = 'Tu';
+        break;
+      case 3:
+        dayString = 'W';
+        break;
+      case 4:
+        dayString = 'Th';
+        break;
+      case 5:
+        dayString = 'F';
+        break;
+      case 6:
+        dayString = 'Sa';
+        break;
+      default:
+        dayString = 'Su';
+        break;
+    }
+    return dayString + ' ';
+  }
+
+  function existingRoutes() {
+    // a feed has a routes array
+    if (feed && Array.isArray(feed.routes) && feed.routes.length) return true;
+  }
+
   return (
     <div>
       <Container
@@ -22,13 +56,22 @@ const FeedSingle = ({ feed, dest, time }) => {
           </Col>
           <Col>
             <Row>
-              <b>M W F</b>
+              <b>
+                {existingRoutes()
+                  ? feed.routes[0].days.map((day) => convertDays(day))
+                  : 'M W F'}
+              </b>
+              {/* <b>M W F</b> */}
             </Row>
             <Row>
-              <b>{time}</b>
+              <b>{existingRoutes() ? feed.routes[0].time : '4:20PM'}</b>
             </Row>
             <Row>
-              <b>To Campus</b>
+              <b>
+                {existingRoutes() && feed.routes[0].toCampus
+                  ? 'To Campus'
+                  : 'From Campus'}
+              </b>
             </Row>
           </Col>
         </Row>
@@ -36,7 +79,12 @@ const FeedSingle = ({ feed, dest, time }) => {
           <Col>Start: 0.3 Miles From You</Col>
         </Row>
         <Row className="text-muted">
-          <Col>Destination: {dest}</Col>
+          <Col>
+            Destination:{' '}
+            {existingRoutes()
+              ? feed.routes[0].offCampusLocation
+              : 'College 9/10'}
+          </Col>
         </Row>
         <Row>
           <Col className="text-dark">
