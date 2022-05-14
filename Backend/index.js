@@ -144,8 +144,8 @@ app.put('/account/setup', async function (req, res) {
       return;
     }
 
-    // console.log('Address: ', req.body.address);
-    // console.log('Coords: ', coordinates);
+    console.log('Address: ', req.body.address);
+    console.log('Coords: ', coordinates);
 
     User.findByIdAndUpdate(
       req.user.id,

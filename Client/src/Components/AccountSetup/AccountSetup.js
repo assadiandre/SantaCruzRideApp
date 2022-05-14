@@ -40,7 +40,7 @@ export default function AccountSetup() {
       setUserType(userObject.userType);
       setPhone(userObject.phoneNumber);
       setBio(userObject.bio);
-      setAddress(userObject.address);
+      setAddress(userObject.address.address);
     }
   }, [userObject]);
 

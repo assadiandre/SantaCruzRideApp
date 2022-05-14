@@ -12,7 +12,7 @@ async function getCoordsForAddress(address) {
   );
   const { data } = response;
 
-  if (!data || data.status === 'ZERO_RESULTS') {
+  if (!data || !data.results || data.status === 'ZERO_RESULTS') {
     throw 'No location matched input string';
   }
 
