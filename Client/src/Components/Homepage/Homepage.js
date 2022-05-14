@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { myContext } from '../../Context';
 import { Card, Button, Stack, Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
@@ -21,22 +21,22 @@ function getLocalAuth() {
 }
 
 export default function Homepage() {
-  const context = useContext(myContext);
+  const [userObject, setUserObject] = useContext(myContext);
   const auth = getLocalAuth();
   const navigate = useNavigate();
 
   // use effect called when component is rendered or when args are true
   useEffect(() => {
     if (auth) {
-      if (context && !context.setupFlag) {
+      if (userObject && !userObject.setupFlag) {
         navigate('/setup');
-      } else if (context && context.setupFlag) {
+      } else if (userObject && userObject.setupFlag) {
         navigate('/feed');
       } else {
         navigate('/');
       }
     }
-  }, [context]);
+  }, [userObject]);
 
   const googleLogin = () => {
     // open google window with your accounts

@@ -135,7 +135,13 @@ app.put('/account/setup', (req, res) => {
   if (req.user) {
     User.findByIdAndUpdate(
       req.user.id,
-      req.body,
+      {
+        setupFlag: req.body.setupFlag,
+        userType: req.body.userType,
+        phoneNumber: req.body.phoneNumber,
+        bio: req.body.bio,
+        address: req.body.address,
+      },
       { safe: true, upsert: true, new: true },
       function (err, doc) {
         if (err) {
@@ -150,19 +156,16 @@ app.put('/account/setup', (req, res) => {
   }
 });
 
-// Add to an account's list of routes
-// See below link for how to push to an array in mongoose
-// https://stackoverflow.com/questions/15621970/pushing-object-into-array-schema-in-mongoose
+
+// Replace user's array of routes with the input array
 app.put('/account/addroute', (req, res) => {
   if (req.user) {
-    console.log('BODY', req.body.routes);
-    // console.log('testing route adding');
+    //console.log('BODY', req.body.routes);
+    //console.log('testing route adding');
     User.findByIdAndUpdate(
       req.user.id,
       {
-        $push: {
-          routes: { $each: req.body.routes },
-        },
+        routes: req.body.routes,
       },
       { safe: true, upsert: true, new: true },
       function (err, doc) {
@@ -170,7 +173,7 @@ app.put('/account/addroute', (req, res) => {
           console.log(err);
           res.send(err);
         } else {
-          // console.log('Updated User : ', docs);
+          //console.log('Updated User : ', docs);
           res.send(doc);
         }
       }
@@ -193,7 +196,7 @@ app.get('/feed/fill', (req, res) => {
 
   // {$and: [{ setupFlag: true }, { _id: { $ne: req.user.id }]}
   // username: 1, phoneNumber: 1, bio: 1
-  console.log(req.user);
+  // console.log(req.user);
   if (req.user) {
     User.find({ _id: { $ne: req.user.id } }, {}).then((doc, err) => {
       if (err) throw err;

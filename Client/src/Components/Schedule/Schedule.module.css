@@ -1,72 +1,98 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;1,100;1,200;1,300&display=swap');
 .googleContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 300px;
-    height: 50px;
-    background: #4385f4;
-    position: relative;
-    color: white;
-    font-family: "Poppins", sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 50px;
+  background: #4385f4;
+  position: relative;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.scheduleContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+  height: calc(100% - 60px); /* This is 100% minus the 60px navbar */
+}
+
+.routeHeaderText {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.routeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .googleContainer img {
-    width: 12.5%;
-    height: 100%;
-    object-fit: contain;
-    left: 10px;
-    border-radius: 3px;
-    position: absolute;
+  width: 12.5%;
+  height: 100%;
+  object-fit: contain;
+  left: 10px;
+  border-radius: 3px;
+  position: absolute;
 }
 
 .githubContainer {
-    background: rgb(56, 56, 56);
+  background: rgb(56, 56, 56);
 }
 
 .twitterContainer {
-    background: #00a2f4;
+  background: #00a2f4;
 }
 
 .twitterContainer img {
-    width: 15%;
-    left: 8px;
+  width: 15%;
+  left: 8px;
 }
 
 .loginPage {
-    width: 100vw;
-    display: flex;
-    background: #377ef8;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
+  width: 100vw;
+  display: flex;
+  background: #377ef8;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .loginForm {
-    display: flex;
-    align-items: left;
-    background: #ffffff;
-    justify-content: center;
-    max-width: 600px;
-    flex-direction: column;
-    min-width: 50vw;
-    box-shadow: 2px 2px 2px #5d5d5d;
-    border-radius: 15px;
+  display: flex;
+  align-items: left;
+  background: #ffffff;
+  justify-content: center;
+  max-width: 600px;
+  flex-direction: column;
+  min-width: 50vw;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 15px;
+  margin-bottom: 15px;
 }
 .buttons {
-    box-shadow: 2px 2px 2px #5d5d5d;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.inputs{
-    max-width: 400px;
-    min-width: 40vw;
-    justify-content: left;
-    display: flex;
-    align-items: left;
-    padding-bottom: 2vw;
+.inputs {
+  max-width: 400px;
+  min-width: 40vw;
+  justify-content: left;
+  display: flex;
+  align-items: left;
+  padding-bottom: 2vw;
 }
-h1{
-    color: #ffffff;
+h1 {
+  color: #ffffff;
+}
+.errorHeader {
+  background-color: #cecdcc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

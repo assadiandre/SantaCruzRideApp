@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { myContext } from '../../Context';
 import styles from './AccountSetup.module.css';
@@ -8,12 +8,12 @@ import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import axios from 'axios';
 import {
+  Card,
   DropdownButton,
   Dropdown,
   Button,
   InputGroup,
   FormControl,
-  Container,
 } from 'react-bootstrap';
 
 function validate(userType, phone, bio) {
@@ -24,20 +24,34 @@ function validate(userType, phone, bio) {
   return errors;
 }
 export default function AccountSetup() {
-  const userObject = useContext(myContext);
-  const [userType, setUserType] = useState('');
+  const [userObject, setUserObject] = useContext(myContext);
+
+  const [userType, setUserType] = useState('Rider');
   const [phone, setPhone] = useState('');
   const [bio, setBio] = useState('');
   const [address, setAddress] = useState('');
   const [err, setErr] = useState([]);
-
+  const [isShown, setIsShown] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // if user has already setup, load their default values.
+    const loadDefaults = userObject && userObject.setupFlag;
+    if (loadDefaults) {
+      setUserType(userObject.userType);
+      setPhone(userObject.phoneNumber);
+      setBio(userObject.bio);
+      setAddress(userObject.address);
+    }
+  }, [userObject]);
 
   const accountSetup = (e) => {
     e.preventDefault();
     setErr([]);
+
     const errors = validate(userType, phone, bio);
     if (errors.length > 0) {
+      setIsShown((current) => true);
       setErr(errors);
     } else {
       axios
@@ -57,24 +71,32 @@ export default function AccountSetup() {
         .then((res) => {
           if (res.data) {
             //    console.log(userType);
-            //   setUserObject(res.data);
-            //    navigate('/schedule');
+            setUserObject(res.data);
+            navigate('/feed');
           }
         });
     }
   };
   return (
-    <div className={styles.loginPage}>
-      <h1>ACCOUNT SETUP</h1>
-      <div></div>
+    // #DC3545 is the hex code for bootstrap danger
+    <div className={styles.loginPage} style={{ background: '#DC3545' }}>
+      <h1>ACCOUNT INFO</h1>
       <div>
         <form onSubmit={accountSetup}>
           <div className={styles.loginForm}>
-            <ul className={styles.errorList}>
-              {err.map((error) => (
-                <li key={error}>{error}</li>
-              ))}
-            </ul>
+            <Card style={{ display: isShown ? 'block' : 'none' }}>
+              <Card.Header as="h5" className={styles.errorHeader}>
+                {err.length} Error{err.length > 1 ? 's' : ''}!
+              </Card.Header>
+              <Card.Body>
+                <ul>
+                  {err.map((error) => (
+                    <li key={error}>{error}</li>
+                  ))}
+                </ul>
+              </Card.Body>
+            </Card>
+
             <ol>
               <li>
                 Phone number
@@ -84,7 +106,7 @@ export default function AccountSetup() {
                   value={phone}
                   onChange={setPhone}
                 />
-                <p class="text-muted">
+                <p className="text-muted">
                   Students will be able to view this to contact you.
                 </p>
               </li>
@@ -92,7 +114,11 @@ export default function AccountSetup() {
 
               <li>
                 Do you want to Drive or Ride?
-                <DropdownButton id="dropdownr-basic-button" title={userType}>
+                <DropdownButton
+                  id="dropdownr-basic-button"
+                  title={userType}
+                  variant="danger"
+                >
                   <Dropdown.Item
                     required
                     as="button"
@@ -117,10 +143,10 @@ export default function AccountSetup() {
 
               <li>
                 About You
-                <div class="input-group">
-                  <div class="input-group-prepend"></div>
+                <div className="input-group">
+                  <div className="input-group-prepend"></div>
                   <textarea
-                    class="form-control"
+                    className="form-control"
                     aria-label="With textarea"
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
@@ -149,7 +175,7 @@ export default function AccountSetup() {
             size="lg"
             active
           >
-            CONTINUE
+            {window.location.pathname.match('/profile') ? 'SAVE' : 'CONTINUE'}
           </Button>
         </form>
       </div>

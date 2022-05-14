@@ -1,14 +1,16 @@
 import React, { useContext } from 'react';
 // import styles from './NavBar.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { myContext } from '../../Context';
 import logo from '../../assets/scraLogo.png';
+import styles from './NavBar.module.css';
 
 import { Navbar, Nav, Container, NavDropdown, Image } from 'react-bootstrap';
 
 export default function NavBar() {
-  const userObject = useContext(myContext);
+  const [userObject, setUserObject] = useContext(myContext);
+  const navigate = useNavigate();
 
   const logout = () => {
     axios
@@ -23,20 +25,28 @@ export default function NavBar() {
       });
   };
 
+  const moveToProfile = () => {
+    navigate('/profile');
+  };
+
+  const moveToSchedule = () => {
+    navigate('/schedule');
+  };
+
   return (
     <div>
-      <Navbar bg={userObject ? 'danger' : 'light'} variant="dark">
+      <Navbar
+        className={styles.navbarHeight}
+        bg={userObject ? 'danger' : 'light'}
+        variant="dark"
+      >
         <Container>
           <Link to={'/'}>
             <img src={logo} width="65" height="45" alt="" />
           </Link>
           <Navbar.Toggle />
           <Nav className="me-auto">
-            <Nav.Link
-              className={userObject ? 'text-light' : 'text-dark'}
-              as={Link}
-              to="/"
-            >
+            <Nav.Link className={'text-light'} as={Link} to="/">
               <b>SCcarpool</b>
             </Nav.Link>
           </Nav>
@@ -44,17 +54,25 @@ export default function NavBar() {
             {userObject ? (
               <Nav>
                 <NavDropdown
-                  title={<b>{`Hi, ${userObject.username}`}</b>}
+                  title={
+                    <b
+                      className={'text-light'}
+                    >{`Hi, ${userObject.username}`}</b>
+                  }
                   id="navbarScrollingDropdown"
                 >
                   <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+                  <NavDropdown.Item onClick={moveToProfile}>
+                    Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={moveToSchedule}>
+                    Schedule
+                  </NavDropdown.Item>
                 </NavDropdown>
               </Nav>
             ) : (
               <Nav>
-                <Navbar.Text
-                  className={userObject ? 'text-light' : 'text-dark'}
-                >
+                <Navbar.Text className={'text-light'}>
                   Not signed in...
                 </Navbar.Text>
               </Nav>
