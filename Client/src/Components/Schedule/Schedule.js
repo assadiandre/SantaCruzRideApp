@@ -91,7 +91,7 @@ export default function Schedule() {
         )
         .then((res) => {
           if (res.data) {
-            console.log(routes);
+            setUserObject(res.data);
             navigate('/feed');
           }
         });

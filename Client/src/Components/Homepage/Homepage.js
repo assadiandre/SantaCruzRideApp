@@ -4,6 +4,7 @@ import { Card, Button, Stack, Container, Row, Col } from 'react-bootstrap';
 //import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import styles from './Homepage.module.css';
 
 import {
   BsPencilSquare,
@@ -45,7 +46,7 @@ export default function Homepage() {
   };
 
   return (
-    <div className="bg-danger pb-5">
+    <div className={`bg-danger pb-5 ${styles.homepage_height}`}>
       <Container className="pt-4 px-4 pb-3 text-light">
         <Row>
           <h1>

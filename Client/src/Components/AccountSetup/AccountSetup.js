@@ -79,7 +79,7 @@ export default function AccountSetup() {
   };
   return (
     // #DC3545 is the hex code for bootstrap danger
-    <div className={styles.loginPage} style={{ background: '#DC3545' }}>
+    <div className={`${styles.loginPage} ${styles.background_height}`}>
       <h1>ACCOUNT INFO</h1>
       <div>
         <form onSubmit={accountSetup}>

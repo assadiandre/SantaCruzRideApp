@@ -11,6 +11,8 @@ import { Navbar, Nav, Container, NavDropdown, Image } from 'react-bootstrap';
 export default function NavBar() {
   const [userObject, setUserObject] = useContext(myContext);
   const navigate = useNavigate();
+  const navbarColor = userObject ? 'danger' : 'light';
+  const textColor = userObject ? 'text-light' : 'text-dark';
 
   const logout = () => {
     axios
@@ -35,18 +37,14 @@ export default function NavBar() {
 
   return (
     <div>
-      <Navbar
-        className={styles.navbarHeight}
-        bg={userObject ? 'danger' : 'light'}
-        variant="dark"
-      >
+      <Navbar className={styles.navbarHeight} bg={navbarColor} variant="dark">
         <Container>
           <Link to={'/'}>
             <img src={logo} width="65" height="45" alt="" />
           </Link>
           <Navbar.Toggle />
           <Nav className="me-auto">
-            <Nav.Link className={'text-light'} as={Link} to="/">
+            <Nav.Link className={textColor} as={Link} to="/">
               <b>SCcarpool</b>
             </Nav.Link>
           </Nav>
@@ -55,9 +53,7 @@ export default function NavBar() {
               <Nav>
                 <NavDropdown
                   title={
-                    <b
-                      className={'text-light'}
-                    >{`Hi, ${userObject.username}`}</b>
+                    <b className={textColor}>{`Hi, ${userObject.username}`}</b>
                   }
                   id="navbarScrollingDropdown"
                 >
@@ -72,7 +68,7 @@ export default function NavBar() {
               </Nav>
             ) : (
               <Nav>
-                <Navbar.Text className={'text-light'}>
+                <Navbar.Text className={textColor}>
                   Not signed in...
                 </Navbar.Text>
               </Nav>
