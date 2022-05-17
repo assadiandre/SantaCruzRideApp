@@ -4,10 +4,11 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
+import { createRequire } from 'module';
 import User from './Objects/user.js';
+import getCoordsForAddress from './util/location.js';
 
 // Define "require"
-import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
@@ -51,9 +52,7 @@ app.use(passport.session());
 passport.serializeUser((user, done) => done(null, user._id));
 
 passport.deserializeUser((id, done) => {
-  User.findById(id, (err, doc) => {
-    return done(null, doc);
-  });
+  User.findById(id, (err, doc) => done(null, doc));
 });
 
 passport.use(
@@ -131,8 +130,21 @@ app.get('/getuser', (req, res) => {
 // Account setup endpoint
 // finds account by ID, then updates the use with that ID with whatever fields
 // were specified in req.body
-app.put('/account/setup', (req, res) => {
+app.put('/account/setup', async (req, res) => {
   if (req.user) {
+    let coordinates;
+
+    try {
+      coordinates = await getCoordsForAddress(req.body.address);
+    } catch (err) {
+      console.log(err);
+      res.send(err);
+      return;
+    }
+
+    console.log('Address: ', req.body.address);
+    console.log('Coords: ', coordinates);
+
     User.findByIdAndUpdate(
       req.user.id,
       {
@@ -140,10 +152,13 @@ app.put('/account/setup', (req, res) => {
         userType: req.body.userType,
         phoneNumber: req.body.phoneNumber,
         bio: req.body.bio,
-        address: req.body.address,
+        address: {
+          address: req.body.address,
+          location: coordinates,
+        },
       },
       { safe: true, upsert: true, new: true },
-      function (err, doc) {
+      (err, doc) => {
         if (err) {
           // console.log(err);
           res.send(err);
@@ -156,24 +171,68 @@ app.put('/account/setup', (req, res) => {
   }
 });
 
-
 // Replace user's array of routes with the input array
-app.put('/account/addroute', (req, res) => {
+app.put('/account/addroute', async (req, res) => {
   if (req.user) {
-    //console.log('BODY', req.body.routes);
-    //console.log('testing route adding');
+    // console.log('testing route adding');
+
+    // Turn each route's location string into a Place object
+
+    const routesToStore = [];
+
+    for (let i = 0; i < req.body.routes.length; i++) {
+      let offCampusCoordinates;
+      let campusCoordinates;
+
+      try {
+        offCampusCoordinates = await getCoordsForAddress(
+          req.body.routes[i].offCampusLocation
+        );
+      } catch (err) {
+        console.log(err);
+        res.send(err);
+        return;
+      }
+
+      try {
+        campusCoordinates = await getCoordsForAddress(
+          req.body.routes[i].campusLocation
+        );
+      } catch (err) {
+        console.log(err);
+        res.send(err);
+        return;
+      }
+
+      routesToStore.push({
+        toCampus: req.body.routes[i].toCampus,
+        days: req.body.routes[i].days,
+        time: req.body.routes[i].time,
+        campusLocation: {
+          address: req.body.routes[i].campusLocation,
+          location: campusCoordinates,
+        },
+        offCampusLocation: {
+          address: req.body.routes[i].offCampusLocation,
+          location: offCampusCoordinates,
+        },
+      });
+    }
+
+    // console.log(routesToStore);
+
     User.findByIdAndUpdate(
       req.user.id,
       {
-        routes: req.body.routes,
+        routes: routesToStore,
       },
       { safe: true, upsert: true, new: true },
-      function (err, doc) {
+      (err, doc) => {
         if (err) {
           console.log(err);
           res.send(err);
         } else {
-          //console.log('Updated User : ', docs);
+          // console.log('Updated User : ', docs);
           res.send(doc);
         }
       }

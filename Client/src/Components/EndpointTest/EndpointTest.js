@@ -14,6 +14,7 @@ export default function EndpointTest() {
           userType: 'rider',
           phoneNumber: '(123) 456-1234',
           bio: 'hello asbdasjhbdsahjkbdk',
+          address: '641 Merrill Road, Santa Cruz',
         },
         {
           withCredentials: true,
@@ -37,15 +38,15 @@ export default function EndpointTest() {
               toCampus: true,
               days: [1, 3, 7],
               time: new Date(),
-              offCampusLocation: '123 Sesame Street',
-              campusLocation: 'College Nine/Ten',
+              offCampusLocation: '517 Cedar Street, Santa Cruz',
+              campusLocation: '641 Merrill Road, Santa Cruz',
             },
             {
               toCampus: false,
               days: [2, 4, 6],
               time: new Date(),
-              offCampusLocation: '321 Bob Street',
-              campusLocation: 'Science Hill',
+              offCampusLocation: '2688 Basswood Drive, San Ramon',
+              campusLocation: '641 Merrill Road, Santa Cruz',
             },
           ],
         },
@@ -61,49 +62,51 @@ export default function EndpointTest() {
       });
   };
 
-  const editRoutes2 = () => {
-    axios
-      .put(
-        'http://localhost:3001/account/addroute',
-        {
-          routes: [
-            {
-              toCampus: true,
-              days: [1, 3, 4, 7],
-              time: new Date(),
-              offCampusLocation: 'Mc Donalds',
-              campusLocation: 'Cowell College',
-            },
-            {
-              toCampus: false,
-              days: [2, 4, 5],
-              time: new Date(),
-              offCampusLocation: 'Walmart',
-              campusLocation: 'Oakes College',
-            },
-          ],
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        if (res.data) {
-          console.log(res.data);
-          //   setUserObject(res.data);
-        }
-      });
-  };
+  // const editRoutes2 = () => {
+  //   axios
+  //     .put(
+  //       'http://localhost:3001/account/addroute',
+  //       {
+  //         routes: [
+  //           {
+  //             toCampus: true,
+  //             days: [1, 3, 4, 7],
+  //             time: new Date(),
+  //             offCampusLocation: 'Mc Donalds',
+  //             campusLocation: 'Cowell College',
+  //           },
+  //           {
+  //             toCampus: false,
+  //             days: [2, 4, 5],
+  //             time: new Date(),
+  //             offCampusLocation: 'Walmart',
+  //             campusLocation: 'Oakes College',
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         withCredentials: true,
+  //       }
+  //     )
+  //     .then((res) => {
+  //       if (res.data) {
+  //         console.log(res.data);
+  //         //   setUserObject(res.data);
+  //       }
+  //     });
+  // };
 
   return (
     <div>
-      Test Setup Endpoint
+      <button onClick={accountSetup}>
+        <p>Test setup endpoint</p>
+      </button>
       <button onClick={editRoutes}>
         <p>Changes Routes to first Array</p>
       </button>
-      <button onClick={editRoutes2}>
+      {/* <button onClick={editRoutes2}>
         <p>Changes Routes to second Array</p>
-      </button>
+      </button> */}
     </div>
   );
 }

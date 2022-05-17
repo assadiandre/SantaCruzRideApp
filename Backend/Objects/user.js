@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Route from './route.js';
+import Place from './place.js';
 
 // change username to First Name and Last Name later
 const user = new mongoose.Schema({
@@ -38,7 +39,7 @@ const user = new mongoose.Schema({
     type: String,
   },
   address: {
-    type: String,
+    type: Place,
   },
 });
 
