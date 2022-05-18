@@ -29,6 +29,7 @@ function App() {
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/test" element={<EndpointTest />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/feedfilltest" element={<EndpointTest />} />
       </Routes>
     </BrowserRouter>
   );
