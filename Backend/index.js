@@ -8,6 +8,7 @@ import { createRequire } from 'module';
 import User from './Objects/user.js';
 import getCoordsForAddress from './util/location.js';
 import user from './Objects/user.js';
+import url from 'url';
 
 // Define "require"
 const require = createRequire(import.meta.url);
@@ -263,6 +264,7 @@ app.get('/feed/fill', (req, res) => {
   // username: 1, phoneNumber: 1, bio: 1
   // console.log(req.user);
   if (req.user) {
+    //console.log(req.query.route_index);
     User.find(
       {
         $and: [
@@ -277,9 +279,15 @@ app.get('/feed/fill', (req, res) => {
 
       // store scores in a dict with user's emails as the key
       // calculate the score as we itterate
-      var req_tocampus = false;
-      var req_days = [0, 2, 4];
-      var req_time = 28800;
+      if (typeof req.query.route_index !== 'undefined') {
+        var req_tocampus = req.user.routes[req.query.route_index].toCampus;
+        var req_days = req.user.routes[req.query.route_index].days;
+        var req_time = req.user.routes[req.query.route_index].time;
+      } else {
+        var req_tocampus = false;
+        var req_days = [1, 3, 5];
+        var req_time = 2800;
+      }
 
       var scores = {};
       var saved = [0, 0];
