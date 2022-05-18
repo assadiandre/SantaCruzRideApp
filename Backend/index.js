@@ -305,8 +305,14 @@ app.get('/feed/fill', (req, res) => {
             }
           }
 
-          // calculate score
-          curr_score = curr_score / Math.abs(doc[i].routes[j].time - req_time);
+          // calculate time diff
+          var time_diff = Math.abs(doc[i].routes[j].time - req_time);
+
+          // calculate score if within some bounds, 24 for now lol
+          if (time_diff < 3600 * 24) {
+            // divide by the time diff it isn't 0, by 0.01 if it is
+            curr_score = curr_score / (time_diff != 0 ? time_diff : 0.01);
+          }
 
           // store score if it is higher
           if (curr_score > saved[0]) {
