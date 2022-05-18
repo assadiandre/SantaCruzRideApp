@@ -7,6 +7,7 @@ import passport from 'passport';
 import { createRequire } from 'module';
 import User from './Objects/user.js';
 import getCoordsForAddress from './util/location.js';
+import user from './Objects/user.js';
 
 // Define "require"
 const require = createRequire(import.meta.url);
@@ -253,6 +254,11 @@ app.get('/feed/fill', (req, res) => {
   // Here, we want to filter for the person's first name, phone number, bio
   // later we will also get their home location and routes
 
+  // test route is the following:
+  // to campus: false
+  // days: 024
+  // time: 8 am = 8 * 3600 = 28800
+
   // {$and: [{ setupFlag: true }, { _id: { $ne: req.user.id }]}
   // username: 1, phoneNumber: 1, bio: 1
   // console.log(req.user);
@@ -268,8 +274,59 @@ app.get('/feed/fill', (req, res) => {
       { username: 1, phoneNumber: 1, bio: 1, routes: 1, email: 1, address: 1 }
     ).then((doc, err) => {
       if (err) throw err;
-      // once we got our list, sort it
-      res.send(doc);
+
+      // store scores in a dict with user's emails as the key
+      // calculate the score as we itterate
+      var req_tocampus = false;
+      var req_days = [0, 2, 4];
+      var req_time = 28800;
+
+      var scores = {};
+      var best_score = 0;
+      var curr_score = 0;
+      var time_diff = 0;
+      for (var i = 0; i < doc.length; i++) {
+        best_score = 0;
+
+        // itterate through the current user's routes
+        for (var j = 0; j < doc[i].routes.length; j++) {
+          curr_score = 0;
+
+          // check if going the right way
+          if (doc[i].routes[j].toCampus != req_tocampus) {
+            break;
+          }
+
+          // get number of matching days
+          for (var k = 0; k < req_days.length; k++) {
+            var found = doc[i].routes[j].days.indexOf(req_days[k]);
+            if (found != -1) {
+              curr_score++;
+            }
+          }
+
+          // calculate score
+          curr_score = curr_score / Math.abs(doc[i].routes[j].time - req_time);
+
+          // store score if it is higher
+          best_score = curr_score > best_score ? curr_score : best_score;
+        }
+
+        scores[doc[i].email] = best_score; // store the best score
+      }
+
+      //console.log(scores);
+
+      doc.sort((a, b) => scores[b.email] - scores[a.email]); // sort maximally
+
+      // find first instance of zero
+      var zero_index = doc.findIndex((user) => scores[user.email] === 0);
+      //console.log(zero_index);
+      if (zero_index != -1) {
+        res.send(doc.splice({}, zero_index));
+      } else {
+        res.send(doc);
+      }
     });
   }
 });
