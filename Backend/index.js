@@ -282,11 +282,11 @@ app.get('/feed/fill', (req, res) => {
       var req_time = 28800;
 
       var scores = {};
-      var best_score = 0;
+      var saved = [0, 0];
       var curr_score = 0;
       var time_diff = 0;
       for (var i = 0; i < doc.length; i++) {
-        best_score = 0;
+        saved = [0, 0];
 
         // itterate through the current user's routes
         for (var j = 0; j < doc[i].routes.length; j++) {
@@ -309,24 +309,31 @@ app.get('/feed/fill', (req, res) => {
           curr_score = curr_score / Math.abs(doc[i].routes[j].time - req_time);
 
           // store score if it is higher
-          best_score = curr_score > best_score ? curr_score : best_score;
+          if (curr_score > saved[0]) {
+            saved[0] = curr_score;
+            saved[1] = j;
+          }
         }
 
-        scores[doc[i].email] = best_score; // store the best score
+        scores[doc[i].email] = saved; // store the best score
       }
 
       //console.log(scores);
 
-      doc.sort((a, b) => scores[b.email] - scores[a.email]); // sort maximally
+      doc.sort((a, b) => scores[b.email][0] - scores[a.email][0]); // sort maximally
 
       // find first instance of zero
-      var zero_index = doc.findIndex((user) => scores[user.email] === 0);
-      //console.log(zero_index);
-      if (zero_index != -1) {
-        res.send(doc.splice({}, zero_index));
-      } else {
-        res.send(doc);
+      var zero_index = doc.findIndex((user) => scores[user.email][0] === 0);
+
+      // now filter out for the best route from each
+      var route_index = 0;
+      for (var i = 0; i < doc.length; i++) {
+        route_index = scores[doc[i].email][1];
+        doc[i].routes.splice(route_index, route_index + 1);
       }
+
+      //console.log(zero_index);
+      res.send(doc.splice({}, zero_index));
     });
   }
 });
