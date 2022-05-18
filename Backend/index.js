@@ -257,9 +257,18 @@ app.get('/feed/fill', (req, res) => {
   // username: 1, phoneNumber: 1, bio: 1
   // console.log(req.user);
   if (req.user) {
-    User.find({ _id: { $ne: req.user.id } }, {}).then((doc, err) => {
+    User.find(
+      {
+        $and: [
+          { setupFlag: true },
+          { _id: { $ne: req.user.id } },
+          { userType: { $ne: req.user.userType } },
+        ],
+      },
+      { username: 1, phoneNumber: 1, bio: 1, routes: 1, email: 1, address: 1 }
+    ).then((doc, err) => {
       if (err) throw err;
-      // console.log(doc);
+      // once we got our list, sort it
       res.send(doc);
     });
   }
