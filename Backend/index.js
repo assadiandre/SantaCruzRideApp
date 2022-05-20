@@ -302,7 +302,7 @@ app.get('/feed/fill', (req, res) => {
 
           // check if going the right way
           if (doc[i].routes[j].toCampus != req_tocampus) {
-            break;
+            continue;
           }
 
           // get number of matching days
