@@ -279,15 +279,18 @@ app.get('/feed/fill', (req, res) => {
 
       // store scores in a dict with user's emails as the key
       // calculate the score as we itterate
-      if (typeof req.query.route_index !== 'undefined') {
-        var req_tocampus = req.user.routes[req.query.route_index].toCampus;
-        var req_days = req.user.routes[req.query.route_index].days;
-        var req_time = req.user.routes[req.query.route_index].time;
-      } else {
-        var req_tocampus = false;
-        var req_days = [1, 3, 5];
-        var req_time = 2800;
-      }
+      // if (typeof req.query.route_index !== 'undefined') {
+      //   var req_tocampus = req.user.routes[req.query.route_index].toCampus;
+      //   var req_days = req.user.routes[req.query.route_index].days;
+      //   var req_time = req.user.routes[req.query.route_index].time;
+      // } else {
+      //   var req_tocampus = false;
+      //   var req_days = [1, 3, 5];
+      //   var req_time = 2800;
+      // }
+      var req_tocampus = req.user.routes[1].toCampus;
+      var req_days = req.user.routes[1].days;
+      var req_time = req.user.routes[1].time;
 
       var scores = {};
       var saved = [0, 0];
@@ -343,7 +346,7 @@ app.get('/feed/fill', (req, res) => {
       var route_index = 0;
       for (var i = 0; i < doc.length; i++) {
         route_index = scores[doc[i].email][1];
-        doc[i].routes.splice(route_index, route_index + 1);
+        doc[i].routes = doc[i].routes.splice(route_index, route_index + 1);
       }
 
       //console.log(zero_index);
