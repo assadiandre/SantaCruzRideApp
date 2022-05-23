@@ -1,8 +1,29 @@
-import { Container, Row, Col, Collapse, Button } from 'react-bootstrap';
+import { Container, Row, Col, Collapse } from 'react-bootstrap';
 import { useState } from 'react';
 
 const FeedSingle = ({ feed, dest, time }) => {
   const [open, setOpen] = useState(false);
+
+  function convertHMS(value) {
+    const sec = parseInt(value, 10); // convert value to number if it's string
+    let hours = Math.floor(sec / 3600); // get hours
+    let minutes = Math.floor((sec - hours * 3600) / 60); // get minutes
+    let seconds = sec - hours * 3600 - minutes * 60; //  get seconds
+    // add 0 if value < 10; Example: 2 => 02
+    if (minutes < 10) {
+      minutes = '0' + minutes;
+    }
+    if (seconds < 10) {
+      seconds = '0' + seconds;
+    }
+
+    if (hours < 12) {
+      return hours + ':' + minutes + ' AM';
+    }
+
+    hours = Math.abs(12 - hours);
+    return hours + ':' + minutes + ' PM'; // Return is HH : MM
+  }
 
   function convertDays(day) {
     // convert numberical days to letters
@@ -30,12 +51,23 @@ const FeedSingle = ({ feed, dest, time }) => {
         dayString = 'Su';
         break;
     }
+
     return dayString + ' ';
   }
 
   function existingRoutes() {
     // a feed has a routes array
     if (feed && Array.isArray(feed.routes) && feed.routes.length) return true;
+  }
+
+  function existingOffCampus() {
+    // if the feed has an updated offcampus that exists
+    if (
+      feed.routes[0].offCampusLocation !== undefined &&
+      feed.routes[0].offCampusLocation !== null &&
+      Object.keys(feed.routes[0].offCampusLocation).length !== 0
+    )
+      return true;
   }
 
   return (
@@ -64,7 +96,9 @@ const FeedSingle = ({ feed, dest, time }) => {
               {/* <b>M W F</b> */}
             </Row>
             <Row>
-              <b>{existingRoutes() ? feed.routes[0].time : '4:20PM'}</b>
+              <b>
+                {existingRoutes() ? convertHMS(feed.routes[0].time) : '4:20PM'}
+              </b>
             </Row>
             <Row>
               <b>
@@ -81,8 +115,9 @@ const FeedSingle = ({ feed, dest, time }) => {
         <Row className="text-muted">
           <Col>
             Destination:{' '}
-            {existingRoutes()
-              ? feed.routes[0].offCampusLocation
+            {/* rn only displaying destinations off campus, not showing any dest to campus */}
+            {existingRoutes() && existingOffCampus()
+              ? feed.routes[0].offCampusLocation.address
               : 'College 9/10'}
           </Col>
         </Row>

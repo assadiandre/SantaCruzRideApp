@@ -1,6 +1,28 @@
 import { Container, Row, Col, DropdownButton, Dropdown } from 'react-bootstrap';
 
 const FeedPageHeader = ({ value, handleChange, user }) => {
+  function convertHMS(value) {
+    const sec = parseInt(value, 10); // convert value to number if it's string
+    let hours = Math.floor(sec / 3600); // get hours
+    let minutes = Math.floor((sec - hours * 3600) / 60); // get minutes
+    let seconds = sec - hours * 3600 - minutes * 60; //  get seconds
+    // add 0 if value < 10; Example: 2 => 02
+
+    if (minutes < 10) {
+      minutes = '0' + minutes;
+    }
+    if (seconds < 10) {
+      seconds = '0' + seconds;
+    }
+
+    if (hours < 12) {
+      return hours + ':' + minutes + ' AM';
+    }
+
+    hours = Math.abs(12 - hours);
+    return hours + ':' + minutes + ' PM'; // Return is HH : MM
+  }
+
   function convertDays(day) {
     var dayString;
     switch (day) {
@@ -58,7 +80,6 @@ const FeedPageHeader = ({ value, handleChange, user }) => {
                           <b> Route #{index + 1}</b>
                         </Col>
                         <Col>
-                          {' '}
                           <b>{route.days.map((day) => convertDays(day))}</b>
                         </Col>
                       </Row>
@@ -68,7 +89,7 @@ const FeedPageHeader = ({ value, handleChange, user }) => {
                         </Col>
                       </Row>
                       <Row>
-                        <Col>{route.time}</Col>
+                        <Col>{convertHMS(route.time)}</Col>
                       </Row>
                     </Container>
                     <hr style={{ color: '#DC3545' }} />
@@ -77,36 +98,7 @@ const FeedPageHeader = ({ value, handleChange, user }) => {
             </DropdownButton>
           </Col>
         </Row>
-        <Row>
-          {/* <ToggleButtonGroup
-            className="p-1"
-            type="checkbox"
-            value={value}
-            onChange={handleChange}
-          >
-            <ToggleButton variant="secondary" id="tbg-btn-1" value={1}>
-              Mon
-            </ToggleButton>
-            <ToggleButton variant="secondary" id="tbg-btn-2" value={2}>
-              Tue
-            </ToggleButton>
-            <ToggleButton variant="secondary" id="tbg-btn-3" value={3}>
-              Wed
-            </ToggleButton>
-            <ToggleButton variant="secondary" id="tbg-btn-4" value={4}>
-              Thu
-            </ToggleButton>
-            <ToggleButton variant="secondary" id="tbg-btn-5" value={5}>
-              Fri
-            </ToggleButton>
-            <ToggleButton variant="secondary" id="tbg-btn-6" value={6}>
-              Sat
-            </ToggleButton>
-            <ToggleButton variant="secondary" id="tbg-btn-7" value={7}>
-              Sun
-            </ToggleButton>
-          </ToggleButtonGroup> */}
-        </Row>
+        <Row></Row>
       </Container>
     </div>
   );
