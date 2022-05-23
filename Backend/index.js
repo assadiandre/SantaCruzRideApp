@@ -7,6 +7,8 @@ import passport from 'passport';
 import { createRequire } from 'module';
 import User from './Objects/user.js';
 import getCoordsForAddress from './util/location.js';
+import user from './Objects/user.js';
+import url from 'url';
 
 // Define "require"
 const require = createRequire(import.meta.url);
@@ -253,14 +255,102 @@ app.get('/feed/fill', (req, res) => {
   // Here, we want to filter for the person's first name, phone number, bio
   // later we will also get their home location and routes
 
+  // test route is the following:
+  // to campus: false
+  // days: 024
+  // time: 8 am = 8 * 3600 = 28800
+
   // {$and: [{ setupFlag: true }, { _id: { $ne: req.user.id }]}
   // username: 1, phoneNumber: 1, bio: 1
   // console.log(req.user);
   if (req.user) {
-    User.find({ _id: { $ne: req.user.id } }, {}).then((doc, err) => {
+    //console.log(req.query.route_index);
+    User.find(
+      {
+        $and: [
+          { setupFlag: true },
+          { _id: { $ne: req.user.id } },
+          { userType: { $ne: req.user.userType } },
+        ],
+      },
+      { username: 1, phoneNumber: 1, bio: 1, routes: 1, email: 1, address: 1 }
+    ).then((doc, err) => {
       if (err) throw err;
-      // console.log(doc);
-      res.send(doc);
+
+      // store scores in a dict with user's emails as the key
+      // calculate the score as we itterate
+      if (typeof req.query.route_index !== 'undefined') {
+        var req_tocampus = req.user.routes[req.query.route_index].toCampus;
+        var req_days = req.user.routes[req.query.route_index].days;
+        var req_time = req.user.routes[req.query.route_index].time;
+      } else {
+        var req_tocampus = false;
+        var req_days = [1, 3, 5];
+        var req_time = 2800;
+      }
+      // var req_tocampus = req.user.routes[1].toCampus;
+      // var req_days = req.user.routes[1].days;
+      // var req_time = req.user.routes[1].time;
+
+      var scores = {};
+      var saved = [0, 0];
+      var curr_score = 0;
+      var time_diff = 0;
+      for (var i = 0; i < doc.length; i++) {
+        saved = [0, 0];
+
+        // itterate through the current user's routes
+        for (var j = 0; j < doc[i].routes.length; j++) {
+          curr_score = 0;
+
+          // check if going the right way
+          if (doc[i].routes[j].toCampus != req_tocampus) {
+            continue;
+          }
+
+          // get number of matching days
+          for (var k = 0; k < req_days.length; k++) {
+            var found = doc[i].routes[j].days.indexOf(req_days[k]);
+            if (found != -1) {
+              curr_score++;
+            }
+          }
+
+          // calculate time diff
+          var time_diff = Math.abs(doc[i].routes[j].time - req_time);
+
+          // calculate score if within some bounds, 24 for now lol
+          if (time_diff < 3600 * 24) {
+            // divide by the time diff it isn't 0, by 0.01 if it is
+            curr_score = curr_score / (time_diff != 0 ? time_diff : 0.01);
+          }
+
+          // store score if it is higher
+          if (curr_score > saved[0]) {
+            saved[0] = curr_score;
+            saved[1] = j;
+          }
+        }
+
+        scores[doc[i].email] = saved; // store the best score
+      }
+
+      //console.log(scores);
+
+      doc.sort((a, b) => scores[b.email][0] - scores[a.email][0]); // sort maximally
+
+      // find first instance of zero
+      var zero_index = doc.findIndex((user) => scores[user.email][0] === 0);
+
+      // now filter out for the best route from each
+      var route_index = 0;
+      for (var i = 0; i < doc.length; i++) {
+        route_index = scores[doc[i].email][1];
+        doc[i].routes = doc[i].routes.splice(route_index, route_index + 1);
+      }
+
+      //console.log(zero_index);
+      res.send(doc.splice({}, zero_index));
     });
   }
 });
