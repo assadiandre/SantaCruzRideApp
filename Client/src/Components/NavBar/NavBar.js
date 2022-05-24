@@ -6,7 +6,7 @@ import { myContext } from '../../Context';
 import logo from '../../assets/scraLogo.png';
 import styles from './NavBar.module.css';
 
-import { Navbar, Nav, Container, NavDropdown, Image } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 
 export default function NavBar() {
   const [userObject, setUserObject] = useContext(myContext);
@@ -33,6 +33,10 @@ export default function NavBar() {
 
   const moveToSchedule = () => {
     navigate('/schedule');
+  };
+
+  const moveToFeed = () => {
+    navigate('/feed');
   };
 
   return (
@@ -64,6 +68,7 @@ export default function NavBar() {
                   <NavDropdown.Item onClick={moveToSchedule}>
                     Schedule
                   </NavDropdown.Item>
+                  <NavDropdown.Item onClick={moveToFeed}>Feed</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
             ) : (
