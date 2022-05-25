@@ -351,15 +351,19 @@ app.get('/feed/fill', (req, res) => {
         scores[doc[i].email] = saved; // store the best score
       }
 
-      //console.log('displaying the scores\n\n', scores);
+      // console.log('displaying the scores\n\n', scores);
 
       doc.sort((a, b) => scores[b.email][0] - scores[a.email][0]); // sort maximally
       //console.log('sorted scores', doc);
 
       // find first instance of zero
       var zero_index = doc.findIndex((user) => scores[user.email][0] === 0);
-      doc.splice(zero_index);
-      //console.log('after splice:', doc);
+
+      if (zero_index >= 0) {
+        doc.splice(zero_index);
+      }
+
+      // console.log('after splice:', doc);
 
       // now filter out for the best route from each
       var route_index = 0;
