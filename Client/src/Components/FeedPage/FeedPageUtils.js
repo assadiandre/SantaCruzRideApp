@@ -23,22 +23,22 @@ export function convertHMS(value) {
 export function convertDays(day) {
   var dayString;
   switch (day) {
-    case 1:
+    case 0:
       dayString = 'M';
       break;
-    case 2:
+    case 1:
       dayString = 'Tu';
       break;
-    case 3:
+    case 2:
       dayString = 'W';
       break;
-    case 4:
+    case 3:
       dayString = 'Th';
       break;
-    case 5:
+    case 4:
       dayString = 'F';
       break;
-    case 6:
+    case 5:
       dayString = 'Sa';
       break;
     default:
