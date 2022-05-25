@@ -1,16 +1,18 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useContext } from 'react';
 import { myContext } from '../../Context';
 import { validate } from './RouteValidator';
 import { Button } from 'react-bootstrap';
 import { Card } from 'react-bootstrap';
 import ScheduleRoute from './ScheduleRoute';
 import styles from './Schedule.module.css';
-import { useEffect } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import GPlace from './GPlace';
 
 export default function Schedule() {
+  // API key of the google map
+  const GOOGLE_MAP_API_KEY = 'AIzaSyCNHjbmv0yX4kw5sJZIO2Jf0qO7wJ2692w';
+  const [loadMap, setLoadMap] = useState(false);
   const [userObject, setUserObject] = useContext(myContext);
   const navigate = useNavigate();
   const [err, setErr] = useState([]);
@@ -21,26 +23,44 @@ export default function Schedule() {
       days: Array(7).fill(false), // marked indices of days chosen
       time: '',
       offCampusLocation: '',
-      onCampusLocation: '',
+      onCampusLocation: 'East Remote Parking Lot',
     },
   ]);
 
   // Will pull user data if it already exists and the user is already setup
   useEffect(() => {
+    loadGoogleMapScript(() => {
+      setLoadMap(true);
+    });
     if (userObject && userObject.setupFlag) {
-      console.log(userObject);
       const storedRoutes = userObject.routes.map((route) => {
+        console.log(route.onCampusLocation.address);
+        console.log(route.offCampusLocation.address);
         return {
           toCampus: route.toCampus,
           time: route.time,
-          offCampusLocation: route.offCampusLocation,
-          onCampusLocation: route.onCampusLocation,
+          offCampusLocation: route.offCampusLocation.address,
+          onCampusLocation: route.onCampusLocation.address,
           days: covertDaysToBooleans(route.days),
         };
       });
       setRoutes(storedRoutes);
     }
   }, [userObject]);
+
+  const loadGoogleMapScript = (callback) => {
+    if (
+      typeof window.google === 'object' &&
+      typeof window.google.maps === 'object'
+    ) {
+      callback();
+    } else {
+      const googleMapScript = document.createElement('script');
+      googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_API_KEY}&libraries=places`;
+      window.document.body.appendChild(googleMapScript);
+      googleMapScript.addEventListener('load', callback);
+    }
+  };
 
   // Given a list of days, it converts the days to booleans
   const covertDaysToBooleans = (days) => {
@@ -78,6 +98,7 @@ export default function Schedule() {
       setErr(errors);
     } else {
       const updatedRoutes = convertDaysForRoutesToNumbers(routes);
+      //console.log(updatedRoutes);
       axios
         .put(
           '/account/addroute',
@@ -114,13 +135,14 @@ export default function Schedule() {
 
   const handleOnCampusLocation = (e, index) => {
     const list = [...routes];
-    list[index].onCampusLocation = e.target.value;
+    list[index].onCampusLocation = e.target.value + ', Santa Cruz, CA';
     setRoutes(list);
   };
 
-  const handleOffCampusLocation = (e, index) => {
+  const handleOffCampusLocation = (v, index) => {
     const list = [...routes];
-    list[index].offCampusLocation = e.target.value;
+    //console.log('hello');
+    list[index].offCampusLocation = v;
     setRoutes(list);
   };
 
@@ -152,6 +174,7 @@ export default function Schedule() {
   return (
     <div className={`${styles.scheduleContent} bg-danger`}>
       <h1>YOUR SCHEDULE</h1>
+
       <form onSubmit={schedule}>
         <ul className="errorList">
           <Card style={{ display: isShown ? 'block' : 'none' }}>
@@ -191,6 +214,7 @@ export default function Schedule() {
               handleTime={handleTime}
               handleAddDay={handleAddDay}
               handleRemoveRoute={handleRemoveRoute}
+              loadMap={loadMap}
             />
           ))}
         </div>
