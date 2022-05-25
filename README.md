@@ -153,3 +153,8 @@ On the search bar, look for Places API and enable
 Next, navigate to: APIs and Services -> Credentials.
 
 If you click edit API key and navigate to API restrictions it should have don't restrict key by default. If you want, you can restrict the key so that it only uses the 3 APIs we are currently using.
+
+You will need to create a new .env file in the Client top level directory
+Add this field to our new .env file (without the <>s):
+
+    REACT_APP_API_KEY=<api_key_here>
