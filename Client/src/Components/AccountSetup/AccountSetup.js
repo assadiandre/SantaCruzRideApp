@@ -72,7 +72,7 @@ export default function AccountSetup() {
           if (res.data) {
             //    console.log(userType);
             setUserObject(res.data);
-            navigate('/feed');
+            navigate('/schedule');
           }
         });
     }
