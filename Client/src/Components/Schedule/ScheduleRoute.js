@@ -1,5 +1,6 @@
 import TimePicker from 'react-bootstrap-time-picker';
 import styles from './Schedule.module.css';
+import GPlace from './GPlace';
 import {
   DropdownButton,
   Dropdown,
@@ -21,6 +22,7 @@ export default function ScheduleRoute(props) {
     handleTime,
     handleAddDay,
     handleRemoveRoute,
+    loadMap,
   } = props;
   const startDate = new Date();
 
@@ -38,7 +40,7 @@ export default function ScheduleRoute(props) {
         <DropdownButton
           size="med"
           id="dropdownr-basic-button"
-          title={routeData.toCampus === false ? 'To UCSC' : 'From UCSC'}
+          title={routeData.toCampus === false ? 'From UCSC' : 'To UCSC'}
         >
           <Dropdown.Item
             as="button"
@@ -58,29 +60,128 @@ export default function ScheduleRoute(props) {
           </Dropdown.Item>
         </DropdownButton>
         <br></br>
-
         <li>
-          Campus Location
-          <InputGroup className={styles.inputs}>
-            <FormControl
-              aria-label="Default"
-              aria-describedby="inputGroup-sizing-default"
-              value={routeData.onCampusLocation}
-              onChange={(e) => handleOnCampusLocation(e, routeNum)}
-            />
-          </InputGroup>
+          On Campus Location
+          <DropdownButton
+            size="med"
+            id="dropdownr-basic-button"
+            title={routeData.onCampusLocation.slice(
+              0,
+              routeData.onCampusLocation.length - 16
+            )}
+          >
+            <Dropdown.Item
+              as="button"
+              type="button"
+              value="East Remote Parking Lot"
+              onClick={(e) => handleOnCampusLocation(e, routeNum)}
+            >
+              East Remote Parking Lot
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              as="button"
+              type="button"
+              value="East Field House"
+              onClick={(e) => handleOnCampusLocation(e, routeNum)}
+            >
+              East Field House
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              as="button"
+              type="button"
+              value="Cowell/Stevenson"
+              onClick={(e) => handleOnCampusLocation(e, routeNum)}
+            >
+              Cowell/Stevenson
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              as="button"
+              type="button"
+              value="Crown/Merill"
+              onClick={(e) => handleOnCampusLocation(e, routeNum)}
+            >
+              Crown/Merill
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              as="button"
+              type="button"
+              value="College 9/John R. Lewis"
+              onClick={(e) => handleOnCampusLocation(e, routeNum)}
+            >
+              College 9/John R. Lewis
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              as="button"
+              type="button"
+              value="Science Hill"
+              onClick={(e) => handleOnCampusLocation(e, routeNum)}
+            >
+              Science Hill
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              as="button"
+              type="button"
+              value="Kresge"
+              onClick={(e) => handleOnCampusLocation(e, routeNum)}
+            >
+              Kresge
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              as="button"
+              type="button"
+              value="Kerr Hall"
+              onClick={(e) => handleOnCampusLocation(e, routeNum)}
+            >
+              Kerr Hall
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              as="button"
+              type="button"
+              value="Rachel Carson/Porter"
+              onClick={(e) => handleOnCampusLocation(e, routeNum)}
+            >
+              Rachel Carson/Porter
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              as="button"
+              type="button"
+              value="Oakes"
+              onClick={(e) => handleOnCampusLocation(e, routeNum)}
+            >
+              Oakes
+            </Dropdown.Item>
+          </DropdownButton>
         </li>
 
         <li>
           Off Campus Location
-          <InputGroup className={styles.inputs}>
+          <div>
+            {loadMap ? (
+              <GPlace
+                onChange={(v) => handleOffCampusLocation(v, routeNum)}
+                defaultValue={routeData.offCampusLocation}
+              />
+            ) : (
+              <>...</>
+            )}
+          </div>
+          {/* <InputGroup className={styles.inputs}>
             <FormControl
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
               value={routeData.offCampusLocation}
               onChange={(e) => handleOffCampusLocation(e, routeNum)}
             />
-          </InputGroup>
+          </InputGroup> */}
         </li>
 
         <li>

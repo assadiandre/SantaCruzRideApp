@@ -142,10 +142,14 @@ Add this field to our .env file (without the <>s):
 
 We should be able to make requests to google's API now. We may need to add additional APIs in the future.
 
-#### Going From Here
+#### Step 5 - Setting up Client Side Autocomplete Google API
 
-Now we can develop in the React app and the Node server. The database is populated right now (as of April 11) with dummy data provided by MongoDB, so later on that should be changed.
+Once again, go to https://console.developers.google.com/apis/dashboard.
 
-The React App has just the default view setup, nothing special so wee need to add some UI there.
+On the menu on the left side of the screen, navigate to: APIs and Services -> Library.
 
-The Node backend is pretty messy but it works for what we want, this needs to be pruned.
+On the search bar, look for Places API and enable
+
+Next, navigate to: APIs and Services -> Credentials.
+
+If you click edit API key and navigate to API restrictions it should have don't restrict key by default. If you want, you can restrict the key so that it only uses the 3 APIs we are currently using.
