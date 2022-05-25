@@ -16,7 +16,7 @@ export function convertHMS(value) {
     return hours + ':' + minutes + ' AM';
   }
 
-  if (hours != 12) hours = Math.abs(12 - hours);
+  if (hours !== 12) hours = Math.abs(12 - hours);
 
   return hours + ':' + minutes + ' PM'; // Return is HH : MM
 }
