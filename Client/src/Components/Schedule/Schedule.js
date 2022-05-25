@@ -11,7 +11,6 @@ import GPlace from './GPlace';
 
 export default function Schedule() {
   // API key of the google map
-  const GOOGLE_MAP_API_KEY = 'AIzaSyCNHjbmv0yX4kw5sJZIO2Jf0qO7wJ2692w';
   const [loadMap, setLoadMap] = useState(false);
   const [userObject, setUserObject] = useContext(myContext);
   const navigate = useNavigate();
@@ -56,7 +55,7 @@ export default function Schedule() {
       callback();
     } else {
       const googleMapScript = document.createElement('script');
-      googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_API_KEY}&libraries=places`;
+      googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}&libraries=places`;
       window.document.body.appendChild(googleMapScript);
       googleMapScript.addEventListener('load', callback);
     }
