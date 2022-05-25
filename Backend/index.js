@@ -284,6 +284,9 @@ app.get('/feed/fill', (req, res) => {
     ).then((doc, err) => {
       if (err) throw err;
 
+      // added by me
+      console.log('is anything returned?', doc);
+
       // store scores in a dict with user's emails as the key
       // calculate the score as we itterate
       if (typeof req.query.route_index !== 'undefined') {
@@ -298,6 +301,12 @@ app.get('/feed/fill', (req, res) => {
       // var req_tocampus = req.user.routes[1].toCampus;
       // var req_days = req.user.routes[1].days;
       // var req_time = req.user.routes[1].time;
+
+      // added by me
+      console.log(
+        'what are we trying to match:\n\n',
+        req.user.routes[req.query.route_index]
+      );
 
       var scores = {};
       var saved = [0, 0];
@@ -342,7 +351,7 @@ app.get('/feed/fill', (req, res) => {
         scores[doc[i].email] = saved; // store the best score
       }
 
-      //console.log(scores);
+      console.log('displaying the scores\n\n', scores);
 
       doc.sort((a, b) => scores[b.email][0] - scores[a.email][0]); // sort maximally
 
@@ -356,7 +365,6 @@ app.get('/feed/fill', (req, res) => {
         doc[i].routes = doc[i].routes.splice(route_index, route_index + 1);
       }
 
-      //console.log(zero_index);
       res.send(doc.splice({}, zero_index));
     });
   }
