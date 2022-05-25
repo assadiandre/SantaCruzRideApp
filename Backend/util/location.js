@@ -17,8 +17,9 @@ async function getCoordsForAddress(address) {
   }
 
   const coordinates = data.results[0].geometry.location;
+  const formatted_address = data.results[0].formatted_address;
 
-  return coordinates;
+  return [coordinates, formatted_address];
 }
 
 export default getCoordsForAddress;

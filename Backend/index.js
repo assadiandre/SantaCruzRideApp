@@ -129,22 +129,29 @@ app.get('/getuser', (req, res) => {
   res.send(req.user);
 });
 
+// If an error occurs while trying to run the endpoint, send back the original req.user object
+// so nothing breaks.
+
 // Account setup endpoint
 // finds account by ID, then updates the use with that ID with whatever fields
 // were specified in req.body
 app.put('/account/setup', async (req, res) => {
   if (req.user) {
-    let coordinates;
+    // formatted address extends the address.
+    // Ex: '641 Merrill Rd, Santa Cruz' to '641 Merrill Rd, Santa Cruz, CA 95064, USA'
+    let coordinates, formattedAddress;
 
     try {
-      coordinates = await getCoordsForAddress(req.body.address);
+      [coordinates, formattedAddress] = await getCoordsForAddress(
+        req.body.address
+      );
     } catch (err) {
       console.log(err);
-      res.send(err);
+      res.send(req.user);
       return;
     }
 
-    console.log('Address: ', req.body.address);
+    console.log('Address: ', formattedAddress);
     console.log('Coords: ', coordinates);
 
     User.findByIdAndUpdate(
@@ -155,7 +162,7 @@ app.put('/account/setup', async (req, res) => {
         phoneNumber: req.body.phoneNumber,
         bio: req.body.bio,
         address: {
-          address: req.body.address,
+          address: formattedAddress,
           location: coordinates,
         },
       },
@@ -163,7 +170,7 @@ app.put('/account/setup', async (req, res) => {
       (err, doc) => {
         if (err) {
           // console.log(err);
-          res.send(err);
+          res.send(req.user);
         } else {
           // console.log('Updated User : ', docs);
           res.send(doc);
@@ -173,36 +180,36 @@ app.put('/account/setup', async (req, res) => {
   }
 });
 
+// Add route endpoints
 // Replace user's array of routes with the input array
 app.put('/account/addroute', async (req, res) => {
   if (req.user) {
     // console.log('testing route adding');
+    // console.log('USER ROUTES:', req.body.routes);
 
     // Turn each route's location string into a Place object
 
     const routesToStore = [];
 
     for (let i = 0; i < req.body.routes.length; i++) {
-      let offCampusCoordinates;
-      let campusCoordinates;
+      let offCampusCoordinates, offCampusFormattedAddress;
+      let onCampusCoordinates, onCampusFormattedAddress;
 
       try {
-        offCampusCoordinates = await getCoordsForAddress(
-          req.body.routes[i].offCampusLocation
-        );
+        [offCampusCoordinates, offCampusFormattedAddress] =
+          await getCoordsForAddress(req.body.routes[i].offCampusLocation);
       } catch (err) {
         console.log(err);
-        res.send(err);
+        res.send(req.user);
         return;
       }
 
       try {
-        campusCoordinates = await getCoordsForAddress(
-          req.body.routes[i].campusLocation
-        );
+        [onCampusCoordinates, onCampusFormattedAddress] =
+          await getCoordsForAddress(req.body.routes[i].onCampusLocation);
       } catch (err) {
         console.log(err);
-        res.send(err);
+        res.send(req.user);
         return;
       }
 
@@ -210,12 +217,12 @@ app.put('/account/addroute', async (req, res) => {
         toCampus: req.body.routes[i].toCampus,
         days: req.body.routes[i].days,
         time: req.body.routes[i].time,
-        campusLocation: {
-          address: req.body.routes[i].campusLocation,
-          location: campusCoordinates,
+        onCampusLocation: {
+          address: onCampusFormattedAddress,
+          location: onCampusCoordinates,
         },
         offCampusLocation: {
-          address: req.body.routes[i].offCampusLocation,
+          address: offCampusFormattedAddress,
           location: offCampusCoordinates,
         },
       });
@@ -232,7 +239,7 @@ app.put('/account/addroute', async (req, res) => {
       (err, doc) => {
         if (err) {
           console.log(err);
-          res.send(err);
+          res.send(req.user);
         } else {
           // console.log('Updated User : ', docs);
           res.send(doc);
