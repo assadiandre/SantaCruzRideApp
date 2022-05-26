@@ -280,8 +280,6 @@ app.get('/feed/fill', (req, res) => {
     ).then((doc, err) => {
       if (err) throw err;
 
-      console.log(req.query.route_index);
-
       // added by me
       //console.log('is anything returned?', doc);
 
