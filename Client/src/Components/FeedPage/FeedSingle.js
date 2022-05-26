@@ -32,9 +32,7 @@ const FeedSingle = ({ feed }) => {
           <Col xs={8}>
             <h5>
               <b>
-                {randomEmojis()}
-                {'  ' + feed.username + '  '}
-                {randomEmojis()}
+                {randomEmojis() + '  ' + feed.username + '  ' + randomEmojis()}
               </b>
             </h5>
           </Col>
@@ -69,7 +67,7 @@ const FeedSingle = ({ feed }) => {
               } else if (existingRoutes() && !feed.routes[0].toCampus) {
                 return existingOnCampus()
                   ? ' ' + feed.routes[0].onCampusLocation.address
-                  : ' College 9/ John R. Lewis College';
+                  : ' East Remote Parking Lot';
               } else {
                 return '...🤷🏼‍♂️🤷🏼‍♂️🤷🏼‍♂️';
               }
@@ -84,7 +82,7 @@ const FeedSingle = ({ feed }) => {
               if (existingRoutes() && feed.routes[0].toCampus) {
                 return existingOnCampus()
                   ? ' ' + feed.routes[0].onCampusLocation.address
-                  : ' College 9/ John R. Lewis College';
+                  : ' East Remote Parking Lot';
               } else if (existingRoutes() && !feed.routes[0].toCampus) {
                 return ' 0.3 Miles From You';
               } else {
