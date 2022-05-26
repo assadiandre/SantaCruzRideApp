@@ -5,8 +5,6 @@ import {
   DropdownButton,
   Dropdown,
   ButtonGroup,
-  InputGroup,
-  FormControl,
   ToggleButton,
   CloseButton,
 } from 'react-bootstrap';
@@ -65,10 +63,7 @@ export default function ScheduleRoute(props) {
           <DropdownButton
             size="med"
             id="dropdownr-basic-button"
-            title={routeData.onCampusLocation.slice(
-              0,
-              routeData.onCampusLocation.length - 16
-            )}
+            title={routeData.onCampusLocation}
           >
             <Dropdown.Item
               as="button"
