@@ -7,8 +7,10 @@ import passport from 'passport';
 import { createRequire } from 'module';
 import User from './Objects/user.js';
 import getCoordsForAddress from './util/location.js';
+import getDistances from './util/distance.js';
 import user from './Objects/user.js';
 import url from 'url';
+import { cachedDataVersionTag } from 'v8';
 
 // Define "require"
 const require = createRequire(import.meta.url);
@@ -373,6 +375,28 @@ app.get('/feed/fill', (req, res) => {
       }
 
       res.send(doc);
+
+      // // get all the addresses that we will send to the api
+      // if (req_tocampus) {
+      //   var origin = [
+      //     req.user.routes[req.query.route_index].onCampusLocation.location,
+      //   ];
+      // } else {
+      //   var origin = [
+      //     req.user.routes[req.query.route_index].offCampusLocation.location,
+      //   ];
+      // }
+
+      // var destinations = [];
+      // for (var user = 0; user < doc.length; user++) {
+      //   if (req_tocampus) {
+      //     destinations.push(doc[user].routes[0].onCampusLocation.location);
+      //   } else {
+      //     destinations.push(doc[user].routes[0].offCampusLocation.location);
+      //   }
+      // }
+
+      // let distances = getDistances(origin, destinations);
     });
   }
 });
