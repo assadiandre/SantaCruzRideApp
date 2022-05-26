@@ -280,19 +280,24 @@ app.get('/feed/fill', (req, res) => {
     ).then((doc, err) => {
       if (err) throw err;
 
+      console.log(req.query.route_index);
+
       // added by me
       //console.log('is anything returned?', doc);
 
       // store scores in a dict with user's emails as the key
       // calculate the score as we itterate
-      if (typeof req.query.route_index !== 'undefined') {
+      if (
+        typeof req.query.route_index !== 'undefined' &&
+        req.user.routes.length > 0 // Make sure there's at least one route to match
+      ) {
         var req_tocampus = req.user.routes[req.query.route_index].toCampus;
         var req_days = req.user.routes[req.query.route_index].days;
         var req_time = req.user.routes[req.query.route_index].time;
       } else {
-        var req_tocampus = false;
-        var req_days = [1, 3, 5];
-        var req_time = 2800;
+        // Send empty array if no routes to match
+        res.send([]);
+        return;
       }
       // var req_tocampus = req.user.routes[1].toCampus;
       // var req_days = req.user.routes[1].days;
