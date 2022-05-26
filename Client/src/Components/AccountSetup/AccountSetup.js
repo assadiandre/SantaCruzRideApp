@@ -27,6 +27,7 @@ export default function AccountSetup() {
   const [userObject, setUserObject] = useContext(myContext);
 
   const [userType, setUserType] = useState('Rider');
+  const [hiddenFlag, setHiddenFlag] = useState('No');
   const [phone, setPhone] = useState('');
   const [bio, setBio] = useState('');
   const [address, setAddress] = useState('');
@@ -39,6 +40,7 @@ export default function AccountSetup() {
     const loadDefaults = userObject && userObject.setupFlag;
     if (loadDefaults) {
       setUserType(userObject.userType);
+      setHiddenFlag(userObject.hiddenFlag ? 'Yes' : 'No');
       setPhone(userObject.phoneNumber);
       setBio(userObject.bio);
       setAddress(userObject.address.address);
@@ -60,6 +62,7 @@ export default function AccountSetup() {
           {
             setupFlag: true,
             userType: userType,
+            hiddenFlag: hiddenFlag === 'Yes' ? true : false,
             phoneNumber: phone,
             bio: bio,
             address: address,
@@ -140,7 +143,40 @@ export default function AccountSetup() {
                 </DropdownButton>
               </li>
               <br></br>
-
+              {/* Only let users change hiddenFlag from profile page, not setup page. */}
+              {window.location.pathname.match('/profile') ? (
+                <div>
+                  <li>
+                    Hide my routes? (If you're not looking for matches at the
+                    moment)
+                    <DropdownButton
+                      id="dropdownr-basic-button"
+                      title={hiddenFlag}
+                      variant="danger"
+                    >
+                      <Dropdown.Item
+                        required
+                        as="button"
+                        type="button"
+                        value="Yes"
+                        onClick={(e) => setHiddenFlag(e.target.value)}
+                      >
+                        Yes
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        required
+                        as="button"
+                        type="button"
+                        value="No"
+                        onClick={(e) => setHiddenFlag(e.target.value)}
+                      >
+                        No
+                      </Dropdown.Item>
+                    </DropdownButton>
+                  </li>
+                  <br></br>
+                </div>
+              ) : null}
               <li>
                 About You
                 <div className="input-group">
