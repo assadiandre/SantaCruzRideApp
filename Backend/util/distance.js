@@ -1,31 +1,29 @@
 import axios from 'axios';
+import qs from 'qs';
 
 // https://stackoverflow.com/questions/49944387/how-to-correctly-use-axios-params-with-arrays
 
 async function getDistances(O, D) {
-  const response = await axios
-    .get('https://maps.googleapis.com/maps/api/distancematrix/json', {
+  const response = await axios.get(
+    `https://maps.googleapis.com/maps/api/distancematrix/json`,
+    {
       params: {
-        origins: O,
-        destinations: D,
+        origins: [O],
+        destinations: [D],
         travelMode: 'driving',
+        units: 'imperial',
         key: process.env.API_KEY,
       },
       paramsSerializer: (params) => {
-        return JSON.stringify(params);
+        return qs.stringify(params, { arrayFormat: 'repeat' });
       },
-    })
-    .then((res) => {
-      if (res.data) {
-        console.log('res data', res.data);
-        // var distances = []
+    }
+  );
 
-        // for (var element = 0; element < distances.rows.lenghth; element++) {
-        //     distances.push()
-        // }
-        return res.data;
-      }
-    });
+  if (typeof response !== 'undefined') {
+    let rows = response.data.rows;
+    return rows[0].elements[0].distance.text;
+  }
 }
 
 export default getDistances;

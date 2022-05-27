@@ -283,7 +283,7 @@ app.get('/feed/fill', (req, res) => {
         ],
       },
       { username: 1, phoneNumber: 1, bio: 1, routes: 1, email: 1, address: 1 }
-    ).then((doc, err) => {
+    ).then(async (doc, err) => {
       if (err) throw err;
 
       // added by me
@@ -374,22 +374,32 @@ app.get('/feed/fill', (req, res) => {
         doc[i].routes = doc[i].routes.splice(route_index, route_index + 1);
       }
 
-      res.send(doc);
-
       // get all the addresses that we will send to the api
-      var origin = [];
-      var destinations = [];
+      let distances = [];
       for (var user = 0; user < doc.length; user++) {
-        origin.push(
-          req.user.routes[req.query.route_index].offCampusLocation.location
-        );
-        console.log(
-          `${doc[user].username} has off campus location ${doc[user].routes[0].offCampusLocation.location}`
-        );
-        destinations.push(doc[user].routes[0].offCampusLocation.location);
+        let distance;
+
+        try {
+          distance = await getDistances(
+            req.user.routes[req.query.route_index].offCampusLocation.address,
+            doc[user].routes[0].offCampusLocation.address
+          );
+        } catch (err) {
+          console.log(err);
+          distance = 'Could not get distance :(';
+        }
+        //console.log(doc[user].routes[0].offCampusLocation.address);
+        distances.push(distance);
       }
 
-      let distances = getDistances(origin, destinations);
+      // change user's off campus location to a string
+      for (var i = 0; i < doc.length; i++) {
+        doc[i].routes[0].offCampusLocation.address = `${distances[i]} From You`;
+        doc[i].routes[0].offCampusLocation.location = {};
+        //console.log(doc[i].routes[0].offCampusLocation);
+      }
+
+      res.send(doc);
     });
   }
 });
