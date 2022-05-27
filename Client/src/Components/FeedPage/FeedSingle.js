@@ -75,7 +75,7 @@ const FeedSingle = ({ feed }) => {
               if (existingRoutes() && feed.routes[0].toCampus) {
                 return existingOffCampus()
                   ? ' ' + feed.routes[0].offCampusLocation.address
-                  : ' ...🤷🏼‍♂️🤷🏼‍♂️🤷🏼‍♂️';
+                  : ' 0.3 Miles From You';
               } else if (existingRoutes() && !feed.routes[0].toCampus) {
                 return existingOnCampus()
                   ? ' ' + feed.routes[0].onCampusLocation.address
@@ -98,7 +98,7 @@ const FeedSingle = ({ feed }) => {
               } else if (existingRoutes() && !feed.routes[0].toCampus) {
                 return existingOffCampus()
                   ? ' ' + feed.routes[0].offCampusLocation.address
-                  : ' ...🤷🏼‍♂️🤷🏼‍♂️🤷🏼‍♂️';
+                  : ' 0.3 Miles From You';
               } else {
                 return '...🤷🏼‍♂️🤷🏼‍♂️🤷🏼‍♂️';
               }
