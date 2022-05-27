@@ -83,6 +83,7 @@ passport.use(
             lastname: profile.name.familyName,
             email: profile.emails[0].value,
             setupFlag: false,
+            hiddenFlag: false,
             routes: [],
           });
 
@@ -158,6 +159,7 @@ app.put('/account/setup', async (req, res) => {
       req.user.id,
       {
         setupFlag: req.body.setupFlag,
+        hiddenFlag: req.body.hiddenFlag,
         userType: req.body.userType,
         phoneNumber: req.body.phoneNumber,
         bio: req.body.bio,
@@ -193,7 +195,6 @@ app.put('/account/addroute', async (req, res) => {
 
     for (let i = 0; i < req.body.routes.length; i++) {
       let offCampusCoordinates, offCampusFormattedAddress;
-      let onCampusCoordinates, onCampusFormattedAddress;
 
       try {
         [offCampusCoordinates, offCampusFormattedAddress] =
@@ -204,22 +205,17 @@ app.put('/account/addroute', async (req, res) => {
         return;
       }
 
-      try {
-        [onCampusCoordinates, onCampusFormattedAddress] =
-          await getCoordsForAddress(req.body.routes[i].onCampusLocation);
-      } catch (err) {
-        console.log(err);
-        res.send(req.user);
-        return;
-      }
-
       routesToStore.push({
         toCampus: req.body.routes[i].toCampus,
         days: req.body.routes[i].days,
         time: req.body.routes[i].time,
+        // hardcode onCampusLocation, we all know where UCSC is
         onCampusLocation: {
-          address: onCampusFormattedAddress,
-          location: onCampusCoordinates,
+          address: req.body.routes[i].onCampusLocation,
+          location: {
+            lat: 36.9820569,
+            lng: -122.0592552,
+          },
         },
         offCampusLocation: {
           address: offCampusFormattedAddress,
@@ -276,6 +272,7 @@ app.get('/feed/fill', (req, res) => {
       {
         $and: [
           { setupFlag: true },
+          { hiddenFlag: false },
           { _id: { $ne: req.user.id } },
           { userType: { $ne: req.user.userType } },
         ],
@@ -289,14 +286,17 @@ app.get('/feed/fill', (req, res) => {
 
       // store scores in a dict with user's emails as the key
       // calculate the score as we itterate
-      if (typeof req.query.route_index !== 'undefined') {
+      if (
+        typeof req.query.route_index !== 'undefined' &&
+        req.user.routes.length > 0 // Make sure there's at least one route to match
+      ) {
         var req_tocampus = req.user.routes[req.query.route_index].toCampus;
         var req_days = req.user.routes[req.query.route_index].days;
         var req_time = req.user.routes[req.query.route_index].time;
       } else {
-        var req_tocampus = false;
-        var req_days = [1, 3, 5];
-        var req_time = 2800;
+        // Send empty array if no routes to match
+        res.send([]);
+        return;
       }
       // var req_tocampus = req.user.routes[1].toCampus;
       // var req_days = req.user.routes[1].days;
@@ -359,6 +359,7 @@ app.get('/feed/fill', (req, res) => {
       // find first instance of zero
       var zero_index = doc.findIndex((user) => scores[user.email][0] === 0);
 
+      // don't splice if ALL routes have a match
       if (zero_index >= 0) {
         doc.splice(zero_index);
       }

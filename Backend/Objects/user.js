@@ -25,6 +25,10 @@ const user = new mongoose.Schema({
     required: true,
     type: Boolean,
   },
+  hiddenFlag: {
+    required: true,
+    type: Boolean,
+  },
   phoneNumber: {
     type: String,
   },
