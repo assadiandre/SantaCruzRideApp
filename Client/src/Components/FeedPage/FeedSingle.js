@@ -20,6 +20,16 @@ const FeedSingle = ({ feed }) => {
       return true;
   }
 
+  function existingOffCampus() {
+    // check if the feed has the updated offcampus field exists
+    if (
+      feed.routes[0].offCampusLocation !== undefined &&
+      feed.routes[0].offCampusLocation !== null &&
+      Object.keys(feed.routes[0].offCampusLocation).length !== 0
+    )
+      return true;
+  }
+
   return (
     <div>
       <Container
@@ -63,7 +73,9 @@ const FeedSingle = ({ feed }) => {
             Start:
             {(() => {
               if (existingRoutes() && feed.routes[0].toCampus) {
-                return ' 0.3 Miles From You';
+                return existingOffCampus()
+                  ? ' ' + feed.routes[0].offCampusLocation.address
+                  : ' ...🤷🏼‍♂️🤷🏼‍♂️🤷🏼‍♂️';
               } else if (existingRoutes() && !feed.routes[0].toCampus) {
                 return existingOnCampus()
                   ? ' ' + feed.routes[0].onCampusLocation.address
@@ -84,7 +96,9 @@ const FeedSingle = ({ feed }) => {
                   ? ' ' + feed.routes[0].onCampusLocation.address
                   : ' East Remote Parking Lot';
               } else if (existingRoutes() && !feed.routes[0].toCampus) {
-                return ' 0.3 Miles From You';
+                return existingOffCampus()
+                  ? ' ' + feed.routes[0].offCampusLocation.address
+                  : ' ...🤷🏼‍♂️🤷🏼‍♂️🤷🏼‍♂️';
               } else {
                 return '...🤷🏼‍♂️🤷🏼‍♂️🤷🏼‍♂️';
               }
