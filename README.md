@@ -158,3 +158,15 @@ You will need to create a new .env file in the Client top level directory
 Add this field to our new .env file (without the <>s):
 
     REACT_APP_API_KEY=<api_key_here>
+
+#### Step 5 - Setting up Distance Matrix Service
+
+Once again, go to https://console.developers.google.com/apis/dashboard.
+
+On the menu on the left side of the screen, navigate to: APIs and Services -> Library.
+
+On the search bar, look for Distance Matrix API and enable it.
+
+Next, navigate to: APIs and Services -> Credentials.
+
+If you click edit API key and navigate to API restrictions it should have don't restrict key by default. If you want, you can restrict the key so that it only uses the now 4 APIs we are currently using.

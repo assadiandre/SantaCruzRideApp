@@ -7,8 +7,10 @@ import passport from 'passport';
 import { createRequire } from 'module';
 import User from './Objects/user.js';
 import getCoordsForAddress from './util/location.js';
+import getDistances from './util/distance.js';
 import user from './Objects/user.js';
 import url from 'url';
+import { cachedDataVersionTag } from 'v8';
 
 // Define "require"
 const require = createRequire(import.meta.url);
@@ -278,7 +280,7 @@ app.get('/feed/fill', (req, res) => {
         ],
       },
       { username: 1, phoneNumber: 1, bio: 1, routes: 1, email: 1, address: 1 }
-    ).then((doc, err) => {
+    ).then(async (doc, err) => {
       if (err) throw err;
 
       // added by me
@@ -371,6 +373,31 @@ app.get('/feed/fill', (req, res) => {
       for (var i = 0; i < doc.length; i++) {
         route_index = scores[doc[i].email][1];
         doc[i].routes = doc[i].routes.splice(route_index, route_index + 1);
+      }
+
+      // get all the addresses that we will send to the api
+      let distances = [];
+      for (var user = 0; user < doc.length; user++) {
+        let distance;
+
+        try {
+          distance = await getDistances(
+            req.user.routes[req.query.route_index].offCampusLocation.address,
+            doc[user].routes[0].offCampusLocation.address
+          );
+        } catch (err) {
+          console.log(err);
+          distance = 'Could not get distance :(';
+        }
+        //console.log(doc[user].routes[0].offCampusLocation.address);
+        distances.push(distance);
+      }
+
+      // change user's off campus location to a string
+      for (var i = 0; i < doc.length; i++) {
+        doc[i].routes[0].offCampusLocation.address = `${distances[i]} From You`;
+        doc[i].routes[0].offCampusLocation.location = {};
+        //console.log(doc[i].routes[0].offCampusLocation);
       }
 
       res.send(doc);
