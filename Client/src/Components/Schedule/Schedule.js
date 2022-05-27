@@ -124,7 +124,7 @@ export default function Schedule() {
       {
         toCampus: false,
         days: [false, false, false, false, false, false, false], // marked indices of days chosen
-        time: '',
+        time: 28800, // default time is 8:00 AM
         offCampusLocation: '',
         onCampusLocation: '',
       },
