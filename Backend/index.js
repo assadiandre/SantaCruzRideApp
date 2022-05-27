@@ -272,6 +272,7 @@ app.get('/feed/fill', (req, res) => {
       {
         $and: [
           { setupFlag: true },
+          { hiddenFlag: false },
           { _id: { $ne: req.user.id } },
           { userType: { $ne: req.user.userType } },
         ],
