@@ -7,7 +7,6 @@ import { Card } from 'react-bootstrap';
 import ScheduleRoute from './ScheduleRoute';
 import styles from './Schedule.module.css';
 import { useEffect, useState, useContext } from 'react';
-import GPlace from './GPlace';
 
 export default function Schedule() {
   // API key of the google map
@@ -125,7 +124,7 @@ export default function Schedule() {
       {
         toCampus: false,
         days: [false, false, false, false, false, false, false], // marked indices of days chosen
-        time: '',
+        time: 28800, // default time is 8:00 AM
         offCampusLocation: '',
         onCampusLocation: '',
       },
@@ -134,13 +133,12 @@ export default function Schedule() {
 
   const handleOnCampusLocation = (e, index) => {
     const list = [...routes];
-    list[index].onCampusLocation = e.target.value + ', Santa Cruz, CA';
+    list[index].onCampusLocation = e.target.value;
     setRoutes(list);
   };
 
   const handleOffCampusLocation = (v, index) => {
     const list = [...routes];
-    //console.log('hello');
     list[index].offCampusLocation = v;
     setRoutes(list);
   };

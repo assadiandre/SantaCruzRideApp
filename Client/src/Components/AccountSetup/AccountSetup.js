@@ -7,14 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import axios from 'axios';
-import {
-  Card,
-  DropdownButton,
-  Dropdown,
-  Button,
-  InputGroup,
-  FormControl,
-} from 'react-bootstrap';
+import { Card, DropdownButton, Dropdown, Button } from 'react-bootstrap';
+import GPlace from './GPlace.js';
 
 function validate(userType, phone, bio) {
   const errors = [];
@@ -33,9 +27,14 @@ export default function AccountSetup() {
   const [address, setAddress] = useState('');
   const [err, setErr] = useState([]);
   const [isShown, setIsShown] = useState(false);
+
+  const [loadMap, setLoadMap] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    loadGoogleMapScript(() => {
+      setLoadMap(true);
+    });
     // if user has already setup, load their default values.
     const loadDefaults = userObject && userObject.setupFlag;
     if (loadDefaults) {
@@ -46,6 +45,20 @@ export default function AccountSetup() {
       setAddress(userObject.address.address);
     }
   }, [userObject]);
+
+  const loadGoogleMapScript = (callback) => {
+    if (
+      typeof window.google === 'object' &&
+      typeof window.google.maps === 'object'
+    ) {
+      callback();
+    } else {
+      const googleMapScript = document.createElement('script');
+      googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}&libraries=places`;
+      window.document.body.appendChild(googleMapScript);
+      googleMapScript.addEventListener('load', callback);
+    }
+  };
 
   const accountSetup = (e) => {
     e.preventDefault();
@@ -189,16 +202,19 @@ export default function AccountSetup() {
                   ></textarea>
                 </div>
               </li>
+
               <li>
                 Home Address
-                <InputGroup className="mb-3">
-                  <FormControl
-                    aria-label="Default"
-                    aria-describedby="inputGroup-sizing-default"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                  />
-                </InputGroup>
+                <div>
+                  {loadMap ? (
+                    <GPlace
+                      onChange={(v) => setAddress(v)}
+                      defaultValue={address}
+                    />
+                  ) : (
+                    <>...</>
+                  )}
+                </div>
               </li>
               <br></br>
             </ol>
