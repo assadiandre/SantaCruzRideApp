@@ -1,6 +1,6 @@
 import { Container, Row, Col, Collapse } from 'react-bootstrap';
 import { useState } from 'react';
-import { convertDays, convertHMS } from './FeedPageUtils';
+import { convertDays, convertHMS, randomEmojis } from './FeedPageUtils';
 
 const FeedSingle = ({ feed }) => {
   const [open, setOpen] = useState(false);
@@ -8,6 +8,16 @@ const FeedSingle = ({ feed }) => {
   function existingRoutes() {
     // a feed has a routes array
     if (feed && Array.isArray(feed.routes) && feed.routes.length) return true;
+  }
+
+  function existingOnCampus() {
+    // check if the feed has the updated offcampus field exists
+    if (
+      feed.routes[0].onCampusLocation !== undefined &&
+      feed.routes[0].onCampusLocation !== null &&
+      Object.keys(feed.routes[0].onCampusLocation).length !== 0
+    )
+      return true;
   }
 
   function existingOffCampus() {
@@ -32,7 +42,7 @@ const FeedSingle = ({ feed }) => {
           <Col xs={8}>
             <h5>
               <b>
-                {feed.username} {feed.lastname}
+                {randomEmojis() + '  ' + feed.username + '  ' + randomEmojis()}
               </b>
             </h5>
           </Col>
@@ -43,7 +53,6 @@ const FeedSingle = ({ feed }) => {
                   ? feed.routes[0].days.map((day) => convertDays(day))
                   : 'M W F'}
               </b>
-              {/* <b>M W F</b> */}
             </Row>
             <Row>
               <b>
@@ -53,22 +62,47 @@ const FeedSingle = ({ feed }) => {
             <Row>
               <b>
                 {existingRoutes() && feed.routes[0].toCampus
-                  ? 'To Campus'
-                  : 'From Campus'}
+                  ? 'To UCSC'
+                  : 'Leaving UCSC'}
               </b>
             </Row>
           </Col>
         </Row>
         <Row className="text-muted">
-          <Col>Start: 0.3 Miles From You</Col>
+          <Col>
+            Start:
+            {(() => {
+              if (existingRoutes() && feed.routes[0].toCampus) {
+                return existingOffCampus()
+                  ? ' ' + feed.routes[0].offCampusLocation.address
+                  : ' 0.3 Miles From You';
+              } else if (existingRoutes() && !feed.routes[0].toCampus) {
+                return existingOnCampus()
+                  ? ' ' + feed.routes[0].onCampusLocation.address
+                  : ' East Remote Parking Lot';
+              } else {
+                return '...🤷🏼‍♂️🤷🏼‍♂️🤷🏼‍♂️';
+              }
+            })()}
+          </Col>
         </Row>
         <Row className="text-muted">
           <Col>
-            Destination:{' '}
-            {/* rn only displaying destinations off campus, not showing any dest to campus */}
-            {existingRoutes() && existingOffCampus()
-              ? feed.routes[0].offCampusLocation.address
-              : 'College 9/10'}
+            Destination:
+            {/* immediately invoked function so i can use if-else statement */}
+            {(() => {
+              if (existingRoutes() && feed.routes[0].toCampus) {
+                return existingOnCampus()
+                  ? ' ' + feed.routes[0].onCampusLocation.address
+                  : ' East Remote Parking Lot';
+              } else if (existingRoutes() && !feed.routes[0].toCampus) {
+                return existingOffCampus()
+                  ? ' ' + feed.routes[0].offCampusLocation.address
+                  : ' 0.3 Miles From You';
+              } else {
+                return '...🤷🏼‍♂️🤷🏼‍♂️🤷🏼‍♂️';
+              }
+            })()}
           </Col>
         </Row>
         <Row>

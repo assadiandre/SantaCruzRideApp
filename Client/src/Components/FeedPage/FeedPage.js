@@ -33,12 +33,12 @@ const FeedPage = () => {
     <div>
       <Container className="bg-danger pt-2 p-3 text-light">
         <Row>
-          <Col xs={5}>
+          <Col xs={6}>
             <h1>
               <b>
                 {user && user.userType === 'Rider'
-                  ? 'All Drivers'
-                  : 'All Riders'}
+                  ? 'All Drivers 🛻'
+                  : 'All Riders 🙋‍♂️'}
               </b>
             </h1>
           </Col>
@@ -47,7 +47,7 @@ const FeedPage = () => {
               variant="danger"
               align="end"
               id="dropdown-menu"
-              title="Match Route"
+              title={'Match Route #' + (routeIndex + 1) + ' '}
             >
               {user &&
                 user.routes.map((route, index) => (
@@ -68,9 +68,7 @@ const FeedPage = () => {
                         </Col>
                       </Row>
                       <Row>
-                        <Col>
-                          {route.toCampus ? 'To Campus' : 'From Campus'}
-                        </Col>
+                        <Col>{route.toCampus ? 'To UCSC' : 'Leaving UCSC'}</Col>
                       </Row>
                       <Row>
                         <Col>{convertHMS(route.time)}</Col>
