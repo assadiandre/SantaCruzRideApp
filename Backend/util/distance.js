@@ -12,7 +12,7 @@ async function getDistances(O, D) {
         key: process.env.API_KEY,
       },
       paramsSerializer: (params) => {
-        return qs.stringify(params);
+        return JSON.stringify(params);
       },
     })
     .then((res) => {

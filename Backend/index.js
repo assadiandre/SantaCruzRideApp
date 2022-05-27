@@ -376,27 +376,20 @@ app.get('/feed/fill', (req, res) => {
 
       res.send(doc);
 
-      // // get all the addresses that we will send to the api
-      // if (req_tocampus) {
-      //   var origin = [
-      //     req.user.routes[req.query.route_index].onCampusLocation.location,
-      //   ];
-      // } else {
-      //   var origin = [
-      //     req.user.routes[req.query.route_index].offCampusLocation.location,
-      //   ];
-      // }
+      // get all the addresses that we will send to the api
+      var origin = [];
+      var destinations = [];
+      for (var user = 0; user < doc.length; user++) {
+        origin.push(
+          req.user.routes[req.query.route_index].offCampusLocation.location
+        );
+        console.log(
+          `${doc[user].username} has off campus location ${doc[user].routes[0].offCampusLocation.location}`
+        );
+        destinations.push(doc[user].routes[0].offCampusLocation.location);
+      }
 
-      // var destinations = [];
-      // for (var user = 0; user < doc.length; user++) {
-      //   if (req_tocampus) {
-      //     destinations.push(doc[user].routes[0].onCampusLocation.location);
-      //   } else {
-      //     destinations.push(doc[user].routes[0].offCampusLocation.location);
-      //   }
-      // }
-
-      // let distances = getDistances(origin, destinations);
+      let distances = getDistances(origin, destinations);
     });
   }
 });
