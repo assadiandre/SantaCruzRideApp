@@ -14,6 +14,10 @@
   margin: 10px;
 }
 
+.toggleButton {
+  max-width: 60px;
+}
+
 .scheduleContent {
   display: flex;
   flex-direction: column;
@@ -25,6 +29,13 @@
 .routeHeaderText {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.scheduleButtonColumn {
+  max-width: 70px;
+  min-width: 70px;
+  margin: 0;
+  padding: 0;
 }
 
 .routeHeader {
@@ -64,17 +75,18 @@
   justify-content: center;
 }
 
-.loginForm {
+.routeCard {
   display: flex;
   align-items: left;
   background: #ffffff;
-  justify-content: center;
   max-width: 600px;
   flex-direction: column;
   min-width: 50vw;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 15px;
   margin-bottom: 15px;
+  margin-right: 15px;
+  margin-left: 15px;
 }
 .buttons {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

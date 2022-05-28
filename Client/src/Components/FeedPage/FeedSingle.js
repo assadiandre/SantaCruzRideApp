@@ -30,6 +30,14 @@ const FeedSingle = ({ feed }) => {
       return true;
   }
 
+  function formatPhoneNumber(pnumber) {
+    const pre = pnumber.slice(2);
+    const area = pre.slice(0, 3);
+    const tdigit = pre.slice(3, 6);
+    const fdigit = pre.slice(6, 10);
+    return `(${area}) ${tdigit}-${fdigit}`;
+  }
+
   return (
     <div>
       <Container
@@ -116,7 +124,7 @@ const FeedSingle = ({ feed }) => {
                 <Row className="mx-auto">
                   Phone Number:{' '}
                   {feed.phoneNumber
-                    ? feed.phoneNumber.slice(2)
+                    ? formatPhoneNumber(feed.phoneNumber)
                     : 'No phone number to show'}
                 </Row>
                 <Row className="mx-auto">

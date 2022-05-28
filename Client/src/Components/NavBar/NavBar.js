@@ -1,15 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 // import styles from './NavBar.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { myContext } from '../../Context';
+import { useUser } from '../../UserContext';
 import logo from '../../assets/scraLogo.png';
 import styles from './NavBar.module.css';
 
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 
 export default function NavBar() {
-  const [userObject, setUserObject] = useContext(myContext);
+  const [userObject, setUserObject] = useUser();
   const navigate = useNavigate();
   const navbarColor = userObject ? 'danger' : 'light';
   const textColor = userObject ? 'text-light' : 'text-dark';

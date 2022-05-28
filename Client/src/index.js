@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
-import Context from './Context';
+import App from './app/App';
+import UserContextProvider from './UserContext';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -10,9 +10,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <Context>
+    <UserContextProvider>
       <App />
-    </Context>
+    </UserContextProvider>
   </React.StrictMode>
 );
 

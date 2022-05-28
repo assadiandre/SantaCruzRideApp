@@ -16,3 +16,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;1,100;1,200;1,300&display=swap');
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+li,
+b,
+a {
+  font-family: 'Poppins', sans-serif;
+}
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+.btn-group {
+  flex-wrap: wrap;
+}
