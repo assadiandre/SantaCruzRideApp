@@ -94,7 +94,7 @@ export default function Homepage() {
           <Col className="col-auto">
             <BsPencilSquare color={'white'} size={45}></BsPencilSquare>
           </Col>
-          <Col>
+          <Col className="d-flex align-items-center">
             <h5 className="text-light">1. Sign up as a rider or driver</h5>
           </Col>
         </Row>
@@ -105,7 +105,7 @@ export default function Homepage() {
               size={45}
             ></BsFillCalendarDayFill>
           </Col>
-          <Col>
+          <Col className="d-flex align-items-center">
             <h5 className="text-light">2. Input your weekly schedule</h5>
           </Col>
         </Row>
@@ -113,7 +113,7 @@ export default function Homepage() {
           <Col className="col-auto">
             <BsFillPinMapFill color={'white'} size={45}></BsFillPinMapFill>
           </Col>
-          <Col>
+          <Col className="d-flex align-items-center">
             <h5 className="text-light">
               3. Match with students going the same route at the same time
             </h5>
