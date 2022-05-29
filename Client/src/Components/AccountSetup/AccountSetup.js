@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { myContext } from '../../Context';
+import { useUser } from '../../UserContext';
 import styles from './AccountSetup.module.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import axios from 'axios';
 import { Card, DropdownButton, Dropdown, Button } from 'react-bootstrap';
-import GPlace from './GPlace.js';
+import GPlace from '../Schedule/GPlace';
 
 function validate(userType, phone, bio) {
   const errors = [];
@@ -18,7 +18,7 @@ function validate(userType, phone, bio) {
   return errors;
 }
 export default function AccountSetup() {
-  const [userObject, setUserObject] = useContext(myContext);
+  const [userObject, setUserObject] = useUser();
 
   const [userType, setUserType] = useState('Rider');
   const [hiddenFlag, setHiddenFlag] = useState('No');
@@ -87,8 +87,12 @@ export default function AccountSetup() {
         .then((res) => {
           if (res.data) {
             //    console.log(userType);
-            setUserObject(res.data);
-            navigate('/schedule');
+            if (!res.data.setupFlag) {
+              setUserObject(res.data);
+              navigate('/schedule');
+            } else {
+              navigate('/feed');
+            }
           }
         });
     }
@@ -99,7 +103,7 @@ export default function AccountSetup() {
       <h1>ACCOUNT INFO</h1>
       <div>
         <form onSubmit={accountSetup}>
-          <div className={styles.loginForm}>
+          <div className={`${styles.loginForm}`}>
             <Card style={{ display: isShown ? 'block' : 'none' }}>
               <Card.Header as="h5" className={styles.errorHeader}>
                 {err.length} Error{err.length > 1 ? 's' : ''}!
@@ -114,7 +118,7 @@ export default function AccountSetup() {
             </Card>
 
             <ol>
-              <li>
+              <li className="me-4 mb-2 mt-3">
                 Phone number
                 <PhoneInput
                   required
@@ -122,13 +126,13 @@ export default function AccountSetup() {
                   value={phone}
                   onChange={setPhone}
                 />
-                <p className="text-muted">
+                <p className="text-muted my-0">
                   Students will be able to view this to contact you.
                 </p>
               </li>
-              <br></br>
 
-              <li>
+              <li className="me-4 mb-2">
+                <p> </p>
                 Do you want to Drive or Ride?
                 <DropdownButton
                   id="dropdownr-basic-button"
@@ -155,42 +159,37 @@ export default function AccountSetup() {
                   </Dropdown.Item>
                 </DropdownButton>
               </li>
-              <br></br>
-              {/* Only let users change hiddenFlag from profile page, not setup page. */}
-              {window.location.pathname.match('/profile') ? (
-                <div>
-                  <li>
-                    Hide my routes? (If you're not looking for matches at the
-                    moment)
-                    <DropdownButton
-                      id="dropdownr-basic-button"
-                      title={hiddenFlag}
-                      variant="danger"
-                    >
-                      <Dropdown.Item
-                        required
-                        as="button"
-                        type="button"
-                        value="Yes"
-                        onClick={(e) => setHiddenFlag(e.target.value)}
-                      >
-                        Yes
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        required
-                        as="button"
-                        type="button"
-                        value="No"
-                        onClick={(e) => setHiddenFlag(e.target.value)}
-                      >
-                        No
-                      </Dropdown.Item>
-                    </DropdownButton>
-                  </li>
-                  <br></br>
-                </div>
-              ) : null}
-              <li>
+
+              <li className="me-4 mb-2">
+                Hide my routes? (If you're not looking for matches at the
+                moment)
+                <DropdownButton
+                  id="dropdownr-basic-button"
+                  title={hiddenFlag}
+                  variant="danger"
+                >
+                  <Dropdown.Item
+                    required
+                    as="button"
+                    type="button"
+                    value="Yes"
+                    onClick={(e) => setHiddenFlag(e.target.value)}
+                  >
+                    Yes
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    required
+                    as="button"
+                    type="button"
+                    value="No"
+                    onClick={(e) => setHiddenFlag(e.target.value)}
+                  >
+                    No
+                  </Dropdown.Item>
+                </DropdownButton>
+              </li>
+
+              <li className="me-4 mb-2">
                 About You
                 <div className="input-group">
                   <div className="input-group-prepend"></div>
@@ -203,7 +202,7 @@ export default function AccountSetup() {
                 </div>
               </li>
 
-              <li>
+              <li className="me-4 mb-2">
                 Home Address
                 <div>
                   {loadMap ? (
@@ -215,13 +214,14 @@ export default function AccountSetup() {
                     <>...</>
                   )}
                 </div>
+                <p className="text-muted my-0">
+                  Students will never be able to see your home address.
+                </p>
               </li>
-              <br></br>
             </ol>
           </div>
-          <br></br>
           <Button
-            className={styles.buttons}
+            className={`${styles.buttons} mt-3 ms-2`}
             type="submit"
             variant="light"
             size="lg"

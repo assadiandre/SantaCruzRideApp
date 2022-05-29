@@ -1,17 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { myContext } from '../../Context';
+import { useUser } from '../../UserContext';
 import { validate } from './RouteValidator';
 import { Button } from 'react-bootstrap';
 import { Card } from 'react-bootstrap';
 import ScheduleRoute from './ScheduleRoute';
 import styles from './Schedule.module.css';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Schedule() {
   // API key of the google map
   const [loadMap, setLoadMap] = useState(false);
-  const [userObject, setUserObject] = useContext(myContext);
+  const [userObject, setUserObject] = useUser();
   const navigate = useNavigate();
   const [err, setErr] = useState([]);
   const [isShown, setIsShown] = useState(false);
@@ -189,7 +189,7 @@ export default function Schedule() {
         </ul>
 
         <Button
-          className={`${styles.buttons} mb-3`}
+          className={`${styles.buttons} mb-3 ms-2`}
           type="button"
           variant="light"
           size="med"
@@ -217,7 +217,7 @@ export default function Schedule() {
         </div>
 
         <Button
-          className={`${styles.buttons} mb-3`}
+          className={`${styles.buttons} mb-3 ms-2`}
           variant="light"
           size="lg"
           type="submit"

@@ -25,7 +25,7 @@ export default function ScheduleRoute(props) {
   const startDate = new Date();
 
   return (
-    <div className={styles.loginForm} key={routeNum}>
+    <div className={styles.routeCard} key={routeNum}>
       <ol>
         <div className={styles.routeHeader}>
           <h2 className={styles.routeHeaderText}>Route #{routeNum + 1}</h2>
@@ -38,6 +38,7 @@ export default function ScheduleRoute(props) {
         <DropdownButton
           size="med"
           id="dropdownr-basic-button"
+          variant="outline-danger"
           title={routeData.toCampus === false ? 'From UCSC' : 'To UCSC'}
         >
           <Dropdown.Item
@@ -58,12 +59,13 @@ export default function ScheduleRoute(props) {
           </Dropdown.Item>
         </DropdownButton>
         <br></br>
-        <li>
+        <li className="me-4">
           On Campus Location
           <DropdownButton
             size="med"
             id="dropdownr-basic-button"
             title={routeData.onCampusLocation}
+            variant="outline-danger"
           >
             <Dropdown.Item
               as="button"
@@ -157,7 +159,7 @@ export default function ScheduleRoute(props) {
           </DropdownButton>
         </li>
 
-        <li>
+        <li className="me-4">
           Off Campus Location
           <div>
             {loadMap ? (
@@ -169,17 +171,8 @@ export default function ScheduleRoute(props) {
               <>...</>
             )}
           </div>
-          {/* <InputGroup className={styles.inputs}>
-            <FormControl
-              aria-label="Default"
-              aria-describedby="inputGroup-sizing-default"
-              value={routeData.offCampusLocation}
-              onChange={(e) => handleOffCampusLocation(e, routeNum)}
-            />
-          </InputGroup> */}
         </li>
-
-        <li>
+        <li className="me-4">
           Arrival Time
           <TimePicker
             start="1:00"
@@ -190,24 +183,24 @@ export default function ScheduleRoute(props) {
             value={routeData.time}
           />
         </li>
-        <li key={routeNum}>
-          Days<br></br>
-          <ButtonGroup className="mb-2">
+        <li key={routeNum} className="me-4">
+          <p className="my-0">Days </p>
+          <ButtonGroup>
             <ToggleButton
-              className="mb-2"
+              className={styles.toggleButton}
               id={`toggle-check-${routeNum}0`}
               type="checkbox"
-              variant="outline-primary"
+              variant="outline-danger"
               checked={routeData.days[0]}
               onChange={(e) => handleAddDay(e, routeNum, 0)}
             >
               Mon
             </ToggleButton>
             <ToggleButton
-              className="mb-2"
+              className={styles.toggleButton}
               id={`toggle-check-${routeNum}1`}
               type="checkbox"
-              variant="outline-primary"
+              variant="outline-danger"
               checked={routeData.days[1]}
               value="1"
               onChange={(e) => handleAddDay(e, routeNum, 1)}
@@ -215,10 +208,10 @@ export default function ScheduleRoute(props) {
               Tues
             </ToggleButton>
             <ToggleButton
-              className="mb-2"
+              className={styles.toggleButton}
               id={`toggle-check-${routeNum}2`}
               type="checkbox"
-              variant="outline-primary"
+              variant="outline-danger"
               checked={routeData.days[2]}
               value="2"
               onChange={(e) => handleAddDay(e, routeNum, 2)}
@@ -226,10 +219,10 @@ export default function ScheduleRoute(props) {
               Wed
             </ToggleButton>
             <ToggleButton
-              className="mb-2"
+              className={styles.toggleButton}
               id={`toggle-check-${routeNum}3`}
               type="checkbox"
-              variant="outline-primary"
+              variant="outline-danger"
               checked={routeData.days[3]}
               value="3"
               onChange={(e) => handleAddDay(e, routeNum, 3)}
@@ -237,10 +230,10 @@ export default function ScheduleRoute(props) {
               Thurs
             </ToggleButton>
             <ToggleButton
-              className="mb-2"
+              className={styles.toggleButton}
               id={`toggle-check-${routeNum}4`}
               type="checkbox"
-              variant="outline-primary"
+              variant="outline-danger"
               checked={routeData.days[4]}
               value="4"
               onChange={(e) => handleAddDay(e, routeNum, 4)}
@@ -248,10 +241,10 @@ export default function ScheduleRoute(props) {
               Fri
             </ToggleButton>
             <ToggleButton
-              className="mb-2"
+              className={styles.toggleButton}
               id={`toggle-check-${routeNum}5`}
               type="checkbox"
-              variant="outline-primary"
+              variant="outline-danger"
               checked={routeData.days[5]}
               value="5"
               onChange={(e) => handleAddDay(e, routeNum, 5)}
@@ -259,10 +252,10 @@ export default function ScheduleRoute(props) {
               Sat
             </ToggleButton>
             <ToggleButton
-              className="mb-2"
+              className={styles.toggleButton}
               id={`toggle-check-${routeNum}6`}
               type="checkbox"
-              variant="outline-primary"
+              variant="outline-danger"
               checked={routeData.days[6]}
               value="6"
               onChange={(e) => handleAddDay(e, routeNum, 6)}

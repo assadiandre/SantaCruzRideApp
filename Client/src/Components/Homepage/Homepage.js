@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { myContext } from '../../Context';
+import React from 'react';
+import { useUser } from '../../UserContext';
 import { Card, Button, Stack, Container, Row, Col } from 'react-bootstrap';
 //import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +22,7 @@ function getLocalAuth() {
 }
 
 export default function Homepage() {
-  const [userObject, setUserObject] = useContext(myContext);
+  const [userObject, setUserObject] = useUser();
   const auth = getLocalAuth();
   const navigate = useNavigate();
 
@@ -91,26 +91,29 @@ export default function Homepage() {
       </Card>
       <Container className="text-left mt-5 mx-auto px-5 pt-5 pb-5">
         <Row className="pb-2">
-          <Col xs={2}>
-            <BsPencilSquare size={45}></BsPencilSquare>
+          <Col className="col-auto">
+            <BsPencilSquare color={'white'} size={45}></BsPencilSquare>
           </Col>
-          <Col>
+          <Col className="d-flex align-items-center">
             <h5 className="text-light">1. Sign up as a rider or driver</h5>
           </Col>
         </Row>
         <Row className="pb-2">
-          <Col xs={2}>
-            <BsFillCalendarDayFill size={45}></BsFillCalendarDayFill>
+          <Col className="col-auto">
+            <BsFillCalendarDayFill
+              color={'white'}
+              size={45}
+            ></BsFillCalendarDayFill>
           </Col>
-          <Col>
+          <Col className="d-flex align-items-center">
             <h5 className="text-light">2. Input your weekly schedule</h5>
           </Col>
         </Row>
-        <Row className="pb-5">
-          <Col xs={2}>
-            <BsFillPinMapFill size={45}></BsFillPinMapFill>
+        <Row>
+          <Col className="col-auto">
+            <BsFillPinMapFill color={'white'} size={45}></BsFillPinMapFill>
           </Col>
-          <Col>
+          <Col className="d-flex align-items-center">
             <h5 className="text-light">
               3. Match with students going the same route at the same time
             </h5>
