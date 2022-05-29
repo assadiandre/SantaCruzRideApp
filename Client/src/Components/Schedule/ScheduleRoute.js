@@ -39,7 +39,7 @@ export default function ScheduleRoute(props) {
           size="med"
           id="dropdownr-basic-button"
           variant="outline-danger"
-          title={routeData.toCampus === false ? 'From UCSC' : 'To UCSC'}
+          title={routeData.toCampus === false ? 'Leaving UCSC' : 'To UCSC'}
         >
           <Dropdown.Item
             as="button"
@@ -52,10 +52,10 @@ export default function ScheduleRoute(props) {
           <Dropdown.Item
             as="button"
             type="button"
-            value="From UCSC"
+            value="Leaving UCSC"
             onClick={(e) => handleToCampus(e, routeNum, false)}
           >
-            From UCSC
+            Leaving UCSC
           </Dropdown.Item>
         </DropdownButton>
         <br></br>
