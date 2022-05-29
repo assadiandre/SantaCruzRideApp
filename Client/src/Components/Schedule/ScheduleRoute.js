@@ -205,7 +205,7 @@ export default function ScheduleRoute(props) {
               value="1"
               onChange={(e) => handleAddDay(e, routeNum, 1)}
             >
-              Tues
+              Tue
             </ToggleButton>
             <ToggleButton
               className={styles.toggleButton}
@@ -227,7 +227,7 @@ export default function ScheduleRoute(props) {
               value="3"
               onChange={(e) => handleAddDay(e, routeNum, 3)}
             >
-              Thurs
+              Thu
             </ToggleButton>
             <ToggleButton
               className={styles.toggleButton}
