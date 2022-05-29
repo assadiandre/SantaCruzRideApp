@@ -87,12 +87,8 @@ export default function AccountSetup() {
         .then((res) => {
           if (res.data) {
             //    console.log(userType);
-            if (!res.data.setupFlag) {
-              setUserObject(res.data);
-              navigate('/schedule');
-            } else {
-              navigate('/feed');
-            }
+            setUserObject(res.data);
+            navigate('/schedule');
           }
         });
     }

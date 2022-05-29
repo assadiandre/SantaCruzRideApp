@@ -1,9 +1,9 @@
 import React from 'react';
-import { useUser } from '../../UserContext';
+// import { useUser } from '../../UserContext';
 import { Card, Button, Stack, Container, Row, Col } from 'react-bootstrap';
 //import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import { useEffect } from 'react';
 import styles from './Homepage.module.css';
 
 import {
@@ -12,32 +12,32 @@ import {
   BsFillCalendarDayFill,
 } from 'react-icons/bs';
 
-function getLocalAuth() {
-  const potentialAuth = localStorage.getItem('auth');
-  if (potentialAuth === 'true') {
-    return true;
-  } else {
-    return false;
-  }
-}
+// function getLocalAuth() {
+//   const potentialAuth = localStorage.getItem('auth');
+//   if (potentialAuth === 'true') {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
 
 export default function Homepage() {
-  const [userObject, setUserObject] = useUser();
-  const auth = getLocalAuth();
-  const navigate = useNavigate();
+  // const [userObject, setUserObject] = useUser();
+  // const auth = getLocalAuth();
+  // const navigate = useNavigate();
 
   // use effect called when component is rendered or when args are true
-  useEffect(() => {
-    if (auth) {
-      if (userObject && !userObject.setupFlag) {
-        navigate('/setup');
-      } else if (userObject && userObject.setupFlag) {
-        navigate('/feed');
-      } else {
-        navigate('/');
-      }
-    }
-  }, [userObject]);
+  // useEffect(() => {
+  //   if (auth) {
+  //     if (userObject && !userObject.setupFlag) {
+  //       navigate('/setup');
+  //     } else if (userObject && userObject.setupFlag) {
+  //       navigate('/feed');
+  //     } else {
+  //       navigate('/');
+  //     }
+  //   }
+  // }, [userObject]);
 
   const googleLogin = () => {
     // open google window with your accounts

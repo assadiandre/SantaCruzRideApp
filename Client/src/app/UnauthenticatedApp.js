@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import Homepage from '../components/Homepage/Homepage';
+import Homepage from '../Components/Homepage/Homepage';
 import RedirectHome from './RedirectHome';
 
 export default function UnauthenticatedApp() {

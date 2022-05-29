@@ -2,7 +2,7 @@
 import './App.css';
 // import { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import NavBar from '../components/NavBar/NavBar';
+import NavBar from '../Components/NavBar/NavBar';
 import { useUser } from '../UserContext';
 import 'bootstrap/dist/css/bootstrap.min.css'; // bootstrap stylesheet
 import UnauthenticatedApp from './UnauthenticatedApp';
