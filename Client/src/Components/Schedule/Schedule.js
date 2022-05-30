@@ -169,7 +169,7 @@ export default function Schedule() {
       <h1>YOUR SCHEDULE</h1>
 
       <form onSubmit={schedule}>
-        <ul className="errorList">
+        <div className={styles.errorList}>
           <Card style={{ display: isShown ? 'block' : 'none' }}>
             <Card.Header as="h5" className={styles.errorHeader}>
               {err.length} Error{err.length > 1 ? 's' : ''}!
@@ -182,8 +182,7 @@ export default function Schedule() {
               </ul>
             </Card.Body>
           </Card>
-        </ul>
-
+        </div>
         <Button
           className={`${styles.buttons} mb-3 ms-2`}
           type="button"
