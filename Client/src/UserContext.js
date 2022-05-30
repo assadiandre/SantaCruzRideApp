@@ -29,10 +29,7 @@ export default function UserContextProvider(props) {
       });
   }, []);
 
-  if (
-    userObjectRequest.status === 'success' ||
-    userObjectRequest.status === 'error'
-  ) {
+  if (userObjectRequest.status === 'success') {
     return (
       <UserContext.Provider value={[userObject, setUserObject]}>
         {props.children}
