@@ -47,7 +47,7 @@ const FeedPage = () => {
       <div>
         <Container className="bg-danger pt-2 p-3 text-light">
           <Row>
-            <Col xs={6}>
+            <Col xs={8}>
               <h1>
                 <b>
                   {user && user.userType === 'Rider'
@@ -56,11 +56,13 @@ const FeedPage = () => {
                 </b>
               </h1>
             </Col>
-            <FeedPageRouteDropdown
-              user={user}
-              routeIndex={routeIndex}
-              setRouteIndex={setRouteIndex}
-            />
+            <Col className="d-flex justify-content-end me-3">
+              <FeedPageRouteDropdown
+                user={user}
+                routeIndex={routeIndex}
+                setRouteIndex={setRouteIndex}
+              />
+            </Col>
           </Row>
         </Container>
         <FeedPageFeed feeds={feeds} />
