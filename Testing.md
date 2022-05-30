@@ -86,3 +86,49 @@
 - `NavBar.js`
   - Navbar throughout the app
   - Manually unit tested by verifying correct route to desired page was taken after clicking the page you wanted to go to
+
+### Brandon Luu:
+
+- `Schedule.js`
+  - Function `Schedule`
+    - Manually unit tested by adding multiple routes and the correct routes were showing up in the database
+  - `loadGoogleMapScript`
+    - Loads the google map script for autocomplete when the page is loaded
+    - Manually unit tested by checking if the places that were autofilled were correct places
+  - `schedule`
+    - Gets called on submit, validates the form then if it is correct, converts the days in the routes from bools to numbers and sents the updated routes to the backend.
+    - Manually tested by using console.log to display updated routes to make sure that it is sending the correct routes to the backend
+  - `Return`
+    - Returns jsx of all the buttons and each route input on the page.
+    - Manually tested to see if the add route and submit buttons worked correctly
+- `ScheduleRoute.js`
+  - Function `ScheduleRoute`
+    - Component that displays each individual route
+    - Manually unit tested by checking if the dropdowns/checkbox displayed the correct info and correctly interacted with Schedule to send the correct routes to the backend
+- `RouteValidator.js`
+  - Function `validate`
+    - Gets called on submit and displays an error message if some fields are empty in the routes
+    - Manually unit tested by adding multiple routes and then checking if it validated the correct routes and fields.
+- `GPlace.js`
+  - `GPlace`
+    - Initializes the google place autocomplete and returns the input form with autocomplete
+    - Manually unit tested by checking if the places that were autofilled were correct places and sent the correct addresses to the backend.
+
+### Joseph Kong:
+
+- Geocoding function `getCoordsForAddress` in `Backend/util/location.js`
+  - Function takes in an address (string) as input and returns the coordinates for that address and the formatted version of that address (i.e. Formatting an address: 1421 Mission Street Santa Cruz turns into 1421 Mission St, Santa Cruz, CA 95060, USA)
+  - Unit test by running the endpoint on an address string (i.e. 1421 Mission Street Santa Cruz).
+  - Take output coordinates (in this case, { lat: 36.9671128, lng: -122.0390627 }) and put them into google maps, expecting the coordinates to point to the address we fed in
+  - Expect output formatted address to be 1421 Mission St, Santa Cruz, CA 95060, USA
+- Account setup/account update endpoint: `app.put('/account/setup')` in `Backend/index.js`
+  - Unit tested the endpoint by logging into a user and making a request with hard-coded data in the body.
+  - Specifically: `{ setupFlag: true, hiddenFlag: false, userType: ‘Driver’, phoneNumber: ‘+17777777777’, bio: ‘hello world’, address: ‘1421 Mission Street, Santa Cruz’ }`
+  - After calling the endpoint, ensure that the hard-coded data appears in the correct fields (and is accurate) by checking the user’s fields in the mongoDB database
+  - Call the endpoint again with the same user, with new data in the request body: `{ setupFlag: true, hiddenFlag: true, userType: ‘Rider’, phoneNumber: ‘+19999999999’, bio: ‘hello earth’, address: ‘517 Cedar Street, Santa Cruz’ }`
+  - Ensure that the user’s data in the database is updated with these new values
+- Add route endpoint : `app.put('/account/addroute')` in `Backend/index.js`
+  - Unit tested the endpoint by logging into a user and making a request with hard-coded data (an array of routes) in the body. specifically `{ routes: [ { toCampus: true, days: [0,1,2], time: 28800, offCampusLocation: ‘1421 Mission Street, Santa Cruz’, onCampusLocation: ‘East Remote Parking Lot’, }, { toCampus: false, days: [3,4,5], time: 57600, offCampusLocation: ‘517 Cedar Street, Santa Cruz’, onCampusLocation: ‘Science Hill}]}`
+  - After calling the endpoint, ensure that the hard-coded data appears in the correct fields (and is accurate) by checking the user’s routes field in the mongoDB database now matches with the array of routes we input
+  - Call the endpoint again with new data: `{ routes: [ { toCampus: false, days: [3,4,5], time: 57600, offCampusLocation: ‘517 Cedar Street, Santa Cruz’, onCampusLocation: ‘Science Hill }, { toCampus: true, days: [0,1,2], time: 28800, offCampusLocation: ‘1421 Mission Street, Santa Cruz’, onCampusLocation: ‘East Remote Parking Lot’ }]`
+  - ensure that the user’s data in the database is updated with these new values
