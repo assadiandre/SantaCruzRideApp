@@ -55,12 +55,12 @@
   - Displays a single feed on feed page
   - Manually unit tested by inputting hardcoded data and validating that it is displayed as expected
   - Further tested later with fetched data from backend and verifying that the correct data was pulled and displayed as intended
-- func `existingRoutes`
-  - Verifies that user has routes
-  - Manually unit tested by visually verifying that a user without routes will not be displayed and a user with route would be
-- func `existingOnCampus`/ `existingOffCampus`
-  - Verifies that user has the updated campus field
-  - Tested by visually observing that only users with updated campus fields will be able to be displayed to the feed page
+  - func `existingRoutes`
+    - Verifies that user has routes
+    - Manually unit tested by visually verifying that a user without routes will not be displayed and a user with route would be
+  - func `existingOnCampus`/ `existingOffCampus`
+    - Verifies that user has the updated campus field
+    - Tested by visually observing that only users with updated campus fields will be able to be displayed to the feed page
 - `FeedPageUtils.js`
   - func `convertHMS`
     - Converts seconds to H:M format
@@ -76,13 +76,10 @@
   - Manually unit tested by observing a change in displayed feeds based on a clicked route from the drop down, verifying that the displayed feeds coincide with the clicked route by observing and seeing if they make sense to be shown based off of our matching algorithm
   - Manually tested by two people trying numerous routes with each other and seeing if we get the expected changes displayed to the feed page
 - `FeedPage.js`
-
   - Feed page of a user
   - Manually unit tested by testing the prior feed components and observing the expected display of the entire feed page
-
   - func `feedFill`
     - get request for pulling a users list of matching feeds from the database and populating their feed, was tested visually
-
 - `NavBar.js`
   - Navbar throughout the app
   - Manually unit tested by verifying correct route to desired page was taken after clicking the page you wanted to go to
