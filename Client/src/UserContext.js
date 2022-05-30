@@ -19,14 +19,12 @@ export default function UserContextProvider(props) {
       .get('http://localhost:3001/getuser', { withCredentials: true })
       .then((res) => {
         if (res.data) {
-          // console.log(res);
           setUserObjectRequest({ data: res.data, status: 'success' });
         } else {
           setUserObjectRequest({ data: null, status: 'success' });
         }
       })
       .catch((error) => {
-        console.log('TRUE');
         setUserObjectRequest({ data: null, status: 'error' });
       });
   }, []);
