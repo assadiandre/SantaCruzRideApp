@@ -86,7 +86,6 @@ export default function AccountSetup() {
         )
         .then((res) => {
           if (res.data) {
-            //    console.log(userType);
             setUserObject(res.data);
             navigate('/schedule');
           }

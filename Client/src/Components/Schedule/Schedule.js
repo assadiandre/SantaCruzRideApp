@@ -32,8 +32,6 @@ export default function Schedule() {
     });
     if (userObject && userObject.setupFlag) {
       const storedRoutes = userObject.routes.map((route) => {
-        console.log(route.onCampusLocation.address);
-        console.log(route.offCampusLocation.address);
         return {
           toCampus: route.toCampus,
           time: route.time,
@@ -96,7 +94,6 @@ export default function Schedule() {
       setErr(errors);
     } else {
       const updatedRoutes = convertDaysForRoutesToNumbers(routes);
-      //console.log(updatedRoutes);
       axios
         .put(
           '/account/addroute',
@@ -146,7 +143,6 @@ export default function Schedule() {
   const handleTime = (index, time) => {
     const list = [...routes];
     list[index].time = time;
-    console.log(time);
     setRoutes(list);
   };
 
