@@ -1,4 +1,7 @@
-# SantaCruzRideApp
+# Santa Cruz Carpool App
+
+## Release 1.0 Demo
+https://youtu.be/LyulLcbW1kw
 
 ## Getting started
 
